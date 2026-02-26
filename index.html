@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* CANDADO DE DISEÑO SATEX 2026 - MODELO CARDAS */
+    /* CANDADO DE DISEÑO SATEX 2026 */
     body { 
         margin: 0; 
         background-color: #2f5577; 
@@ -27,6 +27,7 @@
     .titulo { width: 60%; text-align: center; font-size: 20px; font-weight: bold; }
     .fecha { width: 20%; text-align: right; font-size: 14px; }
 
+    /* FILA DE 11 CARDAS CON DESPLAZAMIENTO */
     .dashboard-top-row {
         display: flex;
         flex-direction: row;
@@ -35,22 +36,18 @@
         gap: 10px;
         padding: 15px;
         background-color: rgba(0, 0, 0, 0.15);
+        min-height: 180px;
     }
 
-    .dashboard-top-row::-webkit-scrollbar {
-        height: 5px;
-    }
-    .dashboard-top-row::-webkit-scrollbar-thumb {
-        background: #4285f4;
-        border-radius: 10px;
-    }
+    /* Scrollbar estético */
+    .dashboard-top-row::-webkit-scrollbar { height: 5px; }
+    .dashboard-top-row::-webkit-scrollbar-thumb { background: #4285f4; border-radius: 10px; }
 
     .gauge-card {
         background: white;
-        min-width: 130px; 
-        height: 170px; /* Aumentado ligeramente para la nueva línea de texto */
+        min-width: 125px; 
+        height: 165px; 
         border-radius: 5px;
-        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -60,7 +57,7 @@
     }
 
     .gauge-title {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: bold;
         color: #222;
         margin-bottom: 2px;
@@ -68,18 +65,18 @@
     }
 
     .canvas-container {
-        width: 120px;
-        height: 85px;
+        width: 115px;
+        height: 80px;
     }
 
     .info-labels {
         text-align: center;
-        margin-top: -3px;
+        margin-top: -5px;
     }
 
-    .valor-ac { font-size: 12px; font-weight: bold; color: #000; margin: 0; }
+    .valor-ac { font-size: 11px; font-weight: bold; color: #000; margin: 0; }
     .valor-max { font-size: 10px; color: #666; margin: 0; }
-    .label-toneladas { font-size: 9px; color: #888; margin: 0; font-style: italic; }
+    .label-toneladas { font-size: 9px; color: #888; margin: 0; font-style: italic; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -93,49 +90,83 @@
 <div class="dashboard-top-row" id="contenedorGauges"></div>
 
 <script>
-    // 1. FECHA (Oración: Primera mayúscula)
+    // 1. FECHA (Formato Oración)
     const f = new Date();
     const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
     let txtFecha = f.toLocaleDateString('es-ES', opciones);
     document.getElementById("fechaDisplay").innerText = txtFecha.charAt(0).toUpperCase() + txtFecha.slice(1);
 
-    // 2. LÓGICA DE GENERACIÓN
+    // 2. DATOS BASE
     const datosBase = { ac: 250000, max: 300000 };
     const porcentaje = (datosBase.ac / datosBase.max) * 100;
 
-    for (let i = 1; i <= 11; i++) {
-        const card = document.createElement('div');
-        card.className = 'gauge-card';
-        card.innerHTML = `
-            <div class="gauge-title">Carda ${i}</div>
-            <div class="canvas-container"><canvas id="gauge-${i}"></canvas></div>
-            <div class="info-labels">
-                <p class="valor-ac">Ac. ${datosBase.ac.toLocaleString()}</p>
-                <p class="valor-max">Max. ${datosBase.max.toLocaleString()}</p>
-                <p class="label-toneladas">Toneladas</p>
-            </div>
-        `;
-        document.getElementById('contenedorGauges').appendChild(card);
+    // 3. GENERACIÓN DE LAS 11 CARDAS
+    window.onload = function() {
+        const contenedor = document.getElementById('contenedorGauges');
+        
+        for (let i = 1; i <= 11; i++) {
+            const card = document.createElement('div');
+            card.className = 'gauge-card';
+            card.innerHTML = `
+                <div class="gauge-title">Carda ${i}</div>
+                <div class="canvas-container"><canvas id="gauge-${i}"></canvas></div>
+                <div class="info-labels">
+                    <p class="valor-ac">Ac. ${datosBase.ac.toLocaleString()}</p>
+                    <p class="valor-max">Max. ${datosBase.max.toLocaleString()}</p>
+                    <p class="label-toneladas">Toneladas</p>
+                </div>
+            `;
+            contenedor.appendChild(card);
 
-        new Chart(document.getElementById(`gauge-${i}`).getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [85, 15, 20], 
-                    backgroundColor: ["#23a446", "#f9b218", "#da291c"],
-                    borderWidth: 1,
-                    borderColor: '#ffffff',
-                    needleValue: porcentaje
+            const ctx = document.getElementById(`gauge-${i}`).getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [85, 15, 20], // Zonas: Verde, Amarillo, Rojo
+                        backgroundColor: ["#23a446", "#f9b218", "#da291c"],
+                        borderWidth: 1,
+                        borderColor: '#ffffff',
+                        needleValue: porcentaje
+                    }]
+                },
+                options: {
+                    rotation: -110,
+                    circumference: 220,
+                    cutout: '75%',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: false, tooltip: false }
+                },
+                plugins: [{
+                    afterDraw(chart) {
+                        const {ctx, width, height} = chart;
+                        const cx = width / 2;
+                        const cy = height / 1.3;
+                        const r = chart.getDatasetMeta(0).data[0].outerRadius;
+                        const val = chart.data.datasets[0].needleValue;
+                        const angle = (Math.PI * 0.88) + (val / 120) * (Math.PI * 1.22);
+
+                        ctx.save();
+                        ctx.translate(cx, cy);
+                        ctx.rotate(angle);
+                        ctx.beginPath();
+                        ctx.moveTo(0, -1.5);
+                        ctx.lineTo(r - 6, 0);
+                        ctx.lineTo(0, 1.5);
+                        ctx.fillStyle = "#000";
+                        ctx.fill();
+                        ctx.rotate(-angle);
+                        ctx.beginPath();
+                        ctx.arc(0, 0, 4, 0, 2 * Math.PI);
+                        ctx.fillStyle = "#000";
+                        ctx.fill();
+                        ctx.restore();
+                    }
                 }]
-            },
-            options: {
-                rotation: -110,
-                circumference: 220,
-                cutout: '75%',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: false, tooltip: false }
-            },
-            plugins: [{
-                afterDraw(chart) {
-                    const {ctx, width, height} =
+            });
+        }
+    };
+</script>
+</body>
+</html>
