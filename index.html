@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
     /* ---------------------------------------------------------
-       CANDADO DE DISEÑO BASE (ESTÁTICO)
+       CANDADO DE DISEÑO BASE (PROYECTO SATEX)
     ------------------------------------------------------------ */
     body { 
         margin: 0; 
@@ -19,12 +19,12 @@
         display: flex;
         align-items: center;
         padding: 0 30px;
-        height: 60px;
+        height: 60px !important; 
         color: white;
     }
 
     .header-left { width: 25%; display: flex; align-items: center; }
-    .header-left img { height: 40px; }
+    .header-left img { height: 40px !important; }
 
     .titulo { 
         width: 50%; 
@@ -37,7 +37,7 @@
     .fecha { width: 25%; text-align: right; font-size: 14px; color: white; }
 
     /* ---------------------------------------------------------
-       INDICADORES (REDUCIDOS 25% ADICIONAL - 82px)
+       CANDADO DE TAMAÑO DE INDICADORES (82px BLOQUEADO)
     ------------------------------------------------------------ */
     .dashboard-grid {
         display: grid;
@@ -48,10 +48,10 @@
     }
 
     .gauge-card {
-        background: white;
-        width: 82px; /* Tamaño final ultra-compacto */
-        height: 82px;
-        border-radius: 50%;
+        background: white !important;
+        width: 82px !important; /* BLOQUEADO AL TAMAÑO SOLICITADO */
+        height: 82px !important; /* BLOQUEADO AL TAMAÑO SOLICITADO */
+        border-radius: 50% !important;
         position: relative;
         display: flex;
         align-items: center;
@@ -75,7 +75,10 @@
         color: #000;
     }
 
-    canvas { max-width: 92%; max-height: 92%; }
+    canvas { 
+        max-width: 92% !important; 
+        max-height: 92% !important; 
+    }
 </style>
 </head>
 <body>
@@ -89,10 +92,12 @@
 <div class="dashboard-grid" id="contenedorGauges"></div>
 
 <script>
+    // Fecha estática en formato Satex
     document.getElementById("fechaDisplay").innerText = new Date().toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'}).toUpperCase();
 
     const contenedor = document.getElementById('contenedorGauges');
     
+    // Creación de los 11 indicadores
     for (let i = 1; i <= 11; i++) {
         const card = document.createElement('div');
         card.className = 'gauge-card';
