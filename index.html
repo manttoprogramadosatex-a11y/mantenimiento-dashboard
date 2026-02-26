@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Tablero Master Mantto. Satex Textil</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body{
@@ -41,24 +40,7 @@ body{
     font-size:14px;
 }
 
-/* CONTENEDOR INDICADORES */
-.gauges{
-    display:flex;
-    justify-content:center;
-    gap:60px;
-    margin-top:50px;
-}
-
-.gauge-container{
-    width:260px;
-    height:260px;
-    position:relative;
-}
-
-canvas{
-    background:white;
-    border-radius:50%;
-}
+/* El contenedor de gauges ha sido removido de la visualización */
 </style>
 </head>
 <body>
@@ -71,16 +53,6 @@ canvas{
     <div class="fecha" id="fecha"></div>
 </div>
 
-<div class="gauges">
-    <div class="gauge-container">
-        <canvas id="gauge1"></canvas>
-    </div>
-
-    <div class="gauge-container">
-        <canvas id="gauge2"></canvas>
-    </div>
-</div>
-
 <script>
 
 /* FECHA */
@@ -90,73 +62,7 @@ let textoFecha = hoy.toLocaleDateString('es-ES', opciones);
 textoFecha = textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
 document.getElementById("fecha").innerText = textoFecha;
 
-
-/* PLUGIN AGUJA */
-const needlePlugin = {
-    id:'needle',
-    afterDatasetDraw(chart,args,pluginOptions){
-        const {ctx,data} = chart;
-        ctx.save();
-
-        const needleValue = data.datasets[0].needleValue;
-        const meta = chart.getDatasetMeta(0);
-        const centerX = meta.data[0].x;
-        const centerY = meta.data[0].y;
-
-        const radius = meta.data[0].outerRadius;
-        const angle = Math.PI + (needleValue / 100) * Math.PI;
-
-        ctx.translate(centerX, centerY);
-        ctx.rotate(angle);
-
-        ctx.beginPath();
-        ctx.moveTo(0,-5);
-        ctx.lineTo(radius - 20,0);
-        ctx.lineTo(0,5);
-        ctx.fillStyle="red";
-        ctx.fill();
-
-        ctx.rotate(-angle);
-        ctx.beginPath();
-        ctx.arc(0,0,8,0,2*Math.PI);
-        ctx.fillStyle="#2f6db3";
-        ctx.fill();
-
-        ctx.restore();
-    }
-};
-
-function crearGauge(id, valor){
-    new Chart(document.getElementById(id),{
-        type:'doughnut',
-        data:{
-            datasets:[{
-                data:[50,30,20],
-                backgroundColor:[
-                    "#2ecc71",  // verde
-                    "#f1c40f",  // amarillo
-                    "#e74c3c"   // rojo
-                ],
-                borderWidth:0,
-                needleValue:valor
-            }]
-        },
-        options:{
-            rotation:-90,
-            circumference:180,
-            cutout:"70%",
-            plugins:{
-                legend:{display:false},
-                tooltip:{enabled:false}
-            }
-        },
-        plugins:[needlePlugin]
-    });
-}
-
-/* VALORES REALES DE PRUEBA */
-crearGauge("gauge1", 18);  
-crearGauge("gauge2", 12);  
+/* Lógica de indicadores eliminada */
 
 </script>
 
