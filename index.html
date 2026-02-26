@@ -4,14 +4,11 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* ---------------------------------------------------------
-       CANDADO VISUAL SATEX 2026 - MODELO AUTORIZADO
-    ------------------------------------------------------------ */
+    /* CANDADO DE DISEÑO SATEX 2026 */
     body { 
         margin: 0; 
         background-color: #2f5577; 
-        font-family: Arial, sans-serif; 
-        overflow-x: hidden;
+        font-family: 'Arial', sans-serif; 
     }
     
     .header {
@@ -23,61 +20,46 @@
         color: white;
     }
 
-    .header-left { width: 25%; }
     .header-left img { height: 40px; }
+    .titulo { width: 100%; text-align: center; font-size: 24px; font-weight: bold; }
 
-    .titulo { 
-        width: 50%; 
-        text-align: center; 
-        font-size: 24px; 
-        font-weight: bold; 
-    }
-
-    .fecha { width: 25%; text-align: right; font-size: 14px; }
-
-    /* CONTENEDOR DE INDICADORES */
     .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 20px;
-        padding: 30px;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 25px;
+        padding: 40px;
         justify-items: center;
     }
 
-    /* TARJETA CIRCULAR COMO LA IMAGEN */
+    /* MODELO CIRCULAR AUTORIZADO */
     .gauge-card {
         background: white;
-        width: 150px; 
-        height: 150px; 
-        border-radius: 50%; /* FORMA CIRCULAR AUTORIZADA */
+        width: 170px; 
+        height: 170px; 
+        border-radius: 50%;
         position: relative;
+        box-shadow: 0 8px 15px rgba(0,0,0,0.3);
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
 
     .canvas-container {
-        width: 140px;
-        height: 140px;
+        width: 160px;
+        height: 160px;
         position: absolute;
-        top: 5px;
     }
 
-    /* TEXTOS INTERNOS DEL INDICADOR */
     .info-overlay {
-        position: absolute;
-        top: 55%;
+        margin-top: 35px; /* Ajuste para centrar textos bajo la aguja */
         text-align: center;
-        width: 100%;
-        z-index: 10;
+        z-index: 5;
     }
 
-    .label-ton { font-size: 24px; font-weight: bold; margin: 0; line-height: 1; }
-    .valor-ac { font-size: 14px; font-weight: bold; margin: 5px 0 0 0; }
-    .valor-max { font-size: 12px; font-weight: bold; margin: 0; }
-
+    .label-ton { font-size: 26px; font-weight: bold; color: #000; margin: 0; }
+    .valor-ac { font-size: 15px; font-weight: bold; color: #000; margin: 2px 0; }
+    .valor-max { font-size: 13px; font-weight: bold; color: #333; margin: 0; }
 </style>
 </head>
 <body>
@@ -85,49 +67,34 @@
 <div class="header">
     <div class="header-left"><img src="logo.png.jpeg" alt="Logo"></div>
     <div class="titulo">Tablero Master Mantto. Satex Textil</div>
-    <div class="fecha" id="fechaDisplay"></div>
 </div>
 
 <div class="dashboard-grid" id="contenedorGauges"></div>
 
 <script>
-    document.getElementById("fechaDisplay").innerText = new Date().toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'}).toUpperCase();
-
-    // DATOS DE EJEMPLO (Se pueden vincular a Excel/Base de datos)
-    const datos = [
-        { ac: 250000, max: 300000 },
-        { ac: 120000, max: 300000 },
-        { ac: 290000, max: 300000 },
-        { ac: 340000, max: 300000 } // Supera el 100% (va a zona roja)
-    ];
-
+    const datosGlobales = { ac: 250000, max: 300000 };
     const contenedor = document.getElementById('contenedorGauges');
-    
-    // Generamos 11 indicadores basados en el modelo autorizado
-    for (let i = 0; i < 11; i++) {
-        const item = datos[i] || datos[0];
-        const porcentaje = (item.ac / item.max) * 100;
 
+    for (let i = 1; i <= 11; i++) {
         const card = document.createElement('div');
         card.className = 'gauge-card';
         card.innerHTML = `
-            <div class="canvas-container">
-                <canvas id="gauge-${i}"></canvas>
-            </div>
+            <div class="canvas-container"><canvas id="gauge-${i}"></canvas></div>
             <div class="info-overlay">
                 <p class="label-ton">Ton.</p>
-                <p class="valor-ac">Ac. ${item.ac.toLocaleString()}</p>
-                <p class="valor-max">Max. ${item.max.toLocaleString()}</p>
+                <p class="valor-ac">Ac. ${datosGlobales.ac.toLocaleString()}</p>
+                <p class="valor-max">Max. ${datosGlobales.max.toLocaleString()}</p>
             </div>
         `;
         contenedor.appendChild(card);
+
+        const porcentaje = (datosGlobales.ac / datosGlobales.max) * 100;
 
         new Chart(document.getElementById(`gauge-${i}`).getContext('2d'), {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    // Escala: 0-85% Verde, 85-100% Amarillo, 100-120% Rojo
-                    data: [85, 15, 20], 
+                    data: [85, 15, 20], // Verde, Amarillo, Rojo (Hasta 120%)
                     backgroundColor: ["#23a446", "#f9b218", "#da291c"],
                     borderWidth: 0,
                     needleValue: porcentaje
@@ -136,7 +103,7 @@
             options: {
                 rotation: -130,
                 circumference: 260,
-                cutout: '75%',
+                cutout: '78%',
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: { legend: false, tooltip: false }
@@ -144,57 +111,56 @@
             plugins: [{
                 afterDraw(chart) {
                     const {ctx, width, height} = chart;
-                    const x = width / 2;
-                    const y = height / 2;
-                    const outerRadius = chart.getDatasetMeta(0).data[0].outerRadius;
-                    const innerRadius = chart.getDatasetMeta(0).data[0].innerRadius;
+                    const cx = width / 2;
+                    const cy = height / 2;
+                    const outerR = chart.getDatasetMeta(0).data[0].outerRadius;
+                    const innerR = chart.getDatasetMeta(0).data[0].innerRadius;
 
-                    // --- DIBUJAR ESCALA (11 LÍNEAS NEGRAS) ---
+                    // --- DIBUJAR LAS 11 LÍNEAS NEGRAS Y % ---
                     ctx.save();
-                    ctx.translate(x, y);
+                    ctx.translate(cx, cy);
                     ctx.textAlign = 'center';
-                    ctx.font = 'bold 9px Arial';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = 'bold 10px Arial';
 
-                    for (let n = 1; n <= 12; n++) {
-                        const valLabel = n * 10;
-                        // Mapeo de 0-120 a los grados del gráfico
-                        const angle = (Math.PI * 0.778) + (valLabel / 120) * (Math.PI * 1.445);
+                    for (let n = 0; n <= 11; n++) {
+                        const valorPct = (n + 1) * 10;
+                        // Cálculo del ángulo exacto basado en el inicio (-130°) y fin (130°)
+                        const angle = (Math.PI * 0.778) + (valorPct / 120) * (Math.PI * 1.445);
                         
-                        // Líneas de escala
+                        // Líneas negras
                         ctx.strokeStyle = "black";
                         ctx.lineWidth = 2;
                         ctx.beginPath();
-                        ctx.moveTo(Math.cos(angle) * (innerRadius - 2), Math.sin(angle) * (innerRadius - 2));
-                        ctx.lineTo(Math.cos(angle) * (outerRadius + 2), Math.sin(angle) * (outerRadius + 2));
+                        ctx.moveTo(Math.cos(angle) * (innerR - 2), Math.sin(angle) * (innerR - 2));
+                        ctx.lineTo(Math.cos(angle) * (outerR + 2), Math.sin(angle) * (outerR + 2));
                         ctx.stroke();
 
-                        // Números de porcentaje (Por fuera)
-                        const textRadius = outerRadius + 12;
+                        // Números de la escala (por fuera)
+                        const tr = outerR + 15;
                         ctx.fillStyle = "black";
-                        ctx.fillText(valLabel + "%", Math.cos(angle) * textRadius, Math.sin(angle) * textRadius);
+                        ctx.fillText(valorPct + "%", Math.cos(angle) * tr, Math.sin(angle) * tr);
                     }
                     ctx.restore();
 
-                    // --- DIBUJAR AGUJA ROJA ---
+                    // --- AGUJA ROJA ---
                     const val = chart.data.datasets[0].needleValue;
-                    const needleAngle = (Math.PI * 0.778) + (val / 120) * (Math.PI * 1.445);
+                    const nAngle = (Math.PI * 0.778) + (val / 120) * (Math.PI * 1.445);
 
                     ctx.save();
-                    ctx.translate(x, y);
-                    ctx.rotate(needleAngle);
-                    
-                    // Triángulo de la aguja
+                    ctx.translate(cx, cy);
+                    ctx.rotate(nAngle);
                     ctx.beginPath();
-                    ctx.moveTo(0, -2);
-                    ctx.lineTo(outerRadius - 10, 0);
-                    ctx.lineTo(0, 2);
+                    ctx.moveTo(0, -3);
+                    ctx.lineTo(outerR - 10, 0);
+                    ctx.lineTo(0, 3);
                     ctx.fillStyle = "#da291c";
                     ctx.fill();
 
-                    // Círculo Central (Azul)
-                    ctx.rotate(-needleAngle);
+                    // Círculo central azul
+                    ctx.rotate(-nAngle);
                     ctx.beginPath();
-                    ctx.arc(0, 0, 6, 0, 2 * Math.PI);
+                    ctx.arc(0, 0, 7, 0, 2 * Math.PI);
                     ctx.fillStyle = "#4285f4";
                     ctx.fill();
                     ctx.strokeStyle = "white";
