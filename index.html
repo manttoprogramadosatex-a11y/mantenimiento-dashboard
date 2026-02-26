@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* ---------------------------------------------------------
-       1. BLOQUEO DE ESTRUCTURA GENERAL (CABECERA Y FONDO)
-    ------------------------------------------------------------ */
+    /* --- ESTRUCTURA BLOQUEADA --- */
     body { 
         margin: 0; 
         background-color: #2f5577; 
@@ -36,24 +34,18 @@
         width: 25%; 
         text-align: right; 
         font-size: 16px; 
-        font-weight: bold;
-        text-transform: uppercase;
+        color: white;
     }
 
-    /* ---------------------------------------------------------
-       2. BLOQUEO DE DISTRIBUCIÓN (GRILLA)
-    ------------------------------------------------------------ */
     .dashboard-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 20px;
-        padding: 30px;
+        gap: 25px;
+        padding: 40px;
         justify-items: center;
     }
 
-    /* ---------------------------------------------------------
-       3. BLOQUEO DEL INDICADOR (MODELO CIRCULAR SATEX)
-    ------------------------------------------------------------ */
+    /* --- INDICADOR SATEX (CIRCULO BLANCO) --- */
     .gauge-card {
         background: white;
         width: 180px; 
@@ -64,7 +56,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     }
 
     .canvas-container {
@@ -79,9 +71,9 @@
         z-index: 10;
     }
 
-    .label-ton { font-size: 32px; font-weight: bold; color: #000; margin: 0; }
+    .label-ton { font-size: 30px; font-weight: bold; color: #000; margin: 0; }
     .valor-ac { font-size: 16px; font-weight: bold; color: #000; margin: 2px 0; }
-    .valor-max { font-size: 14px; font-weight: bold; color: #333; margin: 0; }
+    .valor-max { font-size: 13px; font-weight: bold; color: #555; margin: 0; }
 </style>
 </head>
 <body>
@@ -95,21 +87,19 @@
 <div class="dashboard-grid" id="contenedorGauges"></div>
 
 <script>
-    /* LÓGICA DE FECHA (NO SE TOCA) */
-    function actualizarFecha() {
-        const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
-        document.getElementById("fechaDisplay").innerText = new Date().toLocaleDateString('es-ES', opciones);
-    }
-    actualizarFecha();
+    // 1. FECHA COMO ORACIÓN (Solo primera mayúscula)
+    const fechaActual = new Date();
+    const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
+    let fechaTexto = fechaActual.toLocaleDateString('es-ES', opciones);
+    document.getElementById("fechaDisplay").innerText = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
 
-    /* CONFIGURACIÓN DINÁMICA DE DATOS */
+    // 2. CONFIGURACIÓN DE DATOS (Lo único que cambiará después)
     const valorAc = 250000;
     const valorMax = 300000;
-    const porcentajeActual = (valorAc / valorMax) * 100;
+    const porcentaje = (valorAc / valorMax) * 100;
 
     const contenedor = document.getElementById('contenedorGauges');
     
-    // CREACIÓN DE LOS 11 INDICADORES
     for (let i = 1; i <= 11; i++) {
         const card = document.createElement('div');
         card.className = 'gauge-card';
@@ -127,11 +117,10 @@
             type: 'doughnut',
             data: {
                 datasets: [{
-                    // Verde (85%), Amarillo (15%), Rojo (20%) -> Total visual 120%
-                    data: [85, 15, 20], 
+                    data: [85, 15, 20], // Verde, Amarillo, Rojo (Hasta 120%)
                     backgroundColor: ["#23a446", "#f9b218", "#da291c"],
                     borderWidth: 0,
-                    needleValue: porcentajeActual
+                    needleValue: porcentaje
                 }]
             },
             options: {
@@ -150,14 +139,13 @@
                     const outerR = chart.getDatasetMeta(0).data[0].outerRadius;
                     const innerR = chart.getDatasetMeta(0).data[0].innerRadius;
 
-                    // --- DIBUJAR 11 LÍNEAS NEGRAS EQUITATIVAS ---
+                    // --- DIBUJAR EXACTAMENTE 11 LÍNEAS NEGRAS ---
                     ctx.save();
                     ctx.translate(cx, cy);
+                    ctx.strokeStyle = "black";
+                    ctx.lineWidth = 2;
                     for (let n = 0; n <= 10; n++) {
-                        // Ángulo calculado para 11 líneas distribuidas en la circunferencia
                         const angle = (Math.PI * 0.778) + (n / 10) * (Math.PI * 1.445);
-                        ctx.strokeStyle = "black";
-                        ctx.lineWidth = 2.5;
                         ctx.beginPath();
                         ctx.moveTo(Math.cos(angle) * (innerR - 2), Math.sin(angle) * (innerR - 2));
                         ctx.lineTo(Math.cos(angle) * (outerR + 2), Math.sin(angle) * (outerR + 2));
@@ -165,25 +153,23 @@
                     }
                     ctx.restore();
 
-                    // --- DIBUJAR AGUJA ROJA ---
+                    // --- AGUJA ROJA ---
                     const val = chart.data.datasets[0].needleValue;
-                    // Mapeo: 0% es el inicio, 100% es el fin de amarillo, 120% fin de rojo
-                    const needleAngle = (Math.PI * 0.778) + (val / 120) * (Math.PI * 1.445);
-
+                    const nAngle = (Math.PI * 0.778) + (val / 120) * (Math.PI * 1.445);
                     ctx.save();
                     ctx.translate(cx, cy);
-                    ctx.rotate(needleAngle);
+                    ctx.rotate(nAngle);
                     ctx.beginPath();
                     ctx.moveTo(0, -3);
-                    ctx.lineTo(outerR - 12, 0);
+                    ctx.lineTo(outerR - 10, 0);
                     ctx.lineTo(0, 3);
-                    ctx.fillStyle = "#da291c"; // Aguja Roja
+                    ctx.fillStyle = "#da291c";
                     ctx.fill();
 
-                    // Círculo central azul (Como tu imagen)
-                    ctx.rotate(-needleAngle);
+                    // Círculo central azul
+                    ctx.rotate(-nAngle);
                     ctx.beginPath();
-                    ctx.arc(0, 0, 8, 0, 2 * Math.PI);
+                    ctx.arc(0, 0, 7, 0, 2 * Math.PI);
                     ctx.fillStyle = "#4285f4";
                     ctx.fill();
                     ctx.strokeStyle = "white";
