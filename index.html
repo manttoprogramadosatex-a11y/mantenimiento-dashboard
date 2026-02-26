@@ -1,91 +1,96 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Tablero Master Mantto. Satex Textil</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>Tablero Máster de Mantenimiento - Satex Textil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #0f1f35;
+      color: white;
+      text-align: center;
+    }
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #0f1b2d;
-            color: white;
-        }
+    header {
+      background-color: #24344d;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-        header {
-            background-color: #1f2d44;
-            padding: 8px 25px; /* más delgado */
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    .logo {
+      height: 45px;
+    }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+    .header-title {
+      font-size: 18px;
+      font-weight: bold;
+      flex: 1;
+      text-align: center;
+    }
 
-        .logo-container img {
-            height: 35px; /* logo más pequeño */
-        }
+    .fecha {
+      font-size: 14px;
+      color: #4fc3f7;
+    }
 
-        .logo-container h2 {
-            font-size: 18px;
-            margin: 0;
-        }
+    main {
+      margin-top: 60px;
+    }
 
-        .fecha {
-            font-size: 14px;
-            color: #4db8ff;
-        }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 40px;
+    }
 
-        main {
-            text-align: center;
-            margin-top: 60px;
-        }
-
-        h1 {
-            margin-bottom: 30px;
-        }
-
-        .card {
-            background-color: #1f2d44;
-            padding: 30px;
-            border-radius: 12px;
-            display: inline-block;
-        }
-    </style>
+    .card {
+      background-color: #1f2f47;
+      padding: 30px;
+      border-radius: 15px;
+      width: 400px;
+      margin: auto;
+    }
+  </style>
 </head>
 <body>
 
 <header>
-    <div class="logo-container">
-        <img src="logo.png.jpeg" alt="Logo Empresa">
-        <h2>GRUPO SATEX</h2>
-    </div>
-    <div class="fecha" id="fechaActual"></div>
+  <img src="logo.png.jpeg" alt="Logo Empresa" class="logo">
+  <div class="header-title">
+    Tablero Máster de Mantenimiento – Satex Textil
+  </div>
+  <div class="fecha" id="fecha"></div>
 </header>
 
 <main>
-    <h1>Tablero Master Mantto. Satex Textil</h1>
+  <h1>Dashboard de Indicadores</h1>
 
-    <div class="card">
-        <p>Proyecto en construcción 🚀</p>
-        <p>Aquí se visualizarán los indicadores en tiempo real.</p>
-    </div>
+  <div class="card">
+    Proyecto en construcción 🚀 <br><br>
+    Aquí se visualizarán los indicadores en tiempo real.
+  </div>
 </main>
 
 <script>
-    const fecha = new Date();
-    const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    let fechaTexto = fecha.toLocaleDateString('es-ES', opciones);
+  const fechaElemento = document.getElementById("fecha");
+  const fechaActual = new Date();
 
-    // Poner la primera letra en mayúscula
-    fechaTexto = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
+  const opciones = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  };
 
-    document.getElementById("fechaActual").innerText = fechaTexto;
+  let fechaFormateada = fechaActual.toLocaleDateString('es-ES', opciones);
+
+  // Primera letra en mayúscula
+  fechaFormateada = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
+
+  fechaElemento.textContent = fechaFormateada;
 </script>
 
 </body>
