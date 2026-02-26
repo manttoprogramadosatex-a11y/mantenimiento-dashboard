@@ -54,6 +54,7 @@
 
 <header>
     <div class="logo-container">
+        <!-- AQUÍ ESTÁ EL CAMBIO -->
         <img src="logo.png.jpeg" alt="Logo Empresa">
         <h2>GRUPO SATEX</h2>
     </div>
@@ -72,7 +73,8 @@
 <script>
     const fecha = new Date();
     const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById("fechaActual").innerText = fecha.toLocaleDateString('es-ES', opciones);
+    document.getElementById("fechaActual").innerText =
+        fecha.toLocaleDateString('es-ES', opciones);
 </script>
 
 </body>
