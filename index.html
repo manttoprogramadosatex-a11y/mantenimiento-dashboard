@@ -1,92 +1,78 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Dashboard Mantenimiento</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Dashboard de Mantenimiento</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #0f172a;
-      color: white;
-    }
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #0f1b2d;
+            color: white;
+        }
 
-    header {
-      background-color: #1e293b;
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+        header {
+            background-color: #1f2d44;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-    .empresa {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
 
-    .empresa img {
-      height: 50px;
-    }
+        .logo-container img {
+            height: 50px;
+        }
 
-    .empresa h1 {
-      margin: 0;
-      font-size: 22px;
-    }
+        .fecha {
+            font-size: 14px;
+            color: #4db8ff;
+        }
 
-    .fecha {
-      font-size: 18px;
-      color: #38bdf8;
-    }
+        main {
+            text-align: center;
+            margin-top: 80px;
+        }
 
-    main {
-      padding: 40px;
-      text-align: center;
-    }
-
-    .card {
-      background-color: #1e293b;
-      padding: 30px;
-      border-radius: 12px;
-      display: inline-block;
-      margin-top: 30px;
-    }
-
-  </style>
+        .card {
+            background-color: #1f2d44;
+            padding: 30px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
 </head>
-
 <body>
 
 <header>
-  <div class="empresa">
-    <img src="https://via.placeholder.com/150x50.png?text=LOGO" alt="Logo Empresa">
-    <h1>GRUPO SATEX</h1>
-  </div>
-
-  <div class="fecha" id="fechaActual"></div>
+    <div class="logo-container">
+        <img src="logo.png.jpeg" alt="Logo Empresa">
+        <h2>GRUPO SATEX</h2>
+    </div>
+    <div class="fecha" id="fechaActual"></div>
 </header>
 
 <main>
-  <h2>Dashboard de Mantenimiento</h2>
+    <h1>Dashboard de Mantenimiento</h1>
 
-  <div class="card">
-    <p>Proyecto en construcción 🚀</p>
-    <p>Aquí se visualizarán los indicadores en tiempo real.</p>
-  </div>
+    <div class="card">
+        <p>Proyecto en construcción 🚀</p>
+        <p>Aquí se visualizarán los indicadores en tiempo real.</p>
+    </div>
 </main>
 
 <script>
-  const fecha = new Date();
-  const opciones = { 
-    weekday: 'long', 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
-  };
-  document.getElementById("fechaActual").innerText =
-    fecha.toLocaleDateString("es-MX", opciones);
+    const fecha = new Date();
+    const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    document.getElementById("fechaActual").innerText = fecha.toLocaleDateString('es-ES', opciones);
 </script>
 
 </body>
