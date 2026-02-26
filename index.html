@@ -3,67 +3,184 @@
 <head>
 <meta charset="UTF-8">
 <title>Tablero Master Mantto. Satex Textil</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    background:#2f5577; /* Fondo tablero */
+    background:#2f5577; 
     color:white;
 }
 
-/* ENCABEZADO */
+/* ENCABEZADO MÁS ESTRECHO */
 .header{
-    background:#274a66; /* Un poco más oscuro */
+    background:#274a66; 
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:10px 30px;
+    padding:5px 30px; /* Reducción de padding vertical */
+    height: 60px; /* Altura fija más pequeña */
 }
 
 .header-left{
     display:flex;
     align-items:center;
-    gap:20px;
+    flex: 1;
 }
 
+/* LOGO MÁS PEQUEÑO */
 .header img{
-    height:55px;
+    height:40px; /* Reducción de tamaño */
 }
 
+/* TÍTULO MÁS CENTRADO */
 .titulo{
-    font-size:22px;
+    font-size:20px;
     font-weight:bold;
+    flex: 2;
+    text-align: center; /* Centrado del texto */
 }
 
 .fecha{
-    font-size:14px;
+    font-size:13px;
+    flex: 1;
+    text-align: right;
 }
 
-/* El contenedor de gauges ha sido removido de la visualización */
+/* CONTENEDOR DE INDICADORES CIRCULARES */
+.gauges{
+    display:flex;
+    justify-content:center;
+    gap:60px;
+    margin-top:40px;
+}
+
+.gauge-box {
+    text-align: center;
+}
+
+.gauge-container{
+    width:250px;
+    height:250px;
+    position:relative;
+    background: white; /* Carátula redonda blanca */
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.label-toneladas {
+    margin-top: 15px;
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+}
 </style>
 </head>
 <body>
 
 <div class="header">
     <div class="header-left">
-        <img src="logo.png.jpeg">
-        <div class="titulo">Tablero Master Mantto. Satex Textil</div>
+        <img src="logo.png.jpeg" alt="Logo">
     </div>
+    <div class="titulo">Tablero Master Mantto. Satex Textil</div>
     <div class="fecha" id="fecha"></div>
 </div>
 
-<script>
+<div class="gauges">
+    <div class="gauge-box">
+        <div class="gauge-container">
+            <canvas id="gauge1"></canvas>
+        </div>
+        <div class="label-toneladas">Toneladas</div>
+    </div>
 
-/* FECHA */
+    <div class="gauge-box">
+        <div class="gauge-container">
+            <canvas id="gauge2"></canvas>
+        </div>
+        <div class="label-toneladas">Toneladas</div>
+    </div>
+</div>
+
+<script>
+/* FECHA ACTUAL */
 const hoy = new Date();
 const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric'};
 let textoFecha = hoy.toLocaleDateString('es-ES', opciones);
 textoFecha = textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
 document.getElementById("fecha").innerText = textoFecha;
 
-/* Lógica de indicadores eliminada */
+/* PLUGIN DE AGUJA PERSONALIZADA */
+const needlePlugin = {
+    id:'needle',
+    afterDatasetDraw(chart) {
+        const {ctx, data} = chart;
+        ctx.save();
 
+        const needleValue = data.datasets[0].needleValue;
+        const meta = chart.getDatasetMeta(0);
+        const centerX = meta.data[0].x;
+        const centerY = meta.data[0].y;
+        const radius = meta.data[0].outerRadius;
+
+        // Ángulo de la aguja (invertido para que coincida con los colores)
+        const angle = Math.PI + (needleValue / 100) * Math.PI;
+
+        ctx.translate(centerX, centerY);
+        ctx.rotate(angle);
+
+        // Dibujo de la aguja roja
+        ctx.beginPath();
+        ctx.moveTo(0, -4);
+        ctx.lineTo(radius - 25, 0);
+        ctx.lineTo(0, 4);
+        ctx.fillStyle = "red";
+        ctx.fill();
+
+        // Centro de la aguja azul
+        ctx.rotate(-angle);
+        ctx.beginPath();
+        ctx.arc(0, 0, 10, 0, 2 * Math.PI);
+        ctx.fillStyle = "#2f6db3"; // Azul solicitado
+        ctx.fill();
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.restore();
+    }
+};
+
+function crearGauge(id, valor) {
+    new Chart(document.getElementById(id), {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                // Orden de colores invertido: Verde, Amarillo, Rojo
+                data: [50, 25, 25], 
+                backgroundColor: ["#2ecc71", "#f1c40f", "#e74c3c"],
+                borderWidth: 0,
+                needleValue: valor
+            }]
+        },
+        options: {
+            rotation: -90,
+            circumference: 180,
+            cutout: '80%',
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
+            }
+        },
+        plugins: [needlePlugin]
+    });
+}
+
+/* INICIALIZACIÓN */
+crearGauge("gauge1", 75); // Ejemplo: Aguja en zona amarilla/roja
+crearGauge("gauge2", 30); // Ejemplo: Aguja en zona verde
 </script>
 
 </body>
