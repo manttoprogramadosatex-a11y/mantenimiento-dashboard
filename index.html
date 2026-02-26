@@ -2,14 +2,12 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* ---------------------------------------------------------
-       CANDADO DE ESTRUCTURA - PROPUESTA A (IMAGEN MAESTRA)
-    ------------------------------------------------------------ */
     body { 
         margin: 0; 
         background-color: #2f5577; 
-        font-family: Arial, sans-serif; 
+        font-family: 'Segoe UI', Arial, sans-serif; 
     }
     
     .header {
@@ -19,73 +17,55 @@
         padding: 0 30px;
         height: 60px; 
         color: white;
+        border-bottom: 2px solid #1e3a50;
     }
 
     .header-left { width: 25%; }
     .header-left img { height: 40px; }
-    .titulo { width: 50%; text-align: center; font-size: 24px; font-weight: bold; }
-    .fecha { width: 25%; text-align: right; font-size: 16px; color: white; }
+    .titulo { width: 50%; text-align: center; font-size: 22px; font-weight: bold; }
+    .fecha { width: 25%; text-align: right; font-size: 15px; }
 
     .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 30px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 25px;
         padding: 40px;
         justify-items: center;
     }
 
-    /* EL CONTENEDOR USA TU IMAGEN AUTORIZADA COMO FONDO */
-    .gauge-container {
-        width: 200px;
-        height: 200px;
-        background-image: url('fondo_indicador.png'); /* AQUÍ VA TU IMAGEN */
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
+    /* TARJETA DEL MODELO 4 */
+    .gauge-card {
+        background: white;
+        width: 210px; 
+        height: 230px; 
+        border-radius: 8px;
         position: relative;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        padding-top: 15px;
     }
 
-    /* LA AGUJA ES UN ELEMENTO QUE SOLO ROTA */
-    .needle {
-        position: absolute;
-        width: 4px;
-        height: 80px; /* Ajustar según el radio de tu imagen */
-        background: #da291c;
-        bottom: 50%; /* La base de la aguja en el centro */
-        left: calc(50% - 2px);
-        transform-origin: bottom center;
-        transition: transform 1s ease-in-out;
-        z-index: 2;
-        border-radius: 4px 4px 0 0;
+    .gauge-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
     }
 
-    /* EL CÍRCULO AZUL CENTRAL (Fijo) */
-    .needle-center {
-        position: absolute;
-        width: 16px;
-        height: 16px;
-        background: #4285f4;
-        border: 2px solid white;
-        border-radius: 50%;
-        z-index: 3;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    .canvas-container {
+        width: 190px;
+        height: 140px; /* Altura reducida para efecto semicírculo */
     }
 
-    /* TEXTOS DINÁMICOS SOBRE LA IMAGEN */
-    .info-overlay {
-        position: absolute;
-        bottom: 25px;
+    .info-labels {
         text-align: center;
-        width: 100%;
-        z-index: 4;
+        margin-top: -10px;
     }
 
-    .valor-ac { font-size: 16px; font-weight: bold; color: #000; margin: 0; }
-    .valor-max { font-size: 12px; font-weight: bold; color: #444; margin: 0; }
-
+    .valor-ac { font-size: 18px; font-weight: bold; color: #000; margin: 0; }
+    .valor-max { font-size: 14px; color: #444; margin: 0; }
 </style>
 </head>
 <body>
@@ -99,40 +79,96 @@
 <div class="dashboard-grid" id="contenedorGauges"></div>
 
 <script>
-    // 1. FECHA (Formato Oración: "26 de febrero de 2026")
+    // 1. FECHA (Solo primera mayúscula)
     const f = new Date();
     const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
-    let textoFecha = f.toLocaleDateString('es-ES', opciones);
-    document.getElementById("fechaDisplay").innerText = textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
+    let txtFecha = f.toLocaleDateString('es-ES', opciones);
+    document.getElementById("fechaDisplay").innerText = txtFecha.charAt(0).toUpperCase() + txtFecha.slice(1);
 
-    // 2. DATOS DE EJEMPLO
-    const indicadores = [
-        { id: 1, ac: 250000, max: 300000 },
-        { id: 2, ac: 150000, max: 300000 },
-        { id: 3, ac: 330000, max: 300000 }
-    ];
+    // 2. LÓGICA DE DATOS
+    const datos = { ac: 250000, max: 300000 };
+    const porcentaje = (datos.ac / datos.max) * 100;
 
-    const contenedor = document.getElementById('contenedorGauges');
-
-    indicadores.forEach(data => {
-        const pct = (data.ac / data.max) * 100;
-        
-        // Lógica de rotación: 
-        // Si 0% es -130 grados y 120% es +130 grados:
-        const rotation = -130 + (pct * (260 / 120));
-
+    for (let i = 1; i <= 11; i++) {
         const card = document.createElement('div');
-        card.className = 'gauge-container';
+        card.className = 'gauge-card';
         card.innerHTML = `
-            <div class="needle" style="transform: rotate(${rotation}deg)"></div>
-            <div class="needle-center"></div>
-            <div class="info-overlay">
-                <p class="valor-ac">Ac. ${data.ac.toLocaleString()}</p>
-                <p class="valor-max">Max. ${data.max.toLocaleString()}</p>
+            <div class="gauge-title">Ton.</div>
+            <div class="canvas-container"><canvas id="gauge-${i}"></canvas></div>
+            <div class="info-labels">
+                <p class="valor-ac">Ac. ${datos.ac.toLocaleString()}</p>
+                <p class="valor-max">Max. ${datos.max.toLocaleString()}</p>
             </div>
         `;
-        contenedor.appendChild(card);
-    });
+        contenedorGauges.appendChild(card);
+
+        new Chart(document.getElementById(`gauge-${i}`).getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    // Escala: Verde (0-85), Amarillo (85-100), Rojo (100-120)
+                    data: [85, 15, 20], 
+                    backgroundColor: ["#23a446", "#f9b218", "#da291c"],
+                    borderWidth: 2,
+                    borderColor: '#ffffff',
+                    needleValue: porcentaje
+                }]
+            },
+            options: {
+                rotation: -110,
+                circumference: 220,
+                cutout: '70%',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: false, tooltip: false }
+            },
+            plugins: [{
+                afterDraw(chart) {
+                    const {ctx, width, height} = chart;
+                    const cx = width / 2;
+                    const cy = height / 1.3; // Centro bajado para el arco
+                    const r = chart.getDatasetMeta(0).data[0].outerRadius;
+
+                    // DIBUJAR AGUJA NEGRA (ESTILO INDUSTRIAL)
+                    const val = chart.data.datasets[0].needleValue;
+                    const angle = (Math.PI * 0.88) + (val / 120) * (Math.PI * 1.22);
+
+                    ctx.save();
+                    ctx.translate(cx, cy);
+                    ctx.rotate(angle);
+                    
+                    // Cuerpo de la aguja
+                    ctx.beginPath();
+                    ctx.moveTo(0, -3);
+                    ctx.lineTo(r - 10, 0);
+                    ctx.lineTo(0, 3);
+                    ctx.fillStyle = "#333";
+                    ctx.fill();
+
+                    // Círculo central negro
+                    ctx.rotate(-angle);
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 8, 0, 2 * Math.PI);
+                    ctx.fillStyle = "#333";
+                    ctx.fill();
+                    ctx.restore();
+
+                    // ETIQUETAS DE ESCALA (0 - 120)
+                    ctx.save();
+                    ctx.translate(cx, cy);
+                    ctx.textAlign = 'center';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.fillStyle = '#666';
+                    
+                    // Posición 0%
+                    ctx.fillText('0', -r + 5, 20);
+                    // Posición 120%
+                    ctx.fillText('120%', r - 5, 20);
+                    ctx.restore();
+                }
+            }]
+        });
+    }
 </script>
 </body>
 </html>
