@@ -2,59 +2,64 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Satex Dashboard 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* CANDADO DE DISEÑO SATEX 2026 - NO MODIFICAR ESTRUCTURA */
+    /* CANDADO DE DISEÑO SATEX 2026 - MODELO MASTER V3 */
     body { 
         margin: 0; background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
         display: flex; flex-direction: column; height: 100vh; overflow: hidden;
     }
     
-    /* ENCABEZADO RESTAURADO */
     .header {
         background-color: #274a66; display: flex; align-items: center;
-        padding: 0 30px; height: 60px; color: white; border-bottom: 2px solid #1e3a50;
+        padding: 0 30px; height: 70px; color: white; border-bottom: 2px solid #1e3a50;
         position: relative;
     }
-    .header-left { width: 20%; }
-    .header-left img { height: 35px; }
-    .titulo { width: 60%; text-align: center; font-size: 20px; font-weight: bold; position: absolute; left: 50%; transform: translateX(-50%); }
+    .header-left img { height: 45px; }
+    
+    /* TÍTULO CON TAMAÑO AUMENTADO */
+    .titulo { 
+        width: 60%; text-align: center; font-size: 26px; font-weight: bold; 
+        position: absolute; left: 50%; transform: translateX(-50%);
+        color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
     .fecha { width: 20%; text-align: right; font-size: 14px; margin-left: auto; }
 
-    /* SECCIÓN DE ESTATUS (HORIZONTAL AL ANCHO) */
-    .seccion-estatus { padding: 15px 30px; display: flex; flex-direction: column; gap: 5px; }
-    .frase-estatus { color: white; font-size: 16px; font-weight: bold; margin-bottom: 5px; }
+    /* SECCIÓN ESTATUS - PROPUESTA DE DATOS REALES */
+    .seccion-estatus { padding: 15px 30px; }
+    .frase-estatus { color: white; font-size: 18px; font-weight: bold; margin-bottom: 12px; display: block; }
     
-    .fila-datos { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .fila-datos { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 20px; }
 
     .bloque-husos {
-        background: rgba(255, 255, 255, 0.1); padding: 8px 20px;
-        border-radius: 4px; border-left: 4px solid #f9b218; min-width: 180px;
+        background: rgba(255, 255, 255, 0.1); padding: 10px 25px;
+        border-radius: 4px; border-left: 5px solid #f9b218; min-width: 220px;
     }
-    .husos-titulo { font-size: 10px; text-transform: uppercase; color: #ccc; display: block; }
-    .husos-valor { font-size: 22px; font-weight: bold; color: #f9b218; }
+    .husos-titulo { font-size: 11px; text-transform: uppercase; color: #ccc; display: block; margin-bottom: 2px; }
+    .husos-valor { font-size: 28px; font-weight: bold; color: #f9b218; }
 
-    .contenedor-maquinas { display: flex; gap: 10px; }
+    .contenedor-maquinas { display: flex; gap: 15px; flex-grow: 1; justify-content: flex-end; }
     .mini-card-parada {
-        background: rgba(218, 41, 28, 0.2); border: 1px solid #da291c;
-        padding: 6px 15px; border-radius: 4px; min-width: 150px; text-align: center;
+        background: rgba(218, 41, 28, 0.25); border: 1px solid #da291c;
+        padding: 8px 18px; border-radius: 4px; min-width: 170px; text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    .mini-card-parada span { font-size: 9px; color: #ff9999; display: block; text-transform: uppercase; }
-    .mini-card-parada strong { font-size: 13px; color: white; }
+    .mini-card-parada span { font-size: 10px; color: #ff9999; display: block; text-transform: uppercase; margin-bottom: 2px; }
+    .mini-card-parada strong { font-size: 15px; color: white; display: block; }
+    .mini-card-parada em { font-size: 11px; color: #eee; font-style: normal; }
 
-    /* FILA DE CARDAS - POSICIÓN MEDIA (CANDADO VISUAL) */
+    /* FILA DE CARDAS - POSICIÓN MEDIA (CANDADO VISUAL BLINDADO) */
     .dashboard-middle-row {
         display: flex; flex-direction: row; flex-wrap: nowrap; 
-        overflow-x: auto; gap: 10px; padding: 20px 15px;
+        overflow-x: auto; gap: 10px; padding: 25px 15px;
         background-color: rgba(0, 0, 0, 0.15);
         margin-top: auto; margin-bottom: auto;
     }
-    .dashboard-middle-row::-webkit-scrollbar { height: 6px; }
+    .dashboard-middle-row::-webkit-scrollbar { height: 8px; }
     .dashboard-middle-row::-webkit-scrollbar-thumb { background: #4285f4; border-radius: 10px; }
 
-    /* DISEÑO DE TARJETA BLOQUEADO */
+    /* DISEÑO DE TARJETA INDICADORA */
     .gauge-card {
         background: white; min-width: 135px; height: 165px; border-radius: 5px;
         display: flex; flex-direction: column; align-items: center;
@@ -81,12 +86,25 @@
     <div class="fila-datos">
         <div class="bloque-husos">
             <span class="husos-titulo">Total Husos Inactivos</span>
-            <span id="txtHusos" class="husos-valor">1,240</span>
+            <span id="txtHusos" class="husos-valor">1,452</span>
         </div>
+        
         <div id="listaMaquinas" class="contenedor-maquinas">
-            <div class="mini-card-parada"><span>Máquina Parada</span><strong>CARDA 4</strong></div>
-            <div class="mini-card-parada"><span>Máquina Parada</span><strong>CARDA 7</strong></div>
-            <div class="mini-card-parada"><span>Máquina Parada</span><strong>PEINADORA 2</strong></div>
+            <div class="mini-card-parada">
+                <span>MÁQUINA PARADA</span>
+                <strong>CARDA 4</strong>
+                <em>Motivo: Eléctrico</em>
+            </div>
+            <div class="mini-card-parada">
+                <span>MÁQUINA PARADA</span>
+                <strong>OPEN-END 2</strong>
+                <em>Motivo: Mecánico</em>
+            </div>
+            <div class="mini-card-parada">
+                <span>MÁQUINA PARADA</span>
+                <strong>CONERA 1</strong>
+                <em>Motivo: Limpieza</em>
+            </div>
         </div>
     </div>
 </div>
@@ -94,25 +112,27 @@
 <div class="dashboard-middle-row" id="contenedorGauges"></div>
 
 <script>
-    // 1. FECHA (RESTAURADA)
+    // 1. FECHA
     const f = new Date();
     const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
     let txtFecha = f.toLocaleDateString('es-ES', opciones);
     document.getElementById("fechaDisplay").innerText = txtFecha.charAt(0).toUpperCase() + txtFecha.slice(1);
 
-    // 2. DATOS PARA LOS GAUGE
-    const datosCardas = [
-        { ac: 800, max: 1000 }, { ac: 500, max: 1000 }, { ac: 600, max: 1000 },
-        { ac: 700, max: 1000 }, { ac: 800, max: 1000 }, { ac: 650, max: 1000 },
-        { ac: 400, max: 1000 }, { ac: 650, max: 1000 }, { ac: 800, max: 1000 },
-        { ac: 400, max: 1000 }, { ac: 300, max: 1000 }
-    ];
+    // 2. SIMULACIÓN DE DATOS DE PESTAÑAS
+    const datosExcel = {
+        cardas: [
+            { ac: 850, max: 1000 }, { ac: 420, max: 1000 }, { ac: 910, max: 1000 },
+            { ac: 0, max: 1000 }, { ac: 780, max: 1000 }, { ac: 640, max: 1000 },
+            { ac: 550, max: 1000 }, { ac: 890, max: 1000 }, { ac: 320, max: 1000 },
+            { ac: 710, max: 1000 }, { ac: 450, max: 1000 }
+        ]
+    };
 
-    // 3. GENERACIÓN DE INDICADORES (CON CARGA DE SEGURIDAD)
+    // 3. GENERACIÓN DE INDICADORES (CON CARGA DE SEGURIDAD Y AGUJA)
     window.onload = function() {
         const contenedor = document.getElementById('contenedorGauges');
 
-        datosCardas.forEach((datos, index) => {
+        datosExcel.cardas.forEach((datos, index) => {
             const num = index + 1;
             const porcentaje = (datos.ac / datos.max) * 100;
 
@@ -120,9 +140,7 @@
             card.className = 'gauge-card';
             card.innerHTML = `
                 <div class="gauge-title">Carda ${num}</div>
-                <div class="canvas-container">
-                    <canvas id="gauge-${num}"></canvas>
-                </div>
+                <div class="canvas-container"><canvas id="gauge-${num}"></canvas></div>
                 <div class="info-labels">
                     <p class="valor-ac">Ac. ${datos.ac.toLocaleString()}</p>
                     <p class="valor-max">Max. ${datos.max.toLocaleString()}</p>
@@ -144,11 +162,8 @@
                     }]
                 },
                 options: {
-                    rotation: -110,
-                    circumference: 220,
-                    cutout: '75%',
-                    responsive: true,
-                    maintainAspectRatio: false,
+                    rotation: -110, circumference: 220, cutout: '75%',
+                    responsive: true, maintainAspectRatio: false,
                     plugins: { legend: false, tooltip: false }
                 },
                 plugins: [{
@@ -156,26 +171,15 @@
                     afterDraw: (chart) => {
                         const { ctx, width, height } = chart;
                         ctx.save();
-                        const cx = width / 2;
-                        const cy = height / 1.35;
+                        const cx = width / 2; const cy = height / 1.35;
                         const r = chart.getDatasetMeta(0).data[0].outerRadius;
                         const val = chart.data.datasets[0].needleValue;
                         const angle = (Math.PI * 0.88) + (val / 100) * (Math.PI * 1.23);
-
-                        ctx.translate(cx, cy);
-                        ctx.rotate(angle);
-                        ctx.beginPath();
-                        ctx.moveTo(0, -2);
-                        ctx.lineTo(r - 10, 0);
-                        ctx.lineTo(0, 2);
-                        ctx.fillStyle = '#000';
-                        ctx.fill();
-                        ctx.rotate(-angle);
-                        ctx.beginPath();
-                        ctx.arc(0, 0, 5, 0, Math.PI * 2);
-                        ctx.fillStyle = '#000';
-                        ctx.fill();
-                        ctx.restore();
+                        ctx.translate(cx, cy); ctx.rotate(angle);
+                        ctx.beginPath(); ctx.moveTo(0, -2); ctx.lineTo(r - 10, 0); ctx.lineTo(0, 2);
+                        ctx.fillStyle = '#000'; ctx.fill();
+                        ctx.rotate(-angle); ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2);
+                        ctx.fillStyle = '#000'; ctx.fill(); ctx.restore();
                     }
                 }]
             });
