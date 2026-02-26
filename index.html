@@ -9,6 +9,7 @@
         margin: 0; 
         background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
+        overflow-x: hidden; /* Evita que todo el cuerpo se mueva */
     }
     
     .header {
@@ -26,40 +27,50 @@
     .titulo { width: 60%; text-align: center; font-size: 22px; font-weight: bold; }
     .fecha { width: 20%; text-align: right; font-size: 15px; }
 
-    /* DISTRIBUCIÓN EN UNA SOLA LÍNEA SUPERIOR */
+    /* DISTRIBUCIÓN DE LOS 11 INDICADORES EN UNA SOLA LÍNEA */
     .dashboard-top-row {
         display: flex;
         flex-direction: row;
-        flex-wrap: nowrap; /* Fuerza una sola línea */
-        overflow-x: auto; /* Permite scroll si hay muchos */
-        gap: 15px;
-        padding: 20px;
-        background-color: rgba(0, 0, 0, 0.1);
-        justify-content: center;
+        flex-wrap: nowrap; 
+        overflow-x: auto; /* Permite scroll horizontal si la pantalla es chica */
+        gap: 12px;
+        padding: 15px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Estilo del scrollbar para que sea discreto */
+    .dashboard-top-row::-webkit-scrollbar {
+        height: 6px;
+    }
+    .dashboard-top-row::-webkit-scrollbar-thumb {
+        background: #1e3a50;
+        border-radius: 10px;
     }
 
     .gauge-card {
         background: white;
-        min-width: 160px; /* Tamaño ajustado para caber en línea */
-        height: 180px; 
-        border-radius: 8px;
+        min-width: 150px; /* Tamaño optimizado para 11 unidades */
+        height: 175px; 
+        border-radius: 6px;
         position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-        padding: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        padding: 8px;
+        flex-shrink: 0; /* Evita que los cuadros se encojan */
     }
 
     .gauge-title {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: bold;
         color: #333;
         margin-bottom: 2px;
     }
 
     .canvas-container {
-        width: 150px;
+        width: 140px;
         height: 100px;
     }
 
@@ -68,8 +79,8 @@
         margin-top: -5px;
     }
 
-    .valor-ac { font-size: 14px; font-weight: bold; color: #000; margin: 0; }
-    .valor-max { font-size: 11px; color: #444; margin: 0; }
+    .valor-ac { font-size: 13px; font-weight: bold; color: #000; margin: 0; }
+    .valor-max { font-size: 11px; color: #555; margin: 0; }
 </style>
 </head>
 <body>
@@ -90,19 +101,19 @@
     document.getElementById("fechaDisplay").innerText = txtFecha.charAt(0).toUpperCase() + txtFecha.slice(1);
 
     // 2. LÓGICA DE DATOS
-    const datos = { ac: 250000, max: 300000 };
-    const porcentaje = (datos.ac / datos.max) * 100;
+    const datosBase = { ac: 250000, max: 300000 };
+    const porcentaje = (datosBase.ac / datosBase.max) * 100;
 
-    // Generar indicadores en la fila superior
-    for (let i = 1; i <= 6; i++) { // Ajusta el número de indicadores según necesites
+    // GENERACIÓN EXACTA DE 11 INDICADORES
+    for (let i = 1; i <= 11; i++) {
         const card = document.createElement('div');
         card.className = 'gauge-card';
         card.innerHTML = `
-            <div class="gauge-title">Ton.</div>
+            <div class="gauge-title">Ton. ${i}</div>
             <div class="canvas-container"><canvas id="gauge-${i}"></canvas></div>
             <div class="info-labels">
-                <p class="valor-ac">Ac. ${datos.ac.toLocaleString()}</p>
-                <p class="valor-max">Max. ${datos.max.toLocaleString()}</p>
+                <p class="valor-ac">Ac. ${datosBase.ac.toLocaleString()}</p>
+                <p class="valor-max">Max. ${datosBase.max.toLocaleString()}</p>
             </div>
         `;
         document.getElementById('contenedorGauges').appendChild(card);
