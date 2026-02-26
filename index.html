@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
+    /* CANDADO DE DISEÑO SATEX 2026 */
     body { 
         margin: 0; 
         background-color: #2f5577; 
@@ -20,52 +21,55 @@
         border-bottom: 2px solid #1e3a50;
     }
 
-    .header-left { width: 25%; }
+    .header-left { width: 20%; }
     .header-left img { height: 40px; }
-    .titulo { width: 50%; text-align: center; font-size: 22px; font-weight: bold; }
-    .fecha { width: 25%; text-align: right; font-size: 15px; }
+    .titulo { width: 60%; text-align: center; font-size: 22px; font-weight: bold; }
+    .fecha { width: 20%; text-align: right; font-size: 15px; }
 
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        gap: 25px;
-        padding: 40px;
-        justify-items: center;
+    /* DISTRIBUCIÓN EN UNA SOLA LÍNEA SUPERIOR */
+    .dashboard-top-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap; /* Fuerza una sola línea */
+        overflow-x: auto; /* Permite scroll si hay muchos */
+        gap: 15px;
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.1);
+        justify-content: center;
     }
 
-    /* TARJETA DEL MODELO 4 */
     .gauge-card {
         background: white;
-        width: 210px; 
-        height: 230px; 
+        min-width: 160px; /* Tamaño ajustado para caber en línea */
+        height: 180px; 
         border-radius: 8px;
         position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        padding-top: 15px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        padding: 10px;
     }
 
     .gauge-title {
-        font-size: 24px;
+        font-size: 18px;
         font-weight: bold;
         color: #333;
-        margin-bottom: 5px;
+        margin-bottom: 2px;
     }
 
     .canvas-container {
-        width: 190px;
-        height: 140px; /* Altura reducida para efecto semicírculo */
+        width: 150px;
+        height: 100px;
     }
 
     .info-labels {
         text-align: center;
-        margin-top: -10px;
+        margin-top: -5px;
     }
 
-    .valor-ac { font-size: 18px; font-weight: bold; color: #000; margin: 0; }
-    .valor-max { font-size: 14px; color: #444; margin: 0; }
+    .valor-ac { font-size: 14px; font-weight: bold; color: #000; margin: 0; }
+    .valor-max { font-size: 11px; color: #444; margin: 0; }
 </style>
 </head>
 <body>
@@ -76,7 +80,7 @@
     <div id="fechaDisplay" class="fecha"></div>
 </div>
 
-<div class="dashboard-grid" id="contenedorGauges"></div>
+<div class="dashboard-top-row" id="contenedorGauges"></div>
 
 <script>
     // 1. FECHA (Solo primera mayúscula)
@@ -89,7 +93,8 @@
     const datos = { ac: 250000, max: 300000 };
     const porcentaje = (datos.ac / datos.max) * 100;
 
-    for (let i = 1; i <= 11; i++) {
+    // Generar indicadores en la fila superior
+    for (let i = 1; i <= 6; i++) { // Ajusta el número de indicadores según necesites
         const card = document.createElement('div');
         card.className = 'gauge-card';
         card.innerHTML = `
@@ -100,16 +105,15 @@
                 <p class="valor-max">Max. ${datos.max.toLocaleString()}</p>
             </div>
         `;
-        contenedorGauges.appendChild(card);
+        document.getElementById('contenedorGauges').appendChild(card);
 
         new Chart(document.getElementById(`gauge-${i}`).getContext('2d'), {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    // Escala: Verde (0-85), Amarillo (85-100), Rojo (100-120)
                     data: [85, 15, 20], 
                     backgroundColor: ["#23a446", "#f9b218", "#da291c"],
-                    borderWidth: 2,
+                    borderWidth: 1,
                     borderColor: '#ffffff',
                     needleValue: porcentaje
                 }]
@@ -126,44 +130,27 @@
                 afterDraw(chart) {
                     const {ctx, width, height} = chart;
                     const cx = width / 2;
-                    const cy = height / 1.3; // Centro bajado para el arco
+                    const cy = height / 1.3;
                     const r = chart.getDatasetMeta(0).data[0].outerRadius;
 
-                    // DIBUJAR AGUJA NEGRA (ESTILO INDUSTRIAL)
                     const val = chart.data.datasets[0].needleValue;
                     const angle = (Math.PI * 0.88) + (val / 120) * (Math.PI * 1.22);
 
                     ctx.save();
                     ctx.translate(cx, cy);
                     ctx.rotate(angle);
-                    
-                    // Cuerpo de la aguja
                     ctx.beginPath();
-                    ctx.moveTo(0, -3);
-                    ctx.lineTo(r - 10, 0);
-                    ctx.lineTo(0, 3);
+                    ctx.moveTo(0, -2);
+                    ctx.lineTo(r - 8, 0);
+                    ctx.lineTo(0, 2);
                     ctx.fillStyle = "#333";
                     ctx.fill();
 
-                    // Círculo central negro
                     ctx.rotate(-angle);
                     ctx.beginPath();
-                    ctx.arc(0, 0, 8, 0, 2 * Math.PI);
+                    ctx.arc(0, 0, 5, 0, 2 * Math.PI);
                     ctx.fillStyle = "#333";
                     ctx.fill();
-                    ctx.restore();
-
-                    // ETIQUETAS DE ESCALA (0 - 120)
-                    ctx.save();
-                    ctx.translate(cx, cy);
-                    ctx.textAlign = 'center';
-                    ctx.font = 'bold 12px Arial';
-                    ctx.fillStyle = '#666';
-                    
-                    // Posición 0%
-                    ctx.fillText('0', -r + 5, 20);
-                    // Posición 120%
-                    ctx.fillText('120%', r - 5, 20);
                     ctx.restore();
                 }
             }]
