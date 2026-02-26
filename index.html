@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* CANDADO DE DISEÑO SATEX 2026 - MODELO MASTER V4 */
+    /* CANDADO DE DISEÑO SATEX 2026 - MODO MASTER V5 */
     body { 
         margin: 0; background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
@@ -17,7 +17,6 @@
         position: relative;
     }
     .header-left img { height: 50px; }
-    
     .titulo { 
         width: 60%; text-align: center; font-size: 28px; font-weight: bold; 
         position: absolute; left: 50%; transform: translateX(-50%);
@@ -25,49 +24,64 @@
     }
     .fecha { width: 20%; text-align: right; font-size: 14px; margin-left: auto; }
 
-    /* SECCIÓN ESTATUS ALINEADA */
+    /* SECCIÓN ESTATUS INTEGRADA */
     .seccion-estatus { 
         padding: 15px 30px; 
         display: flex; 
         align-items: center; 
-        gap: 20px; 
+        gap: 15px;
+        background: rgba(0,0,0,0.1);
     }
-    .frase-estatus { 
-        color: white; 
-        font-size: 18px; 
-        font-weight: bold; 
-        white-space: nowrap;
-    }
+    .frase-estatus { color: white; font-size: 16px; font-weight: bold; white-space: nowrap; }
     
-    .fila-indicadores-top {
-        display: flex; 
-        align-items: center; 
-        gap: 15px; 
-        flex-grow: 1;
-    }
+    .contenedor-bloques { display: flex; align-items: center; gap: 12px; }
 
     .bloque-dato {
         background: rgba(255, 255, 255, 0.1); 
-        padding: 8px 15px;
+        padding: 8px 12px;
         border-radius: 4px; 
         border-left: 4px solid #f9b218;
-        min-width: 150px;
+        min-width: 130px;
+        height: 50px;
+        display: flex; flex-direction: column; justify-content: center;
     }
-    .dato-etiqueta { font-size: 10px; text-transform: uppercase; color: #ccc; display: block; margin-bottom: 2px; }
-    .dato-valor { font-size: 22px; font-weight: bold; color: #f9b218; }
+    .dato-etiqueta { font-size: 9px; text-transform: uppercase; color: #ccc; margin-bottom: 2px; }
+    .dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; line-height: 1; }
 
-    .contenedor-paradas { margin-left: auto; display: flex; gap: 10px; }
-    .card-parada-unica {
-        background: rgba(218, 41, 28, 0.3); 
-        border: 1px solid #da291c;
-        padding: 8px 20px; 
-        border-radius: 4px; 
-        color: white; 
-        text-align: center;
-        min-width: 160px;
+    /* ÁREA DE MÁQUINAS PARADAS CON SCROLL VERTICAL */
+    .seccion-paradas-scroll {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: 10px;
+        border-left: 1px solid rgba(255,255,255,0.2);
+        padding-left: 20px;
+        flex-grow: 1;
     }
-    .card-parada-unica span { font-size: 9px; display: block; color: #ff9999; text-transform: uppercase; }
-    .card-parada-unica strong { font-size: 16px; text-transform: uppercase; display: block; }
+
+    .lista-vertical-container {
+        height: 66px; /* Mismo alto visual que los bloques */
+        overflow-y: auto;
+        width: 250px;
+        padding-right: 5px;
+    }
+    /* Estilo del scroll */
+    .lista-vertical-container::-webkit-scrollbar { width: 4px; }
+    .lista-vertical-container::-webkit-scrollbar-thumb { background: #da291c; border-radius: 10px; }
+
+    .item-parada {
+        background: rgba(218, 41, 28, 0.2);
+        border: 1px solid #da291c;
+        border-radius: 3px;
+        padding: 5px 10px;
+        margin-bottom: 5px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .item-parada strong { font-size: 13px; text-transform: uppercase; }
+    .item-parada span { font-size: 10px; color: #ff9999; }
 
     /* INDICADORES CARDAS */
     .dashboard-middle-row {
@@ -102,7 +116,8 @@
 
 <div class="seccion-estatus">
     <span class="frase-estatus">Estatus de Planta:</span>
-    <div class="fila-indicadores-top">
+    
+    <div class="contenedor-bloques">
         <div class="bloque-dato">
             <span class="dato-etiqueta">Continuas (Inactivos)</span>
             <span class="dato-valor">16</span>
@@ -115,13 +130,20 @@
             <span class="dato-etiqueta">Coneras (Inactivos)</span>
             <span class="dato-valor">0</span>
         </div>
+    </div>
 
-        <div class="contenedor-paradas">
-            <div class="card-parada-unica">
-                <span>Máquina Parada</span>
-                <strong>Regulador 10</strong>
-            </div>
+    <div class="seccion-paradas-scroll">
+        <div class="bloque-dato" style="border-left-color: #da291c;">
+            <span class="dato-etiqueta">Total Máquinas Paradas</span>
+            <span class="dato-valor" style="color: #ff9999;">1</span>
         </div>
+        
+        <div class="lista-vertical-container">
+            <div class="item-parada">
+                <strong>Regulador 10</strong>
+                <span>25/02/2025</span>
+            </div>
+            </div>
     </div>
 </div>
 
@@ -132,7 +154,7 @@
     const f = new Date();
     document.getElementById("fechaDisplay").innerText = f.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-    // Datos extraídos de tu Excel
+    // Datos Cardas
     const datosExcel = [
         { ac: 800, max: 1000 }, { ac: 500, max: 1000 }, { ac: 600, max: 1000 },
         { ac: 700, max: 1000 }, { ac: 800, max: 1000 }, { ac: 650, max: 1000 },
@@ -171,7 +193,7 @@
             });
         });
 
-        // REFRESH AUTOMÁTICO CADA 2 MINUTOS
+        // AUTO-REFRESCO CADA 2 MINUTOS
         setTimeout(function(){ location.reload(); }, 120000); 
     };
 </script>
