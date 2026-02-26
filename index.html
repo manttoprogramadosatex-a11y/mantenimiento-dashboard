@@ -11,26 +11,26 @@
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    background:#f4f6f9;
+    background: linear-gradient(to bottom, #1f3f5b, #274e73);
 }
 
-/* HEADER */
+/* HEADER MÁS DELGADO */
 .header{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:15px 40px;
+    padding:8px 40px;   /* antes era 15px */
     background:#1f3f5b;
 }
 
 .logo{
-    height:50px;
+    height:45px;
 }
 
 .titulo-header{
     flex:1;
     text-align:center;
-    font-size:26px;
+    font-size:24px;
     font-weight:bold;
     color:white;
 }
@@ -49,7 +49,11 @@ body{
     margin-top:60px;
 }
 
+/* SOLO EL RELOJ ES BLANCO */
 canvas{
+    background:white;
+    border-radius:50%;
+    padding:15px;
     width:280px !important;
     height:280px !important;
 }
@@ -94,16 +98,17 @@ const gaugePlugin = {
         const max = options.max;
         const angle = Math.PI + (value/max)*Math.PI;
 
-        /* AGUJA */
         ctx.save();
         ctx.translate(centerX, centerY);
         ctx.rotate(angle);
+
         ctx.beginPath();
         ctx.moveTo(-3,0);
         ctx.lineTo(0,-radius+35);
         ctx.lineTo(3,0);
         ctx.fillStyle="red";
         ctx.fill();
+
         ctx.restore();
 
         /* CENTRO AZUL */
@@ -131,9 +136,9 @@ function createGauge(id,value,max){
             datasets:[{
                 data:[max*0.2,max*0.3,max*0.5],
                 backgroundColor:[
-                    "#e74c3c",   // rojo
-                    "#f1c40f",   // amarillo
-                    "#2ecc71"    // verde
+                    "#e74c3c",
+                    "#f1c40f",
+                    "#2ecc71"
                 ],
                 borderWidth:0
             }]
@@ -151,7 +156,6 @@ function createGauge(id,value,max){
         plugins:[gaugePlugin]
     });
 }
-
 
 /* VALORES EJEMPLO */
 createGauge("g1",18,25);
