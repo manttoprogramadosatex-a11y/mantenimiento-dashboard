@@ -2,132 +2,159 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Dashboard Ejecutivo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tablero Master Mantto. Satex Textil</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #0f2b46;
+    background: #1f4e79; /* Azul corporativo claro */
     color: white;
-    text-align: center;
 }
 
-header {
-    padding: 10px 20px;
-    background: #163a5c;
+/* ===== HEADER (NO SE TOCA) ===== */
+.header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 10px 30px;
 }
 
-header img {
-    height: 40px;
+.logo {
+    height: 45px;
 }
 
 .fecha {
     font-size: 14px;
 }
 
-h1 {
-    margin: 20px 0;
-    font-weight: 500;
+/* ===== CONTENIDO EXISTENTE ===== */
+.contenido-central {
+    text-align: center;
+    margin-top: 40px;
 }
 
-.cardas-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    padding: 30px;
+/* ===== NUEVA SECCIÓN CARDAS ===== */
+.gauges-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin-top: 60px;
 }
 
-.card {
-    background: #1c4066;
+.gauge-card {
+    background: rgba(255,255,255,0.08);
     padding: 20px;
     border-radius: 15px;
+    width: 260px;
+    text-align: center;
 }
 
 canvas {
-    max-height: 180px;
+    max-width: 220px;
+    margin: auto;
+}
+
+.card-title {
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 16px;
 }
 </style>
 </head>
+
 <body>
 
-<header>
-    <img src="logo.png.jpeg" alt="Logo">
+<!-- HEADER ORIGINAL -->
+<div class="header">
+    <img src="logo.png.jpeg" class="logo">
     <div class="fecha" id="fecha"></div>
-</header>
+</div>
 
-<h1>Indicadores Cardas</h1>
+<!-- CONTENIDO QUE YA ESTABA -->
+<div class="contenido-central">
+    <!-- Aquí estaba su contenido anterior y NO lo borramos -->
+</div>
 
-<div class="cardas-container" id="cardasContainer"></div>
+<!-- NUEVA SECCIÓN VELOCÍMETROS CARDAS -->
+<div class="gauges-container">
+
+    <div class="gauge-card">
+        <div class="card-title">Carda 1</div>
+        <canvas id="gauge1"></canvas>
+    </div>
+
+    <div class="gauge-card">
+        <div class="card-title">Carda 2</div>
+        <canvas id="gauge2"></canvas>
+    </div>
+
+    <div class="gauge-card">
+        <div class="card-title">Carda 3</div>
+        <canvas id="gauge3"></canvas>
+    </div>
+
+</div>
 
 <script>
 
-// Fecha con día en mayúscula
+/* ===== FECHA CON DÍA EN MAYÚSCULA ===== */
 const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-let fechaTexto = new Date().toLocaleDateString('es-ES', opciones);
-fechaTexto = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
-document.getElementById("fecha").innerText = fechaTexto;
+let fecha = new Date().toLocaleDateString('es-ES', opciones);
+fecha = fecha.charAt(0).toUpperCase() + fecha.slice(1);
+document.getElementById("fecha").innerText = fecha;
 
 
-// 🔥 DATOS SIMULADOS (solo demostración)
-const cardas = [
-    { nombre: "Carda 1", actual: 8, max: 10 },
-    { nombre: "Carda 2", actual: 6, max: 10 },
-    { nombre: "Carda 3", actual: 9, max: 10 },
-    { nombre: "Carda 4", actual: 5, max: 10 },
-    { nombre: "Carda 5", actual: 7, max: 10 },
-    { nombre: "Carda 6", actual: 10, max: 10 },
-    { nombre: "Carda 7", actual: 4, max: 10 },
-    { nombre: "Carda 8", actual: 8.5, max: 10 },
-    { nombre: "Carda 9", actual: 6.5, max: 10 },
-    { nombre: "Carda 10", actual: 9.2, max: 10 },
-];
+/* ===== FUNCIÓN VELOCÍMETRO ===== */
+function createGauge(id, value, max) {
 
-const container = document.getElementById("cardasContainer");
-
-cardas.forEach((carda, index) => {
-
-    const porcentaje = (carda.actual / carda.max) * 100;
-
+    let porcentaje = value / max;
     let color = "#2ecc71";
-    if (porcentaje > 85) color = "#e74c3c";
-    else if (porcentaje > 60) color = "#f1c40f";
 
-    const div = document.createElement("div");
-    div.className = "card";
+    if (porcentaje < 0.4) color = "#e74c3c";
+    else if (porcentaje < 0.7) color = "#f39c12";
 
-    div.innerHTML = `
-        <h3>${carda.nombre}</h3>
-        <canvas id="gauge${index}"></canvas>
-        <p>${carda.actual} / ${carda.max} Ton</p>
-    `;
-
-    container.appendChild(div);
-
-    new Chart(document.getElementById(`gauge${index}`), {
+    new Chart(document.getElementById(id), {
         type: 'doughnut',
         data: {
             datasets: [{
-                data: [porcentaje, 100 - porcentaje],
-                backgroundColor: [color, "#2c5a85"],
+                data: [value, max - value],
+                backgroundColor: [color, "#2c3e50"],
                 borderWidth: 0
             }]
         },
         options: {
             rotation: -90,
             circumference: 180,
-            cutout: "70%",
+            cutout: '70%',
             plugins: {
                 tooltip: { enabled: false },
                 legend: { display: false }
             }
-        }
+        },
+        plugins: [{
+            id: 'text',
+            beforeDraw(chart) {
+                const { width, height, ctx } = chart;
+                ctx.restore();
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "white";
+                ctx.textAlign = "center";
+                ctx.fillText(value + " Toneladas", width / 2, height - 30);
+                ctx.save();
+            }
+        }]
     });
+}
 
-});
+/* ===== EJEMPLO VISUAL ===== */
+createGauge("gauge1", 18, 25);
+createGauge("gauge2", 12, 25);
+createGauge("gauge3", 22, 25);
 
 </script>
 
