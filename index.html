@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* CANDADO DE DISEÑO SATEX 2026 - POSICIÓN MEDIA */
+    /* CANDADO DE DISEÑO SATEX 2026 - POSICIÓN MEDIA RESTAURADA */
     body { 
         margin: 0; 
         background-color: #2f5577; 
@@ -27,32 +27,149 @@
     .header-left { width: 20%; }
     .header-left img { height: 35px; }
     .titulo { width: 60%; text-align: center; font-size: 20px; font-weight: bold; }
-    .fecha-contenedor { width: 20%; text-align: right; }
-    .fecha { font-size: 14px; display: block; }
+    .fecha { width: 20%; text-align: right; font-size: 14px; }
 
-    /* NUEVA SECCIÓN: ESTATUS DE PLANTA */
+    /* SECCIÓN SUPERIOR PARA TUS DATOS */
+    .seccion-superior {
+        height: 40vh; /* Ocupa el 40% superior de la pantalla */
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
     .estatus-derecha {
         text-align: right;
-        padding-right: 30px;
-        padding-top: 10px;
+        padding: 10px 30px;
         color: white;
     }
     .frase-estatus {
         font-size: 16px;
         font-weight: bold;
         display: block;
-        margin-bottom: 20px; /* Bajar un renglón */
+        margin-bottom: 20px; /* Bajar un renglón solicitado */
     }
 
-    .espacio-superior {
-        flex: 1; 
-        display: flex;
-        flex-direction: column;
-    }
-
-    /* FILA DE CARDAS DESPLAZADA A LA MITAD */
+    /* FILA DE CARDAS - POSICIÓN MEDIA */
     .dashboard-middle-row {
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap; 
-        overflow-x: auto;
+        overflow-x: auto; 
+        gap: 10px;
+        padding: 15px;
+        background-color: rgba(0, 0, 0, 0.15);
+        min-height: 165px; /* Altura fija para asegurar visibilidad */
+    }
+
+    .dashboard-middle-row::-webkit-scrollbar { height: 6px; }
+    .dashboard-middle-row::-webkit-scrollbar-thumb { background: #4285f4; border-radius: 10px; }
+
+    /* ESTRUCTURA VISUAL BLOQUEADA POR EL USUARIO */
+    .gauge-card {
+        background: white;
+        min-width: 130px; 
+        height: 160px; 
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        padding: 6px;
+        flex-shrink: 0;
+    }
+    .gauge-title { font-size: 14px; font-weight: bold; color: #222; margin-bottom: 2px; text-transform: uppercase; }
+    .canvas-container { width: 120px; height: 85px; }
+    .info-labels { text-align: center; margin-top: -3px; }
+    .valor-ac { font-size: 12px; font-weight: bold; color: #000; margin: 0; }
+    .valor-max { font-size: 10px; color: #666; margin: 0; }
+    .label-toneladas { font-size: 9px; color: #888; margin: 0; font-style: italic; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-left"><img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg" alt="Logo"></div>
+    <div class="titulo">Tablero Master Mantto. Satex Textil</div>
+    <div id="fechaDisplay" class="fecha"></div>
+</div>
+
+<div class="seccion-superior">
+    <div class="estatus-derecha">
+        <span class="frase-estatus">Estatus de Planta:</span>
+    </div>
+</div>
+
+<div class="dashboard-middle-row" id="contenedorGauges"></div>
+
+<script>
+    // 1. FECHA
+    const f = new Date();
+    const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
+    let txtFecha = f.toLocaleDateString('es-ES', opciones);
+    document.getElementById("fechaDisplay").innerText = txtFecha.charAt(0).toUpperCase() + txtFecha.slice(1);
+
+    // 2. GENERACIÓN DE INDICADORES (CON CARGA DE SEGURIDAD)
+    window.onload = function() {
+        const contenedor = document.getElementById('contenedorGauges');
+        const datosBase = { ac: 250000, max: 300000 };
+        const porcentaje = (datosBase.ac / datosBase.max) * 100;
+
+        for (let i = 1; i <= 11; i++) {
+            const card = document.createElement('div');
+            card.className = 'gauge-card';
+            card.innerHTML = `
+                <div class="gauge-title">Carda ${i}</div>
+                <div class="canvas-container"><canvas id="gauge-${i}"></canvas></div>
+                <div class="info-labels">
+                    <p class="valor-ac">Ac. ${datosBase.ac.toLocaleString()}</p>
+                    <p class="valor-max">Max. ${datosBase.max.toLocaleString()}</p>
+                    <p class="label-toneladas">Toneladas</p>
+                </div>
+            `;
+            contenedor.appendChild(card);
+
+            new Chart(document.getElementById(`gauge-${i}`).getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [85, 15, 20], 
+                        backgroundColor: ["#23a446", "#f9b218", "#da291c"],
+                        borderWidth: 1,
+                        borderColor: '#ffffff',
+                        needleValue: porcentaje
+                    }]
+                },
+                options: {
+                    rotation: -110,
+                    circumference: 220,
+                    cutout: '75%',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: false, tooltip: false }
+                },
+                plugins: [{
+                    afterDraw(chart) {
+                        const {ctx, width, height} = chart;
+                        const cx = width / 2;
+                        const cy = height / 1.3;
+                        const r = chart.getDatasetMeta(0).data[0].outerRadius;
+                        const val = chart.data.datasets[0].needleValue;
+                        const angle = (Math.PI * 0.88) + (val / 120) * (Math.PI * 1.22);
+                        ctx.save();
+                        ctx.translate(cx, cy);
+                        ctx.rotate(angle);
+                        ctx.beginPath();
+                        ctx.moveTo(0, -1.5); ctx.lineTo(r - 6, 0); ctx.lineTo(0, 1.5);
+                        ctx.fillStyle = "#000"; ctx.fill();
+                        ctx.rotate(-angle);
+                        ctx.beginPath(); ctx.arc(0, 0, 4, 0, 2 * Math.PI);
+                        ctx.fillStyle = "#000"; ctx.fill();
+                        ctx.restore();
+                    }
+                }]
+            });
+        }
+    };
+</script>
+</body>
+</html>
