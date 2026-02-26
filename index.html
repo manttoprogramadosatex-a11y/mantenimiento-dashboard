@@ -1,191 +1,131 @@
-Tienes toda la razón, mil disculpas por haber movido el título de su lugar. He restaurado la configuración exacta del encabezado (flexbox con el título centrado al medio de la pantalla) y he reducido los indicadores al 50% de su tamaño original (aproximadamente 110px) para que se vean muy compactos y elegantes en el tablero.
-
-Aquí tienes el código corregido con el encabezado de SATEX bloqueado y los indicadores mini:
-HTML
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Tablero Master Mantto. Satex Textil</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #2f5577; 
-    color: white;
-}
+    body { margin: 0; background: #2f5577; font-family: Arial, sans-serif; }
+    
+    /* ENCABEZADO ORIGINAL BLOQUEADO */
+    .header {
+        background: #274a66;
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+        height: 60px;
+        color: white;
+    }
+    .header-left { width: 20%; display: flex; align-items: center; }
+    .header-left img { height: 40px; }
+    .titulo { 
+        width: 60%; 
+        text-align: center; 
+        font-size: 28px; 
+        font-weight: bold; 
+        text-transform: none;
+    }
+    .fecha { width: 20%; text-align: right; font-size: 14px; }
 
-/* ENCABEZADO RESTAURADO (TÍTULO AL CENTRO) */
-.header {
-    background: #274a66; 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 30px;
-    height: 50px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-
-.header-left {
-    display: flex;
-    align-items: center;
-    width: 25%; /* Espacio para el logo */
-}
-
-.header img {
-    height: 35px;
-}
-
-.titulo {
-    font-size: 28px;
-    font-weight: bold;
-    text-align: center;
-    width: 50%; /* Título centrado al medio de la pantalla */
-    letter-spacing: 1px;
-}
-
-.fecha {
-    font-size: 13px;
-    width: 25%; /* Espacio para la fecha */
-    text-align: right;
-}
-
-/* CONTENEDOR PARA LOS 11 INDICADORES (MINI - 50%) */
-.grid-indicadores {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 15px;
-    padding: 30px;
-    justify-items: center;
-}
-
-.gauge-card {
-    background: white;
-    width: 110px; /* Reducción al 50% */
-    height: 110px; /* Reducción al 50% */
-    border-radius: 50%;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.label-toneladas {
-    position: absolute;
-    top: 20px;
-    color: #333;
-    font-size: 8px; /* Texto mini para el reloj mini */
-    font-weight: bold;
-    z-index: 10;
-}
-
-.valor-principal {
-    position: absolute;
-    bottom: 18px;
-    color: #000;
-    font-size: 11px; /* Valor ajustado al tamaño */
-    font-weight: 800;
-    z-index: 10;
-}
-
-canvas {
-    max-width: 95%;
-    max-height: 95%;
-}
+    /* INDICADORES AL 50% */
+    .container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 20px;
+        padding: 40px;
+        justify-items: center;
+    }
+    .gauge-card {
+        background: white;
+        width: 110px; 
+        height: 110px;
+        border-radius: 50%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .label-ton {
+        position: absolute;
+        top: 22px;
+        font-size: 9px;
+        font-weight: bold;
+        color: #333;
+    }
+    .valor {
+        position: absolute;
+        bottom: 18px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #000;
+    }
+    canvas { max-width: 95%; max-height: 95%; }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="header-left">
-        <img src="logo.png.jpeg" alt="Logo">
-    </div>
+    <div class="header-left"><img src="logo.png.jpeg"></div>
     <div class="titulo">Tablero Master Mantto. Satex Textil</div>
     <div class="fecha" id="fecha"></div>
 </div>
 
-<div class="grid-indicadores" id="contenedorGauges">
-    </div>
+<div class="container" id="tablero"></div>
 
 <script>
-/* FECHA ACTUAL */
-const hoy = new Date();
-const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric'};
-document.getElementById("fecha").innerText = hoy.toLocaleDateString('es-ES', opciones).toUpperCase();
+    document.getElementById("fecha").innerText = new Date().toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'}).toUpperCase();
 
-/* GENERACIÓN DE LOS 11 GAUGES MINI */
-const numIndicadores = 11;
-const contenedor = document.getElementById('contenedorGauges');
+    const tablero = document.getElementById('tablero');
+    for (let i = 1; i <= 11; i++) {
+        const div = document.createElement('div');
+        div.className = 'gauge-card';
+        div.innerHTML = `<div class="label-ton">Toneladas</div><canvas id="g-${i}"></canvas><div class="valor">250,000</div>`;
+        tablero.appendChild(div);
 
-for (let i = 1; i <= numIndicadores; i++) {
-    const card = document.createElement('div');
-    card.className = 'gauge-card';
-    card.innerHTML = `
-        <div class="label-toneladas">Toneladas</div>
-        <canvas id="gauge-${i}"></canvas>
-        <div class="valor-principal">250,000</div>
-    `;
-    contenedor.appendChild(card);
-
-    const ctx = document.getElementById(`gauge-${i}`).getContext('2d');
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [50, 25, 25], 
-                backgroundColor: ["#23a446", "#f9b218", "#da291c"],
-                borderWidth: 0,
-                needleValue: 25 
+        new Chart(document.getElementById(`g-${i}`).getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [50, 25, 25],
+                    backgroundColor: ["#23a446", "#f9b218", "#da291c"],
+                    borderWidth: 0,
+                    needleValue: 25
+                }]
+            },
+            options: {
+                rotation: -120,
+                circumference: 240,
+                cutout: '75%',
+                plugins: { legend: false, tooltip: false }
+            },
+            plugins: [{
+                afterDatasetDraw(chart) {
+                    const {ctx, data} = chart;
+                    const x = chart.getDatasetMeta(0).data[0].x;
+                    const y = chart.getDatasetMeta(0).data[0].y;
+                    const r = chart.getDatasetMeta(0).data[0].outerRadius;
+                    const angle = (Math.PI * 0.833) + (data.datasets[0].needleValue / 100) * (Math.PI * 1.33);
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(angle);
+                    ctx.beginPath();
+                    ctx.moveTo(0, -1);
+                    ctx.lineTo(r - 5, 0);
+                    ctx.lineTo(0, 1);
+                    ctx.fillStyle = "#333";
+                    ctx.fill();
+                    ctx.rotate(-angle);
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 4, 0, 2 * Math.PI);
+                    ctx.fillStyle = "#4285f4";
+                    ctx.fill();
+                    ctx.strokeStyle = "white";
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+                    ctx.restore();
+                }
             }]
-        },
-        options: {
-            rotation: -120,
-            circumference: 240,
-            cutout: '75%',
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: { legend: { display: false }, tooltip: { enabled: false } }
-        },
-        plugins: [{
-            id: 'needle',
-            afterDatasetDraw(chart) {
-                const {ctx} = chart;
-                const meta = chart.getDatasetMeta(0);
-                const x = meta.data[0].x;
-                const y = meta.data[0].y;
-                const outerR = meta.data[0].outerRadius;
-
-                // Aguja
-                const angle = (Math.PI * 0.833) + (chart.data.datasets[0].needleValue / 100) * (Math.PI * 1.33);
-                ctx.save();
-                ctx.translate(x, y);
-                ctx.rotate(angle);
-                ctx.beginPath();
-                ctx.moveTo(0, -1);
-                ctx.lineTo(outerR - 5, 0);
-                ctx.lineTo(0, 1);
-                ctx.fillStyle = "#333";
-                ctx.fill();
-
-                // Centro azul mini
-                ctx.rotate(-angle);
-                ctx.beginPath();
-                ctx.arc(0, 0, 3.5, 0, 2 * Math.PI);
-                ctx.fillStyle = "#4285f4";
-                ctx.fill();
-                ctx.strokeStyle = "white";
-                ctx.lineWidth = 1;
-                ctx.stroke();
-                ctx.restore();
-            }
-        }]
-    });
-}
+        });
+    }
 </script>
 </body>
 </html>
