@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
     /* ---------------------------------------------------------
-       CANDADO DE DISEÑO BASE (PROYECTO SATEX)
+       CANDADO DE DISEÑO BASE (PROYECTO SATEX 2026)
     ------------------------------------------------------------ */
     body { 
         margin: 0; 
@@ -37,48 +37,44 @@
     .fecha { width: 25%; text-align: right; font-size: 14px; color: white; }
 
     /* ---------------------------------------------------------
-       CANDADO DE TAMAÑO DE INDICADORES (82px BLOQUEADO)
+       CANDADO DE TAMAÑO Y POSICIÓN (82px BLOQUEADO)
     ------------------------------------------------------------ */
     .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-        gap: 15px;
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        gap: 20px;
         padding: 30px;
         justify-items: center;
     }
 
     .gauge-card {
         background: white !important;
-        width: 82px !important; /* BLOQUEADO AL TAMAÑO SOLICITADO */
-        height: 82px !important; /* BLOQUEADO AL TAMAÑO SOLICITADO */
-        border-radius: 50% !important;
+        width: 100px !important; /* Un poco más de margen para las etiquetas externas */
+        height: 115px !important; 
+        border-radius: 8px;
         position: relative;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
 
-    .label-ton {
-        position: absolute;
-        top: 16px;
-        font-size: 7px;
-        font-weight: bold;
-        color: #333;
+    .canvas-container {
+        width: 82px !important; /* TAMAÑO DE INDICADOR BLOQUEADO */
+        height: 82px !important;
+        position: relative;
     }
 
-    .valor-num {
-        position: absolute;
-        bottom: 14px;
-        font-size: 9px;
-        font-weight: bold;
-        color: #000;
+    .info-container {
+        text-align: center;
+        margin-top: -5px;
     }
 
-    canvas { 
-        max-width: 92% !important; 
-        max-height: 92% !important; 
-    }
+    .label-ton { font-size: 8px; font-weight: bold; color: #333; margin: 0; }
+    .valor-ac { font-size: 9px; font-weight: bold; color: #000; margin: 0; }
+    .valor-max { font-size: 7px; color: #555; margin: 0; }
+
 </style>
 </head>
 <body>
@@ -92,59 +88,106 @@
 <div class="dashboard-grid" id="contenedorGauges"></div>
 
 <script>
-    // Fecha estática en formato Satex
     document.getElementById("fechaDisplay").innerText = new Date().toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'}).toUpperCase();
+
+    // CONFIGURACIÓN DE PRUEBA (Modifica estos valores)
+    const valorAcumulado = 250000;
+    const valorMaximo = 300000;
+    const porcentajeActual = (valorAcumulado / valorMaximo) * 100;
 
     const contenedor = document.getElementById('contenedorGauges');
     
-    // Creación de los 11 indicadores
     for (let i = 1; i <= 11; i++) {
         const card = document.createElement('div');
         card.className = 'gauge-card';
-        card.innerHTML = `<div class="label-ton">Toneladas</div><canvas id="gauge-${i}"></canvas><div class="valor-num">250,000</div>`;
+        card.innerHTML = `
+            <div class="canvas-container">
+                <canvas id="gauge-${i}"></canvas>
+            </div>
+            <div class="info-container">
+                <p class="label-ton">Ton.</p>
+                <p class="valor-ac">Ac. ${valorAcumulado.toLocaleString()}</p>
+                <p class="valor-max">Max. ${valorMaximo.toLocaleString()}</p>
+            </div>
+        `;
         contenedor.appendChild(card);
 
         new Chart(document.getElementById(`gauge-${i}`).getContext('2d'), {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    data: [50, 25, 25],
+                    // FRANJAS CON CANDADO: Verde (85%), Amarillo (15% para llegar a 100), Rojo (20% extra)
+                    data: [85, 15, 20], 
                     backgroundColor: ["#23a446", "#f9b218", "#da291c"],
                     borderWidth: 0,
-                    needleValue: 25 
+                    needleValue: porcentajeActual 
                 }]
             },
             options: {
-                rotation: -120,
-                circumference: 240,
-                cutout: '75%',
+                rotation: -135,
+                circumference: 270,
+                cutout: '70%',
                 responsive: true,
+                maintainAspectRatio: true,
                 plugins: { legend: false, tooltip: false }
             },
             plugins: [{
-                afterDatasetDraw(chart) {
-                    const {ctx} = chart;
-                    const meta = chart.getDatasetMeta(0);
-                    const x = meta.data[0].x;
-                    const y = meta.data[0].y;
-                    const r = meta.data[0].outerRadius;
-                    const val = chart.data.datasets[0].needleValue;
-                    
-                    const angle = (Math.PI * 0.833) + (val / 100) * (Math.PI * 1.33);
-                    
+                afterDraw(chart) {
+                    const {ctx, chartArea: {top, bottom, left, right, width, height}} = chart;
+                    const x = width / 2;
+                    const y = height / 2 + 5;
+                    const outerRadius = chart.getDatasetMeta(0).data[0].outerRadius;
+                    const innerRadius = chart.getDatasetMeta(0).data[0].innerRadius;
+
+                    // --- DIBUJAR 11 LÍNEAS (ESCALA) Y TEXTO % ---
                     ctx.save();
                     ctx.translate(x, y);
-                    ctx.rotate(angle);
-                    ctx.beginPath();
-                    ctx.moveTo(0, -0.8);
-                    ctx.lineTo(r - 4, 0);
-                    ctx.lineTo(0, 0.8);
-                    ctx.fillStyle = "#333";
-                    ctx.fill();
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.font = 'bold 6px Arial';
+
+                    for (let n = 0; n <= 11; n++) {
+                        const perc = (n + 1) * 10; // 10%, 20%... 120%
+                        const angle = (Math.PI * 0.75) + (perc / 120) * (Math.PI * 1.5);
+                        
+                        // Línea negra (Escala)
+                        ctx.strokeStyle = "black";
+                        ctx.lineWidth = 1.5;
+                        ctx.beginPath();
+                        ctx.moveTo(Math.cos(angle) * innerRadius, Math.sin(angle) * innerRadius);
+                        ctx.lineTo(Math.cos(angle) * outerRadius, Math.sin(angle) * outerRadius);
+                        ctx.stroke();
+
+                        // Etiquetas de texto
+                        const textRadius = outerRadius + 8;
+                        if(perc <= 120) {
+                            ctx.fillStyle = "#333";
+                            ctx.fillText(perc + "%", Math.cos(angle) * textRadius, Math.sin(angle) * textRadius);
+                        }
+                    }
+                    ctx.restore();
+
+                    // --- DIBUJAR AGUJA ---
+                    const val = chart.data.datasets[0].needleValue;
+                    // Mapeo de 0-120% al ángulo del gráfico
+                    const needleAngle = (Math.PI * 0.75) + (val / 120) * (Math.PI * 1.5);
+
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(needleAngle);
                     
-                    ctx.rotate(-angle);
+                    // Cuerpo de la aguja
                     ctx.beginPath();
-                    ctx.arc(0, 0, 3, 0, 2 * Math.PI);
+                    ctx.moveTo(0, -1);
+                    ctx.lineTo(outerRadius - 5, 0);
+                    ctx.lineTo(0, 1);
+                    ctx.fillStyle = "#da291c";
+                    ctx.fill();
+
+                    // Centro de la aguja (Azul)
+                    ctx.rotate(-needleAngle);
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 4, 0, 2 * Math.PI);
                     ctx.fillStyle = "#4285f4";
                     ctx.fill();
                     ctx.strokeStyle = "white";
