@@ -4,19 +4,22 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* CANDADO DE DISEÑO SATEX 2026 - V6 SCROLL ACTIVO */
+    /* CANDADO ULTRA RESTRINGIDO SATEX 2026 - OPTIMIZACIÓN DE ESPACIO */
     body { 
         margin: 0; background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
         display: flex; flex-direction: column; height: 100vh; overflow: hidden;
     }
     
+    /* REDUCCIÓN DE ESPACIO SEGÚN FLECHA ROJA */
     .header {
         background-color: #274a66; display: flex; align-items: center;
-        padding: 0 30px; height: 80px; color: white; border-bottom: 2px solid #1e3a50;
+        padding: 0 30px; 
+        height: 60px; /* Reducido de 80px a 60px para ganar lienzo */
+        color: white; border-bottom: 2px solid #1e3a50;
         position: relative;
     }
-    .header-left img { height: 50px; }
+    .header-left img { height: 50px; } /* Tamaño de logo intacto */
     .titulo { 
         width: 60%; text-align: center; font-size: 28px; font-weight: bold; 
         position: absolute; left: 50%; transform: translateX(-50%);
@@ -24,14 +27,12 @@
     }
     .fecha { width: 20%; text-align: right; font-size: 14px; margin-left: auto; }
 
-    /* SECCIÓN ESTATUS */
+    /* SECCIÓN ESTATUS COMPACTA */
     .seccion-estatus { 
-        padding: 10px 30px; 
-        display: flex; 
-        align-items: center; 
-        gap: 15px;
+        padding: 8px 30px; /* Reducido para optimizar espacio */
+        display: flex; align-items: center; gap: 15px;
         background: rgba(0,0,0,0.1);
-        min-height: 80px;
+        min-height: 70px;
     }
     .frase-estatus { color: white; font-size: 16px; font-weight: bold; white-space: nowrap; }
     
@@ -43,53 +44,41 @@
         border-radius: 4px; 
         border-left: 4px solid #f9b218;
         min-width: 120px;
-        height: 55px;
+        height: 50px;
         display: flex; flex-direction: column; justify-content: center;
     }
     .dato-etiqueta { font-size: 9px; text-transform: uppercase; color: #ccc; margin-bottom: 2px; }
     .dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; line-height: 1; }
 
-    /* ÁREA DE MÁQUINAS PARADAS (SOLUCIÓN SCROLL) */
+    /* ÁREA DE MÁQUINAS PARADAS - CANDADO DE ALTURA */
     .seccion-paradas-scroll {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-left: 10px;
-        border-left: 1px solid rgba(255,255,255,0.2);
-        padding-left: 20px;
-        flex-grow: 1;
+        display: flex; align-items: center; gap: 15px;
+        margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.2);
+        padding-left: 20px; flex-grow: 1;
     }
 
     .lista-vertical-container {
-        height: 60px; /* Alto fijo para forzar el scroll */
+        height: 55px; /* Límite estricto para no bajar al lienzo */
         overflow-y: auto;
-        width: 320px;
+        width: 350px;
         padding-right: 8px;
     }
     
-    /* Estilo del scroll para que sea visible */
     .lista-vertical-container::-webkit-scrollbar { width: 6px; }
-    .lista-vertical-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
     .lista-vertical-container::-webkit-scrollbar-thumb { background: #da291c; border-radius: 10px; }
 
     .item-parada {
-        background: rgba(218, 41, 28, 0.25);
-        border: 1px solid #da291c;
-        border-radius: 3px;
-        padding: 6px 12px;
-        margin-bottom: 6px;
-        color: white;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        background: rgba(218, 41, 28, 0.25); border: 1px solid #da291c;
+        border-radius: 3px; padding: 4px 10px; margin-bottom: 4px;
+        color: white; display: flex; justify-content: space-between; align-items: center;
     }
-    .item-parada strong { font-size: 12px; text-transform: uppercase; }
+    .item-parada strong { font-size: 11px; text-transform: uppercase; }
     .item-parada span { font-size: 9px; color: #ff9999; }
 
-    /* INDICADORES CARDAS */
+    /* INDICADORES CARDAS - CANDADO DE POSICIÓN */
     .dashboard-middle-row {
         display: flex; flex-direction: row; flex-wrap: nowrap; 
-        overflow-x: auto; gap: 10px; padding: 20px 15px;
+        overflow-x: auto; gap: 10px; padding: 15px 15px;
         background-color: rgba(0, 0, 0, 0.15);
         margin-top: auto; margin-bottom: auto;
     }
@@ -148,16 +137,18 @@
 <div class="dashboard-middle-row" id="contenedorGauges"></div>
 
 <script>
+    // Fecha
     const f = new Date();
     document.getElementById("fechaDisplay").innerText = f.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-    // DATOS REALES DE TU IMAGEN (3 MÁQUINAS)
+    // DATOS DE MÁQUINAS (Representando filas ocupadas en Excel)
     const maquinasParadasData = [
         { nombre: "Regulador 10", fecha: "25/02/2025" },
         { nombre: "Conera 5", fecha: "26/02/2025" },
         { nombre: "Continua 8", fecha: "27/02/2025" }
     ];
 
+    // DATOS CARDAS
     const datosCardas = [
         { ac: 800, max: 1000 }, { ac: 500, max: 1000 }, { ac: 600, max: 1000 },
         { ac: 700, max: 1000 }, { ac: 800, max: 1000 }, { ac: 650, max: 1000 },
@@ -165,21 +156,19 @@
     ];
 
     window.onload = function() {
-        // 1. Generar Lista de Paradas y Contar Filas
         const listaDiv = document.getElementById('listaParadas');
         const totalSpan = document.getElementById('totalParadas');
         
+        // Conteo automático basado en registros
+        totalSpan.innerText = maquinasParadasData.length;
+
         maquinasParadasData.forEach(m => {
             const item = document.createElement('div');
             item.className = 'item-parada';
             item.innerHTML = `<strong>${m.nombre}</strong><span>${m.fecha}</span>`;
             listaDiv.appendChild(item);
         });
-        
-        // Actualizar el conteo basado en la cantidad de elementos en el array
-        totalSpan.innerText = maquinasParadasData.length;
 
-        // 2. Generar Cardas
         const contenedor = document.getElementById('contenedorGauges');
         datosCardas.forEach((datos, index) => {
             const num = index + 1;
