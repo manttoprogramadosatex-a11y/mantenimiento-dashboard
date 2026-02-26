@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
     /* ---------------------------------------------------------
-       CANDADO SATEX 2026 - MODELO FIJO
+       1. BLOQUEO DE ESTRUCTURA GENERAL (CABECERA Y FONDO)
     ------------------------------------------------------------ */
     body { 
         margin: 0; 
@@ -22,22 +22,42 @@
         color: white;
     }
 
+    .header-left { width: 25%; }
     .header-left img { height: 40px; }
-    .titulo { width: 100%; text-align: center; font-size: 24px; font-weight: bold; }
 
+    .titulo { 
+        width: 50%; 
+        text-align: center; 
+        font-size: 24px; 
+        font-weight: bold; 
+    }
+
+    .fecha { 
+        width: 25%; 
+        text-align: right; 
+        font-size: 16px; 
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    /* ---------------------------------------------------------
+       2. BLOQUEO DE DISTRIBUCIÓN (GRILLA)
+    ------------------------------------------------------------ */
     .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 20px;
         padding: 30px;
         justify-items: center;
     }
 
-    /* EL CIRCULO BLANCO PERFECTO DE TU IMAGEN */
+    /* ---------------------------------------------------------
+       3. BLOQUEO DEL INDICADOR (MODELO CIRCULAR SATEX)
+    ------------------------------------------------------------ */
     .gauge-card {
         background: white;
-        width: 190px; 
-        height: 190px; 
+        width: 180px; 
+        height: 180px; 
         border-radius: 50%;
         position: relative;
         display: flex;
@@ -48,21 +68,20 @@
     }
 
     .canvas-container {
-        width: 180px;
-        height: 180px;
+        width: 170px;
+        height: 170px;
         position: absolute;
-        top: 5px;
     }
 
     .info-overlay {
-        margin-top: 40px;
+        margin-top: 45px;
         text-align: center;
         z-index: 10;
     }
 
     .label-ton { font-size: 32px; font-weight: bold; color: #000; margin: 0; }
     .valor-ac { font-size: 16px; font-weight: bold; color: #000; margin: 2px 0; }
-    .valor-max { font-size: 14px; font-weight: bold; color: #000; margin: 0; }
+    .valor-max { font-size: 14px; font-weight: bold; color: #333; margin: 0; }
 </style>
 </head>
 <body>
@@ -70,19 +89,27 @@
 <div class="header">
     <div class="header-left"><img src="logo.png.jpeg" alt="Logo"></div>
     <div class="titulo">Tablero Master Mantto. Satex Textil</div>
+    <div id="fechaDisplay" class="fecha"></div>
 </div>
 
 <div class="dashboard-grid" id="contenedorGauges"></div>
 
 <script>
-    // DATOS DINÁMICOS
+    /* LÓGICA DE FECHA (NO SE TOCA) */
+    function actualizarFecha() {
+        const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
+        document.getElementById("fechaDisplay").innerText = new Date().toLocaleDateString('es-ES', opciones);
+    }
+    actualizarFecha();
+
+    /* CONFIGURACIÓN DINÁMICA DE DATOS */
     const valorAc = 250000;
     const valorMax = 300000;
-    const porcentaje = (valorAc / valorMax) * 100;
+    const porcentajeActual = (valorAc / valorMax) * 100;
 
     const contenedor = document.getElementById('contenedorGauges');
     
-    // Crear 11 indicadores idénticos
+    // CREACIÓN DE LOS 11 INDICADORES
     for (let i = 1; i <= 11; i++) {
         const card = document.createElement('div');
         card.className = 'gauge-card';
@@ -100,11 +127,11 @@
             type: 'doughnut',
             data: {
                 datasets: [{
-                    // Escala de colores autorizada: Verde (0-85), Amarillo (85-100), Rojo (100-120)
+                    // Verde (85%), Amarillo (15%), Rojo (20%) -> Total visual 120%
                     data: [85, 15, 20], 
                     backgroundColor: ["#23a446", "#f9b218", "#da291c"],
                     borderWidth: 0,
-                    needleValue: porcentaje
+                    needleValue: porcentajeActual
                 }]
             },
             options: {
@@ -118,50 +145,42 @@
             plugins: [{
                 afterDraw(chart) {
                     const {ctx, width, height} = chart;
-                    const x = width / 2;
-                    const y = height / 2;
+                    const cx = width / 2;
+                    const cy = height / 2;
                     const outerR = chart.getDatasetMeta(0).data[0].outerRadius;
                     const innerR = chart.getDatasetMeta(0).data[0].innerRadius;
 
-                    // --- DIBUJAR 11 MARCAS NEGRAS EQUITATIVAS ---
+                    // --- DIBUJAR 11 LÍNEAS NEGRAS EQUITATIVAS ---
                     ctx.save();
-                    ctx.translate(x, y);
-                    for (let n = 0; n <= 11; n++) {
-                        const val = n * 10.9; // Distribución exacta para 11 líneas en 120%
-                        const angle = (Math.PI * 0.778) + (n / 11) * (Math.PI * 1.445);
-                        
+                    ctx.translate(cx, cy);
+                    for (let n = 0; n <= 10; n++) {
+                        // Ángulo calculado para 11 líneas distribuidas en la circunferencia
+                        const angle = (Math.PI * 0.778) + (n / 10) * (Math.PI * 1.445);
                         ctx.strokeStyle = "black";
                         ctx.lineWidth = 2.5;
                         ctx.beginPath();
                         ctx.moveTo(Math.cos(angle) * (innerR - 2), Math.sin(angle) * (innerR - 2));
                         ctx.lineTo(Math.cos(angle) * (outerR + 2), Math.sin(angle) * (outerR + 2));
                         ctx.stroke();
-
-                        // ETIQUETAS DE % (Solo las principales para evitar amontonamiento como en tu imagen)
-                        ctx.fillStyle = "black";
-                        ctx.font = "bold 11px Arial";
-                        const tr = outerR + 15;
-                        if(n === 3) ctx.fillText("40%", Math.cos(angle) * tr - 5, Math.sin(angle) * tr);
-                        if(n === 7) ctx.fillText("80%", Math.cos(angle) * tr, Math.sin(angle) * tr - 5);
-                        if(n === 11) ctx.fillText("120%", Math.cos(angle) * tr + 5, Math.sin(angle) * tr);
                     }
                     ctx.restore();
 
-                    // --- AGUJA ROJA ---
-                    const valNeedle = chart.data.datasets[0].needleValue;
-                    const needleAngle = (Math.PI * 0.778) + (valNeedle / 120) * (Math.PI * 1.445);
+                    // --- DIBUJAR AGUJA ROJA ---
+                    const val = chart.data.datasets[0].needleValue;
+                    // Mapeo: 0% es el inicio, 100% es el fin de amarillo, 120% fin de rojo
+                    const needleAngle = (Math.PI * 0.778) + (val / 120) * (Math.PI * 1.445);
 
                     ctx.save();
-                    ctx.translate(x, y);
+                    ctx.translate(cx, cy);
                     ctx.rotate(needleAngle);
                     ctx.beginPath();
                     ctx.moveTo(0, -3);
-                    ctx.lineTo(outerR - 10, 0);
+                    ctx.lineTo(outerR - 12, 0);
                     ctx.lineTo(0, 3);
-                    ctx.fillStyle = "#da291c";
+                    ctx.fillStyle = "#da291c"; // Aguja Roja
                     ctx.fill();
 
-                    // CIRCULO AZUL CENTRAL
+                    // Círculo central azul (Como tu imagen)
                     ctx.rotate(-needleAngle);
                     ctx.beginPath();
                     ctx.arc(0, 0, 8, 0, 2 * Math.PI);
