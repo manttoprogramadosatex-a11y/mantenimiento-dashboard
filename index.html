@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <title>Tablero Master Mantto. Satex Textil</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    background:#2f5577; 
+    background:#2f5577; /* Fondo tablero */
     color:white;
 }
 
-/* ENCABEZADO */
+/* ENCABEZADO REDUCIDO AL MÍNIMO */
 .header{
     background:#274a66; 
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:5px 30px;
-    height: 60px;
+    padding:0 30px; /* Sin padding vertical */
+    height: 50px;   /* Altura reducida */
+    border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
 .header-left{
@@ -29,11 +29,12 @@ body{
     flex: 1;
 }
 
+/* LOGO AJUSTADO AL NUEVO ENCABEZADO */
 .header img{
-    height:40px;
+    height:35px; /* Más pequeño para que quepa bien */
 }
 
-/* TÍTULO SIN TEXTO SUPERIOR */
+/* TÍTULO CON TAMAÑO SOLICITADO */
 .titulo{
     font-size:28px; 
     font-weight:bold;
@@ -43,39 +44,17 @@ body{
 }
 
 .fecha{
-    font-size:14px;
+    font-size:13px;
     flex: 1;
     text-align: right;
 }
 
-/* CONTENEDOR DE INDICADORES */
-.gauges{
+/* ESPACIO PARA LOS FUTUROS INDICADORES */
+.contenedor-principal{
     display:flex;
     justify-content:center;
-    gap:80px;
-    margin-top:50px;
-}
-
-.gauge-container{
-    width:320px;
-    height:320px;
-    position:relative;
-    background: white; 
-    border-radius: 50%;
-    padding: 10px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-}
-
-/* PALABRA TONELADAS SOBRE EL EJE AZUL */
-.texto-interior {
-    position: absolute;
-    top: 52%; 
-    left: 50%;
-    transform: translate(-50%, -100%);
-    color: #333;
-    font-weight: bold;
-    font-size: 16px;
-    z-index: 10;
+    align-items:center;
+    min-height: 200px;
 }
 </style>
 </head>
@@ -89,17 +68,8 @@ body{
     <div class="fecha" id="fecha"></div>
 </div>
 
-<div class="gauges">
-    <div class="gauge-container">
-        <div class="texto-interior">Toneladas</div>
-        <canvas id="gauge1"></canvas>
+<div class="contenedor-principal">
     </div>
-
-    <div class="gauge-container">
-        <div class="texto-interior">Toneladas</div>
-        <canvas id="gauge2"></canvas>
-    </div>
-</div>
 
 <script>
 /* FECHA ACTUAL */
@@ -109,86 +79,7 @@ let textoFecha = hoy.toLocaleDateString('es-ES', opciones);
 textoFecha = textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
 document.getElementById("fecha").innerText = textoFecha;
 
-/* PLUGIN DE AGUJA Y ESCALAS */
-const gaugePlugin = {
-    id:'gaugeCustom',
-    afterDatasetDraw(chart) {
-        const {ctx} = chart;
-        ctx.save();
-
-        const needleValue = chart.data.datasets[0].needleValue;
-        const meta = chart.getDatasetMeta(0);
-        const centerX = meta.data[0].x;
-        const centerY = meta.data[0].y;
-        const outerRadius = meta.data[0].outerRadius;
-
-        // --- ESCALAS (0 a 100) ---
-        ctx.translate(centerX, centerY);
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.font = 'bold 13px Arial';
-        ctx.fillStyle = '#444';
-
-        for (let i = 0; i <= 100; i += 10) {
-            const angle = Math.PI + (i / 100) * Math.PI;
-            const x = (outerRadius + 18) * Math.cos(angle);
-            const y = (outerRadius + 18) * Math.sin(angle);
-            ctx.fillText(i, x, y);
-        }
-
-        // --- AGUJA ROJA ---
-        const needleAngle = Math.PI + (needleValue / 100) * Math.PI;
-        ctx.rotate(needleAngle);
-        ctx.beginPath();
-        ctx.moveTo(0, -3);
-        ctx.lineTo(outerRadius - 25, 0);
-        ctx.lineTo(0, 3);
-        ctx.fillStyle = "red";
-        ctx.fill();
-
-        // --- CENTRO AZUL ---
-        ctx.rotate(-needleAngle);
-        ctx.beginPath();
-        ctx.arc(0, 0, 14, 0, 2 * Math.PI);
-        ctx.fillStyle = "#2f6db3"; 
-        ctx.fill();
-        ctx.strokeStyle = "white";
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        ctx.restore();
-    }
-};
-
-function crearGauge(id, valor) {
-    new Chart(document.getElementById(id), {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                // Colores Invertidos: Verde, Amarillo, Rojo
-                data: [50, 25, 25], 
-                backgroundColor: ["#2ecc71", "#f1c40f", "#e74c3c"],
-                borderWidth: 0,
-                needleValue: valor
-            }]
-        },
-        options: {
-            rotation: -90,
-            circumference: 180,
-            cutout: '80%',
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: false }
-            },
-            layout: { padding: 40 }
-        },
-        plugins: [gaugePlugin]
-    });
-}
-
-/* VALORES DE PRUEBA */
-crearGauge("gauge1", 10); 
-crearGauge("gauge2", 85); 
+/* Lógica de indicadores removida por el momento */
 </script>
 
 </body>
