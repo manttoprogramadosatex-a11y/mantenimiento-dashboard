@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* CANDADO DE DISEÑO SATEX 2026 - MODO MASTER V5 */
+    /* CANDADO DE DISEÑO SATEX 2026 - V6 SCROLL ACTIVO */
     body { 
         margin: 0; background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
@@ -24,35 +24,36 @@
     }
     .fecha { width: 20%; text-align: right; font-size: 14px; margin-left: auto; }
 
-    /* SECCIÓN ESTATUS INTEGRADA */
+    /* SECCIÓN ESTATUS */
     .seccion-estatus { 
-        padding: 15px 30px; 
+        padding: 10px 30px; 
         display: flex; 
         align-items: center; 
         gap: 15px;
         background: rgba(0,0,0,0.1);
+        min-height: 80px;
     }
     .frase-estatus { color: white; font-size: 16px; font-weight: bold; white-space: nowrap; }
     
-    .contenedor-bloques { display: flex; align-items: center; gap: 12px; }
+    .contenedor-bloques { display: flex; align-items: center; gap: 10px; }
 
     .bloque-dato {
         background: rgba(255, 255, 255, 0.1); 
-        padding: 8px 12px;
+        padding: 5px 12px;
         border-radius: 4px; 
         border-left: 4px solid #f9b218;
-        min-width: 130px;
-        height: 50px;
+        min-width: 120px;
+        height: 55px;
         display: flex; flex-direction: column; justify-content: center;
     }
     .dato-etiqueta { font-size: 9px; text-transform: uppercase; color: #ccc; margin-bottom: 2px; }
     .dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; line-height: 1; }
 
-    /* ÁREA DE MÁQUINAS PARADAS CON SCROLL VERTICAL */
+    /* ÁREA DE MÁQUINAS PARADAS (SOLUCIÓN SCROLL) */
     .seccion-paradas-scroll {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 15px;
         margin-left: 10px;
         border-left: 1px solid rgba(255,255,255,0.2);
         padding-left: 20px;
@@ -60,33 +61,35 @@
     }
 
     .lista-vertical-container {
-        height: 66px; /* Mismo alto visual que los bloques */
+        height: 60px; /* Alto fijo para forzar el scroll */
         overflow-y: auto;
-        width: 250px;
-        padding-right: 5px;
+        width: 320px;
+        padding-right: 8px;
     }
-    /* Estilo del scroll */
-    .lista-vertical-container::-webkit-scrollbar { width: 4px; }
+    
+    /* Estilo del scroll para que sea visible */
+    .lista-vertical-container::-webkit-scrollbar { width: 6px; }
+    .lista-vertical-container::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
     .lista-vertical-container::-webkit-scrollbar-thumb { background: #da291c; border-radius: 10px; }
 
     .item-parada {
-        background: rgba(218, 41, 28, 0.2);
+        background: rgba(218, 41, 28, 0.25);
         border: 1px solid #da291c;
         border-radius: 3px;
-        padding: 5px 10px;
-        margin-bottom: 5px;
+        padding: 6px 12px;
+        margin-bottom: 6px;
         color: white;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
-    .item-parada strong { font-size: 13px; text-transform: uppercase; }
-    .item-parada span { font-size: 10px; color: #ff9999; }
+    .item-parada strong { font-size: 12px; text-transform: uppercase; }
+    .item-parada span { font-size: 9px; color: #ff9999; }
 
     /* INDICADORES CARDAS */
     .dashboard-middle-row {
         display: flex; flex-direction: row; flex-wrap: nowrap; 
-        overflow-x: auto; gap: 10px; padding: 25px 15px;
+        overflow-x: auto; gap: 10px; padding: 20px 15px;
         background-color: rgba(0, 0, 0, 0.15);
         margin-top: auto; margin-bottom: auto;
     }
@@ -94,16 +97,15 @@
     .dashboard-middle-row::-webkit-scrollbar-thumb { background: #4285f4; border-radius: 10px; }
 
     .gauge-card {
-        background: white; min-width: 135px; height: 165px; border-radius: 5px;
+        background: white; min-width: 130px; height: 160px; border-radius: 5px;
         display: flex; flex-direction: column; align-items: center;
         box-shadow: 0 4px 8px rgba(0,0,0,0.3); padding: 8px; flex-shrink: 0;
     }
-    .gauge-title { font-size: 14px; font-weight: bold; color: #222; margin-bottom: 2px; text-transform: uppercase; }
-    .canvas-container { width: 120px; height: 85px; position: relative; }
+    .gauge-title { font-size: 13px; font-weight: bold; color: #222; margin-bottom: 2px; text-transform: uppercase; }
+    .canvas-container { width: 110px; height: 80px; position: relative; }
     .info-labels { text-align: center; margin-top: -5px; }
-    .valor-ac { font-size: 12px; font-weight: bold; color: #000; margin: 0; }
-    .valor-max { font-size: 10px; color: #666; margin: 0; }
-    .label-toneladas { font-size: 9px; color: #da291c; margin: 0; font-style: italic; font-weight: bold; }
+    .valor-ac { font-size: 11px; font-weight: bold; color: #000; margin: 0; }
+    .valor-max { font-size: 9px; color: #666; margin: 0; }
 </style>
 </head>
 <body>
@@ -134,15 +136,11 @@
 
     <div class="seccion-paradas-scroll">
         <div class="bloque-dato" style="border-left-color: #da291c;">
-            <span class="dato-etiqueta">Total Máquinas Paradas</span>
-            <span class="dato-valor" style="color: #ff9999;">1</span>
+            <span class="dato-etiqueta">Máquinas Paradas</span>
+            <span id="totalParadas" class="dato-valor" style="color: #ff9999;">0</span>
         </div>
         
-        <div class="lista-vertical-container">
-            <div class="item-parada">
-                <strong>Regulador 10</strong>
-                <span>25/02/2025</span>
-            </div>
+        <div class="lista-vertical-container" id="listaParadas">
             </div>
     </div>
 </div>
@@ -150,31 +148,49 @@
 <div class="dashboard-middle-row" id="contenedorGauges"></div>
 
 <script>
-    // Fecha actual
     const f = new Date();
     document.getElementById("fechaDisplay").innerText = f.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-    // Datos Cardas
-    const datosExcel = [
+    // DATOS REALES DE TU IMAGEN (3 MÁQUINAS)
+    const maquinasParadasData = [
+        { nombre: "Regulador 10", fecha: "25/02/2025" },
+        { nombre: "Conera 5", fecha: "26/02/2025" },
+        { nombre: "Continua 8", fecha: "27/02/2025" }
+    ];
+
+    const datosCardas = [
         { ac: 800, max: 1000 }, { ac: 500, max: 1000 }, { ac: 600, max: 1000 },
         { ac: 700, max: 1000 }, { ac: 800, max: 1000 }, { ac: 650, max: 1000 },
-        { ac: 400, max: 1000 }, { ac: 650, max: 1000 }, { ac: 800, max: 1000 },
-        { ac: 400, max: 1000 }, { ac: 300, max: 1000 }
+        { ac: 400, max: 1000 }, { ac: 650, max: 1000 }, { ac: 800, max: 1000 }
     ];
 
     window.onload = function() {
+        // 1. Generar Lista de Paradas y Contar Filas
+        const listaDiv = document.getElementById('listaParadas');
+        const totalSpan = document.getElementById('totalParadas');
+        
+        maquinasParadasData.forEach(m => {
+            const item = document.createElement('div');
+            item.className = 'item-parada';
+            item.innerHTML = `<strong>${m.nombre}</strong><span>${m.fecha}</span>`;
+            listaDiv.appendChild(item);
+        });
+        
+        // Actualizar el conteo basado en la cantidad de elementos en el array
+        totalSpan.innerText = maquinasParadasData.length;
+
+        // 2. Generar Cardas
         const contenedor = document.getElementById('contenedorGauges');
-        datosExcel.forEach((datos, index) => {
+        datosCardas.forEach((datos, index) => {
             const num = index + 1;
-            const porcentaje = (datos.ac / datos.max) * 100;
             const card = document.createElement('div');
             card.className = 'gauge-card';
-            card.innerHTML = `<div class="gauge-title">Carda ${num}</div><div class="canvas-container"><canvas id="gauge-${num}"></canvas></div><div class="info-labels"><p class="valor-ac">Ac. ${datos.ac}</p><p class="valor-max">Max. ${datos.max}</p><p class="label-toneladas">Toneladas</p></div>`;
+            card.innerHTML = `<div class="gauge-title">Carda ${num}</div><div class="canvas-container"><canvas id="gauge-${num}"></canvas></div><div class="info-labels"><p class="valor-ac">Ac. ${datos.ac}</p><p class="valor-max">Max. ${datos.max}</p></div>`;
             contenedor.appendChild(card);
 
             new Chart(document.getElementById(`gauge-${num}`).getContext('2d'), {
                 type: 'doughnut',
-                data: { datasets: [{ data: [70, 15, 15], backgroundColor: ["#23a446", "#f9b218", "#da291c"], needleValue: porcentaje }] },
+                data: { datasets: [{ data: [70, 15, 15], backgroundColor: ["#23a446", "#f9b218", "#da291c"], needleValue: (datos.ac/datos.max)*100 }] },
                 options: { rotation: -110, circumference: 220, cutout: '75%', plugins: { legend: false, tooltip: false } },
                 plugins: [{
                     afterDraw: (chart) => {
@@ -186,14 +202,14 @@
                         ctx.translate(cx, cy); ctx.rotate(angle);
                         ctx.beginPath(); ctx.moveTo(0, -2); ctx.lineTo(r - 10, 0); ctx.lineTo(0, 2);
                         ctx.fillStyle = '#000'; ctx.fill();
-                        ctx.rotate(-angle); ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2);
+                        ctx.rotate(-angle); ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2);
                         ctx.fillStyle = '#000'; ctx.fill(); ctx.restore();
                     }
                 }]
             });
         });
 
-        // AUTO-REFRESCO CADA 2 MINUTOS
+        // REFRESH AUTOMÁTICO 2 MINUTOS
         setTimeout(function(){ location.reload(); }, 120000); 
     };
 </script>
