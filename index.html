@@ -2,165 +2,161 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tablero Master Mantto. Satex Textil</title>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #1f3f5b, #274e73);
+    background:#2f5577; /* Fondo tablero */
+    color:white;
 }
 
-/* HEADER MÁS DELGADO */
+/* ENCABEZADO */
 .header{
+    background:#274a66; /* Un poco más oscuro */
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:8px 40px;   /* antes era 15px */
-    background:#1f3f5b;
+    padding:10px 30px;
 }
 
-.logo{
-    height:45px;
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:20px;
 }
 
-.titulo-header{
-    flex:1;
-    text-align:center;
-    font-size:24px;
+.header img{
+    height:55px;
+}
+
+.titulo{
+    font-size:22px;
     font-weight:bold;
-    color:white;
 }
 
 .fecha{
-    color:white;
     font-size:14px;
 }
 
-/* CONTENEDOR */
-.gauges-container{
+/* CONTENEDOR INDICADORES */
+.gauges{
     display:flex;
     justify-content:center;
-    flex-wrap:wrap;
-    gap:80px;
-    margin-top:60px;
+    gap:60px;
+    margin-top:50px;
 }
 
-/* SOLO EL RELOJ ES BLANCO */
+.gauge-container{
+    width:260px;
+    height:260px;
+    position:relative;
+}
+
 canvas{
     background:white;
     border-radius:50%;
-    padding:15px;
-    width:280px !important;
-    height:280px !important;
 }
 </style>
 </head>
-
 <body>
 
 <div class="header">
-    <img src="logo.png.jpeg" class="logo">
-    <div class="titulo-header">Tablero Master Mantto. Satex Textil</div>
+    <div class="header-left">
+        <img src="logo.png.jpeg">
+        <div class="titulo">Tablero Master Mantto. Satex Textil</div>
+    </div>
     <div class="fecha" id="fecha"></div>
 </div>
 
-<div class="gauges-container">
-    <canvas id="g1"></canvas>
-    <canvas id="g2"></canvas>
-    <canvas id="g3"></canvas>
+<div class="gauges">
+    <div class="gauge-container">
+        <canvas id="gauge1"></canvas>
+    </div>
+
+    <div class="gauge-container">
+        <canvas id="gauge2"></canvas>
+    </div>
 </div>
 
 <script>
 
 /* FECHA */
-const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-let fecha = new Date().toLocaleDateString('es-ES', opciones);
-fecha = fecha.charAt(0).toUpperCase() + fecha.slice(1);
-document.getElementById("fecha").innerText = fecha;
+const hoy = new Date();
+const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric'};
+let textoFecha = hoy.toLocaleDateString('es-ES', opciones);
+textoFecha = textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
+document.getElementById("fecha").innerText = textoFecha;
 
 
 /* PLUGIN AGUJA */
-const gaugePlugin = {
-    id:'gaugeNeedle',
-    afterDraw(chart, args, options){
+const needlePlugin = {
+    id:'needle',
+    afterDatasetDraw(chart,args,pluginOptions){
+        const {ctx,data} = chart;
+        ctx.save();
 
-        const {ctx} = chart;
+        const needleValue = data.datasets[0].needleValue;
         const meta = chart.getDatasetMeta(0);
         const centerX = meta.data[0].x;
         const centerY = meta.data[0].y;
+
         const radius = meta.data[0].outerRadius;
+        const angle = Math.PI + (needleValue / 100) * Math.PI;
 
-        const value = options.value;
-        const max = options.max;
-        const angle = Math.PI + (value/max)*Math.PI;
-
-        ctx.save();
         ctx.translate(centerX, centerY);
         ctx.rotate(angle);
 
         ctx.beginPath();
-        ctx.moveTo(-3,0);
-        ctx.lineTo(0,-radius+35);
-        ctx.lineTo(3,0);
+        ctx.moveTo(0,-5);
+        ctx.lineTo(radius - 20,0);
+        ctx.lineTo(0,5);
         ctx.fillStyle="red";
         ctx.fill();
 
-        ctx.restore();
-
-        /* CENTRO AZUL */
+        ctx.rotate(-angle);
         ctx.beginPath();
-        ctx.arc(centerX, centerY, 12, 0, 2*Math.PI);
-        ctx.fillStyle="#2c6cb0";
+        ctx.arc(0,0,8,0,2*Math.PI);
+        ctx.fillStyle="#2f6db3";
         ctx.fill();
 
-        /* TEXTO */
-        ctx.font="18px Arial";
-        ctx.fillStyle="black";
-        ctx.textAlign="center";
-        ctx.fillText("Toneladas", centerX, centerY-20);
-
-        ctx.font="22px Arial";
-        ctx.fillText(value.toLocaleString(), centerX, centerY+35);
+        ctx.restore();
     }
 };
 
-function createGauge(id,value,max){
-
+function crearGauge(id, valor){
     new Chart(document.getElementById(id),{
         type:'doughnut',
         data:{
             datasets:[{
-                data:[max*0.2,max*0.3,max*0.5],
+                data:[50,30,20],
                 backgroundColor:[
-                    "#e74c3c",
-                    "#f1c40f",
-                    "#2ecc71"
+                    "#2ecc71",  // verde
+                    "#f1c40f",  // amarillo
+                    "#e74c3c"   // rojo
                 ],
-                borderWidth:0
+                borderWidth:0,
+                needleValue:valor
             }]
         },
         options:{
-            rotation:180,
+            rotation:-90,
             circumference:180,
-            cutout:"75%",
+            cutout:"70%",
             plugins:{
                 legend:{display:false},
-                tooltip:{enabled:false},
-                gaugeNeedle:{value:value,max:max}
+                tooltip:{enabled:false}
             }
         },
-        plugins:[gaugePlugin]
+        plugins:[needlePlugin]
     });
 }
 
-/* VALORES EJEMPLO */
-createGauge("g1",18,25);
-createGauge("g2",12,25);
-createGauge("g3",22,25);
+/* VALORES REALES DE PRUEBA */
+crearGauge("gauge1", 18);  
+crearGauge("gauge2", 12);  
 
 </script>
 
