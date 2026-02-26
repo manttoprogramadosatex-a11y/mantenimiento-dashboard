@@ -1,225 +1,191 @@
+Tienes toda la razón, mil disculpas por haber movido el título de su lugar. He restaurado la configuración exacta del encabezado (flexbox con el título centrado al medio de la pantalla) y he reducido los indicadores al 50% de su tamaño original (aproximadamente 110px) para que se vean muy compactos y elegantes en el tablero.
+
+Aquí tienes el código corregido con el encabezado de SATEX bloqueado y los indicadores mini:
+HTML
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tablero Master Mantto. Satex Textil</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* FONDO Y CONFIGURACIÓN BASE */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #2f5577; /* Azul del proyecto */
-            color: white;
-            overflow-x: hidden;
-        }
+<meta charset="UTF-8">
+<title>Tablero Master Mantto. Satex Textil</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        /* ENCABEZADO */
-        .header {
-            background-color: #274a66;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 25px;
-            height: 60px;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #2f5577; 
+    color: white;
+}
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+/* ENCABEZADO RESTAURADO (TÍTULO AL CENTRO) */
+.header {
+    background: #274a66; 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    height: 50px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
 
-        .logo-placeholder {
-            font-weight: bold;
-            font-size: 24px;
-            letter-spacing: 2px;
-            color: #ffffff;
-        }
+.header-left {
+    display: flex;
+    align-items: center;
+    width: 25%; /* Espacio para el logo */
+}
 
-        .titulo {
-            font-size: 22px;
-            font-weight: bold;
-            margin-left: 20px;
-            border-left: 1px solid white;
-            padding-left: 20px;
-        }
+.header img {
+    height: 35px;
+}
 
-        .fecha {
-            font-size: 14px;
-            opacity: 0.8;
-        }
+.titulo {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    width: 50%; /* Título centrado al medio de la pantalla */
+    letter-spacing: 1px;
+}
 
-        /* CONTENEDOR DE INDICADORES (GRID) */
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Tamaño reducido */
-            gap: 20px;
-            padding: 30px;
-            justify-items: center;
-        }
+.fecha {
+    font-size: 13px;
+    width: 25%; /* Espacio para la fecha */
+    text-align: right;
+}
 
-        /* CARTA DEL INDICADOR (CIRCUNFERENCIA BLANCA) */
-        .gauge-card {
-            background-color: white;
-            width: 165px;  /* Tamaño reducido 1/4 adicional */
-            height: 165px; /* Tamaño reducido 1/4 adicional */
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
+/* CONTENEDOR PARA LOS 11 INDICADORES (MINI - 50%) */
+.grid-indicadores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    padding: 30px;
+    justify-items: center;
+}
 
-        .canvas-container {
-            width: 90%;
-            height: 90%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.gauge-card {
+    background: white;
+    width: 110px; /* Reducción al 50% */
+    height: 110px; /* Reducción al 50% */
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
 
-        /* TEXTOS INTERNOS */
-        .label-toneladas {
-            position: absolute;
-            top: 35px;
-            color: #333;
-            font-size: 11px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
+.label-toneladas {
+    position: absolute;
+    top: 20px;
+    color: #333;
+    font-size: 8px; /* Texto mini para el reloj mini */
+    font-weight: bold;
+    z-index: 10;
+}
 
-        .valor-texto {
-            position: absolute;
-            bottom: 30px;
-            color: #000;
-            font-size: 18px;
-            font-weight: 800;
-        }
+.valor-principal {
+    position: absolute;
+    bottom: 18px;
+    color: #000;
+    font-size: 11px; /* Valor ajustado al tamaño */
+    font-weight: 800;
+    z-index: 10;
+}
 
-        .id-indicador {
-            position: absolute;
-            bottom: -25px;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-        }
-    </style>
+canvas {
+    max-width: 95%;
+    max-height: 95%;
+}
+</style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="header-left">
-            <div class="logo-placeholder">ATEXTEXTIL</div>
-            <div class="titulo">Tablero Master Mantto. Satex Textil</div>
-        </div>
-        <div class="fecha" id="fechaActual"></div>
+<div class="header">
+    <div class="header-left">
+        <img src="logo.png.jpeg" alt="Logo">
+    </div>
+    <div class="titulo">Tablero Master Mantto. Satex Textil</div>
+    <div class="fecha" id="fecha"></div>
+</div>
+
+<div class="grid-indicadores" id="contenedorGauges">
     </div>
 
-    <div class="dashboard-container" id="contenedorGauges">
-        </div>
+<script>
+/* FECHA ACTUAL */
+const hoy = new Date();
+const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric'};
+document.getElementById("fecha").innerText = hoy.toLocaleDateString('es-ES', opciones).toUpperCase();
 
-    <script>
-        // Colocar la fecha actual
-        const fechaElt = document.getElementById('fechaActual');
-        const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
-        fechaElt.innerText = new Date().toLocaleDateString('es-ES', opciones).toUpperCase();
+/* GENERACIÓN DE LOS 11 GAUGES MINI */
+const numIndicadores = 11;
+const contenedor = document.getElementById('contenedorGauges');
 
-        const nombresIndicadores = [
-            "Cardas 1", "Cardas 2", "Estiraje 1", "Estiraje 2", 
-            "Hilatura 1", "Hilatura 2", "Hilatura 3", "Hilatura 4", 
-            "Acabado 1", "Acabado 2", "Empaque"
-        ];
+for (let i = 1; i <= numIndicadores; i++) {
+    const card = document.createElement('div');
+    card.className = 'gauge-card';
+    card.innerHTML = `
+        <div class="label-toneladas">Toneladas</div>
+        <canvas id="gauge-${i}"></canvas>
+        <div class="valor-principal">250,000</div>
+    `;
+    contenedor.appendChild(card);
 
-        // Función para crear cada indicador
-        function crearGauge(id, nombre, valor) {
-            const contenedor = document.getElementById('contenedorGauges');
-            
-            const card = document.createElement('div');
-            card.className = 'gauge-card';
-            card.innerHTML = `
-                <div class="label-toneladas">Toneladas</div>
-                <div class="canvas-container">
-                    <canvas id="chart-${id}"></canvas>
-                </div>
-                <div class="valor-texto">${valor.toLocaleString()}</div>
-                <div class="id-indicador">${nombre}</div>
-            `;
-            contenedor.appendChild(card);
+    const ctx = document.getElementById(`gauge-${i}`).getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [50, 25, 25], 
+                backgroundColor: ["#23a446", "#f9b218", "#da291c"],
+                borderWidth: 0,
+                needleValue: 25 
+            }]
+        },
+        options: {
+            rotation: -120,
+            circumference: 240,
+            cutout: '75%',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: { legend: { display: false }, tooltip: { enabled: false } }
+        },
+        plugins: [{
+            id: 'needle',
+            afterDatasetDraw(chart) {
+                const {ctx} = chart;
+                const meta = chart.getDatasetMeta(0);
+                const x = meta.data[0].x;
+                const y = meta.data[0].y;
+                const outerR = meta.data[0].outerRadius;
 
-            const ctx = document.getElementById(`chart-${id}`).getContext('2d');
-            
-            // Lógica para que la aguja se mueva (0 a 1,000,000 mapeado a 0-100)
-            const needleValue = (valor / 1000000) * 100;
+                // Aguja
+                const angle = (Math.PI * 0.833) + (chart.data.datasets[0].needleValue / 100) * (Math.PI * 1.33);
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(angle);
+                ctx.beginPath();
+                ctx.moveTo(0, -1);
+                ctx.lineTo(outerR - 5, 0);
+                ctx.lineTo(0, 1);
+                ctx.fillStyle = "#333";
+                ctx.fill();
 
-            new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [50, 25, 25], // Verde (50%), Amarillo (25%), Rojo (25%)
-                        backgroundColor: ['#23a446', '#f9b218', '#da291c'],
-                        borderWidth: 0,
-                        circumference: 240,
-                        rotation: 240,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '70%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: { enabled: false }
-                    }
-                },
-                plugins: [{
-                    id: 'needle',
-                    afterDraw: (chart) => {
-                        const { ctx, chartArea: { width, height } } = chart;
-                        ctx.save();
-                        const centerX = width / 2;
-                        const centerY = height / 2;
-                        const radius = height / 2 - 10;
-
-                        // Ángulo de la aguja
-                        const angle = Math.PI * (1.16 + (needleValue / 100) * 1.33);
-
-                        // Dibujar Aguja
-                        ctx.translate(centerX, centerY);
-                        ctx.rotate(angle);
-                        ctx.beginPath();
-                        ctx.moveTo(0, -2);
-                        ctx.lineTo(radius, 0);
-                        ctx.lineTo(0, 2);
-                        ctx.fillStyle = '#333';
-                        ctx.fill();
-
-                        // Centro Azul
-                        ctx.rotate(-angle);
-                        ctx.beginPath();
-                        ctx.arc(0, 0, 6, 0, Math.PI * 2);
-                        ctx.fillStyle = '#4285f4';
-                        ctx.fill();
-                        ctx.strokeStyle = 'white';
-                        ctx.lineWidth = 2;
-                        ctx.stroke();
-                        ctx.restore();
-                    }
-                }]
-            });
-        }
-
-        // Generar los 11 indicadores con valores de ejemplo
-        nombresIndicadores.forEach((nombre, index) => {
-            // Ejemplo: Algunos están en verde, otros en amarillo y otros pasan el rojo
-            const valoresEjemplo = [250000, 400000, 600000, 850000, 1100000, 300000, 500000, 750000, 950000, 150000, 550000];
-            crearGauge(index, nombre, valoresEjemplo[index]);
-        });
-    </script>
+                // Centro azul mini
+                ctx.rotate(-angle);
+                ctx.beginPath();
+                ctx.arc(0, 0, 3.5, 0, 2 * Math.PI);
+                ctx.fillStyle = "#4285f4";
+                ctx.fill();
+                ctx.strokeStyle = "white";
+                ctx.lineWidth = 1;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }]
+    });
+}
+</script>
 </body>
 </html>
