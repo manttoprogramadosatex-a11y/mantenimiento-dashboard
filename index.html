@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* CANDADO DE DISEÑO SATEX 2026 - MODELO MASTER V3 */
+    /* CANDADO DE DISEÑO SATEX 2026 */
     body { 
         margin: 0; background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
@@ -13,43 +13,53 @@
     
     .header {
         background-color: #274a66; display: flex; align-items: center;
-        padding: 0 30px; height: 70px; color: white; border-bottom: 2px solid #1e3a50;
+        padding: 0 30px; height: 80px; color: white; border-bottom: 2px solid #1e3a50;
         position: relative;
     }
-    .header-left img { height: 45px; }
-    
-    /* TÍTULO CON TAMAÑO AUMENTADO */
+    .header-left img { height: 50px; }
     .titulo { 
-        width: 60%; text-align: center; font-size: 26px; font-weight: bold; 
+        width: 60%; text-align: center; font-size: 28px; font-weight: bold; 
         position: absolute; left: 50%; transform: translateX(-50%);
-        color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        color: #ffffff; text-transform: uppercase;
     }
     .fecha { width: 20%; text-align: right; font-size: 14px; margin-left: auto; }
 
-    /* SECCIÓN ESTATUS - PROPUESTA DE DATOS REALES */
-    .seccion-estatus { padding: 15px 30px; }
-    .frase-estatus { color: white; font-size: 18px; font-weight: bold; margin-bottom: 12px; display: block; }
+    /* ESTATUS DE PLANTA: DESGLOSE POR MÁQUINA */
+    .seccion-estatus { padding: 10px 30px; }
+    .frase-estatus { color: white; font-size: 16px; font-weight: bold; margin-bottom: 8px; display: block; }
     
-    .fila-datos { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 20px; }
-
-    .bloque-husos {
-        background: rgba(255, 255, 255, 0.1); padding: 10px 25px;
-        border-radius: 4px; border-left: 5px solid #f9b218; min-width: 220px;
+    .fila-indicadores-top {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: nowrap;
     }
-    .husos-titulo { font-size: 11px; text-transform: uppercase; color: #ccc; display: block; margin-bottom: 2px; }
-    .husos-valor { font-size: 28px; font-weight: bold; color: #f9b218; }
 
-    .contenedor-maquinas { display: flex; gap: 15px; flex-grow: 1; justify-content: flex-end; }
-    .mini-card-parada {
-        background: rgba(218, 41, 28, 0.25); border: 1px solid #da291c;
-        padding: 8px 18px; border-radius: 4px; min-width: 170px; text-align: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    /* BLOQUES INDIVIDUALES POR TIPO DE HUSO */
+    .bloque-dato {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 15px;
+        border-radius: 4px;
+        border-left: 4px solid #f9b218;
+        min-width: 140px;
     }
-    .mini-card-parada span { font-size: 10px; color: #ff9999; display: block; text-transform: uppercase; margin-bottom: 2px; }
-    .mini-card-parada strong { font-size: 15px; color: white; display: block; }
-    .mini-card-parada em { font-size: 11px; color: #eee; font-style: normal; }
+    .dato-etiqueta { font-size: 9px; text-transform: uppercase; color: #ccc; display: block; }
+    .dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; }
 
-    /* FILA DE CARDAS - POSICIÓN MEDIA (CANDADO VISUAL BLINDADO) */
+    /* MÁQUINA PARADA AL EXTREMO */
+    .contenedor-paradas { margin-left: auto; display: flex; gap: 10px; }
+    .card-parada-unica {
+        background: rgba(218, 41, 28, 0.3);
+        border: 1px solid #da291c;
+        padding: 8px 20px;
+        border-radius: 4px;
+        color: white;
+        text-align: center;
+    }
+    .card-parada-unica span { font-size: 9px; display: block; color: #ff9999; }
+    .card-parada-unica strong { font-size: 16px; text-transform: uppercase; }
+
+    /* INDICADORES CARDAS (POSICIÓN MEDIA BLOQUEADA) */
     .dashboard-middle-row {
         display: flex; flex-direction: row; flex-wrap: nowrap; 
         overflow-x: auto; gap: 10px; padding: 25px 15px;
@@ -59,7 +69,6 @@
     .dashboard-middle-row::-webkit-scrollbar { height: 8px; }
     .dashboard-middle-row::-webkit-scrollbar-thumb { background: #4285f4; border-radius: 10px; }
 
-    /* DISEÑO DE TARJETA INDICADORA */
     .gauge-card {
         background: white; min-width: 135px; height: 165px; border-radius: 5px;
         display: flex; flex-direction: column; align-items: center;
@@ -67,10 +76,10 @@
     }
     .gauge-title { font-size: 14px; font-weight: bold; color: #222; margin-bottom: 2px; text-transform: uppercase; }
     .canvas-container { width: 120px; height: 85px; position: relative; }
-    .info-labels { text-align: center; margin-top: -5px; line-height: 1.2; }
+    .info-labels { text-align: center; margin-top: -5px; }
     .valor-ac { font-size: 12px; font-weight: bold; color: #000; margin: 0; }
     .valor-max { font-size: 10px; color: #666; margin: 0; }
-    .label-toneladas { font-size: 9px; color: #da291c; margin: 2px 0 0 0; font-style: italic; font-weight: bold; }
+    .label-toneladas { font-size: 9px; color: #da291c; margin: 0; font-style: italic; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -83,27 +92,24 @@
 
 <div class="seccion-estatus">
     <span class="frase-estatus">Estatus de Planta:</span>
-    <div class="fila-datos">
-        <div class="bloque-husos">
-            <span class="husos-titulo">Total Husos Inactivos</span>
-            <span id="txtHusos" class="husos-valor">1,452</span>
+    <div class="fila-indicadores-top">
+        <div class="bloque-dato">
+            <span class="dato-etiqueta">Continuas (Inactivos)</span>
+            <span class="dato-valor">16</span>
         </div>
-        
-        <div id="listaMaquinas" class="contenedor-maquinas">
-            <div class="mini-card-parada">
+        <div class="bloque-dato">
+            <span class="dato-etiqueta">Open-End (Inactivos)</span>
+            <span class="dato-valor">1</span>
+        </div>
+        <div class="bloque-dato">
+            <span class="dato-etiqueta">Coneras (Inactivos)</span>
+            <span class="dato-valor">0</span>
+        </div>
+
+        <div class="contenedor-paradas">
+            <div class="card-parada-unica">
                 <span>MÁQUINA PARADA</span>
-                <strong>CARDA 4</strong>
-                <em>Motivo: Eléctrico</em>
-            </div>
-            <div class="mini-card-parada">
-                <span>MÁQUINA PARADA</span>
-                <strong>OPEN-END 2</strong>
-                <em>Motivo: Mecánico</em>
-            </div>
-            <div class="mini-card-parada">
-                <span>MÁQUINA PARADA</span>
-                <strong>CONERA 1</strong>
-                <em>Motivo: Limpieza</em>
+                <strong>REGULADOR 10</strong>
             </div>
         </div>
     </div>
@@ -112,69 +118,39 @@
 <div class="dashboard-middle-row" id="contenedorGauges"></div>
 
 <script>
-    // 1. FECHA
+    // Fecha
     const f = new Date();
-    const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
-    let txtFecha = f.toLocaleDateString('es-ES', opciones);
-    document.getElementById("fechaDisplay").innerText = txtFecha.charAt(0).toUpperCase() + txtFecha.slice(1);
+    document.getElementById("fechaDisplay").innerText = f.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-    // 2. SIMULACIÓN DE DATOS DE PESTAÑAS
-    const datosExcel = {
-        cardas: [
-            { ac: 850, max: 1000 }, { ac: 420, max: 1000 }, { ac: 910, max: 1000 },
-            { ac: 0, max: 1000 }, { ac: 780, max: 1000 }, { ac: 640, max: 1000 },
-            { ac: 550, max: 1000 }, { ac: 890, max: 1000 }, { ac: 320, max: 1000 },
-            { ac: 710, max: 1000 }, { ac: 450, max: 1000 }
-        ]
-    };
+    // Datos Cardas (Pestaña Información Cardas)
+    const datosExcel = [
+        { ac: 800, max: 1000 }, { ac: 500, max: 1000 }, { ac: 600, max: 1000 },
+        { ac: 700, max: 1000 }, { ac: 800, max: 1000 }, { ac: 650, max: 1000 },
+        { ac: 400, max: 1000 }, { ac: 650, max: 1000 }, { ac: 800, max: 1000 },
+        { ac: 400, max: 1000 }, { ac: 300, max: 1000 }
+    ];
 
-    // 3. GENERACIÓN DE INDICADORES (CON CARGA DE SEGURIDAD Y AGUJA)
     window.onload = function() {
         const contenedor = document.getElementById('contenedorGauges');
-
-        datosExcel.cardas.forEach((datos, index) => {
+        datosExcel.forEach((datos, index) => {
             const num = index + 1;
             const porcentaje = (datos.ac / datos.max) * 100;
-
             const card = document.createElement('div');
             card.className = 'gauge-card';
-            card.innerHTML = `
-                <div class="gauge-title">Carda ${num}</div>
-                <div class="canvas-container"><canvas id="gauge-${num}"></canvas></div>
-                <div class="info-labels">
-                    <p class="valor-ac">Ac. ${datos.ac.toLocaleString()}</p>
-                    <p class="valor-max">Max. ${datos.max.toLocaleString()}</p>
-                    <p class="label-toneladas">Toneladas</p>
-                </div>
-            `;
+            card.innerHTML = `<div class="gauge-title">Carda ${num}</div><div class="canvas-container"><canvas id="gauge-${num}"></canvas></div><div class="info-labels"><p class="valor-ac">Ac. ${datos.ac}</p><p class="valor-max">Max. ${datos.max}</p><p class="label-toneladas">Toneladas</p></div>`;
             contenedor.appendChild(card);
 
-            const ctx = document.getElementById(`gauge-${num}`).getContext('2d');
-            new Chart(ctx, {
+            new Chart(document.getElementById(`gauge-${num}`).getContext('2d'), {
                 type: 'doughnut',
-                data: {
-                    datasets: [{
-                        data: [70, 15, 15], 
-                        backgroundColor: ["#23a446", "#f9b218", "#da291c"],
-                        borderWidth: 1,
-                        borderColor: '#ffffff',
-                        needleValue: porcentaje
-                    }]
-                },
-                options: {
-                    rotation: -110, circumference: 220, cutout: '75%',
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: false, tooltip: false }
-                },
+                data: { datasets: [{ data: [70, 15, 15], backgroundColor: ["#23a446", "#f9b218", "#da291c"], needleValue: porcentaje }] },
+                options: { rotation: -110, circumference: 220, cutout: '75%', plugins: { legend: false, tooltip: false } },
                 plugins: [{
-                    id: 'needle',
                     afterDraw: (chart) => {
                         const { ctx, width, height } = chart;
                         ctx.save();
                         const cx = width / 2; const cy = height / 1.35;
                         const r = chart.getDatasetMeta(0).data[0].outerRadius;
-                        const val = chart.data.datasets[0].needleValue;
-                        const angle = (Math.PI * 0.88) + (val / 100) * (Math.PI * 1.23);
+                        const angle = (Math.PI * 0.88) + (chart.data.datasets[0].needleValue / 100) * (Math.PI * 1.23);
                         ctx.translate(cx, cy); ctx.rotate(angle);
                         ctx.beginPath(); ctx.moveTo(0, -2); ctx.lineTo(r - 10, 0); ctx.lineTo(0, 2);
                         ctx.fillStyle = '#000'; ctx.fill();
