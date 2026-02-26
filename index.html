@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard de Mantenimiento</title>
+    <title>Tablero Master Mantto. Satex Textil</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
@@ -15,7 +15,7 @@
 
         header {
             background-color: #1f2d44;
-            padding: 15px 30px;
+            padding: 8px 25px; /* más delgado */
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -24,11 +24,16 @@
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 10px;
         }
 
         .logo-container img {
-            height: 50px;
+            height: 35px; /* logo más pequeño */
+        }
+
+        .logo-container h2 {
+            font-size: 18px;
+            margin: 0;
         }
 
         .fecha {
@@ -38,7 +43,11 @@
 
         main {
             text-align: center;
-            margin-top: 80px;
+            margin-top: 60px;
+        }
+
+        h1 {
+            margin-bottom: 30px;
         }
 
         .card {
@@ -46,7 +55,6 @@
             padding: 30px;
             border-radius: 12px;
             display: inline-block;
-            margin-top: 20px;
         }
     </style>
 </head>
@@ -54,7 +62,6 @@
 
 <header>
     <div class="logo-container">
-        <!-- AQUÍ ESTÁ EL CAMBIO -->
         <img src="logo.png.jpeg" alt="Logo Empresa">
         <h2>GRUPO SATEX</h2>
     </div>
@@ -62,7 +69,7 @@
 </header>
 
 <main>
-    <h1>Dashboard de Mantenimiento</h1>
+    <h1>Tablero Master Mantto. Satex Textil</h1>
 
     <div class="card">
         <p>Proyecto en construcción 🚀</p>
@@ -73,8 +80,12 @@
 <script>
     const fecha = new Date();
     const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById("fechaActual").innerText =
-        fecha.toLocaleDateString('es-ES', opciones);
+    let fechaTexto = fecha.toLocaleDateString('es-ES', opciones);
+
+    // Poner la primera letra en mayúscula
+    fechaTexto = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
+
+    document.getElementById("fechaActual").innerText = fechaTexto;
 </script>
 
 </body>
