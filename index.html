@@ -4,118 +4,142 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    body { margin: 0; background: #2f5577; font-family: Arial, sans-serif; }
+    /* ---------------------------------------------------------
+       CANDADO DE DISEÑO BASE (ESTÁTICO)
+    ------------------------------------------------------------ */
+    body { 
+        margin: 0; 
+        background-color: #2f5577 !important; 
+        font-family: Arial, sans-serif !important; 
+        overflow-x: hidden;
+    }
     
-    /* ENCABEZADO ORIGINAL BLOQUEADO */
     .header {
-        background: #274a66;
+        background-color: #274a66 !important; 
         display: flex;
         align-items: center;
         padding: 0 30px;
         height: 60px;
         color: white;
     }
-    .header-left { width: 20%; display: flex; align-items: center; }
-    .header-left img { height: 40px; }
-    .titulo { 
-        width: 60%; 
-        text-align: center; 
-        font-size: 28px; 
-        font-weight: bold; 
-        text-transform: none;
-    }
-    .fecha { width: 20%; text-align: right; font-size: 14px; }
 
-    /* INDICADORES AL 50% */
-    .container {
+    .header-left { width: 25%; display: flex; align-items: center; }
+    .header-left img { height: 40px; }
+
+    .titulo { 
+        width: 50%; 
+        text-align: center; 
+        font-size: 28px !important; 
+        font-weight: bold; 
+        color: white !important;
+    }
+
+    .fecha { width: 25%; text-align: right; font-size: 14px; color: white; }
+
+    /* ---------------------------------------------------------
+       INDICADORES (REDUCIDOS 25% ADICIONAL - 82px)
+    ------------------------------------------------------------ */
+    .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 20px;
-        padding: 40px;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 15px;
+        padding: 30px;
         justify-items: center;
     }
+
     .gauge-card {
         background: white;
-        width: 110px; 
-        height: 110px;
+        width: 82px; /* Tamaño final ultra-compacto */
+        height: 82px;
         border-radius: 50%;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     }
+
     .label-ton {
         position: absolute;
-        top: 22px;
-        font-size: 9px;
+        top: 16px;
+        font-size: 7px;
         font-weight: bold;
         color: #333;
     }
-    .valor {
+
+    .valor-num {
         position: absolute;
-        bottom: 18px;
-        font-size: 12px;
+        bottom: 14px;
+        font-size: 9px;
         font-weight: bold;
         color: #000;
     }
-    canvas { max-width: 95%; max-height: 95%; }
+
+    canvas { max-width: 92%; max-height: 92%; }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="header-left"><img src="logo.png.jpeg"></div>
+    <div class="header-left"><img src="logo.png.jpeg" alt="Logo"></div>
     <div class="titulo">Tablero Master Mantto. Satex Textil</div>
-    <div class="fecha" id="fecha"></div>
+    <div class="fecha" id="fechaDisplay"></div>
 </div>
 
-<div class="container" id="tablero"></div>
+<div class="dashboard-grid" id="contenedorGauges"></div>
 
 <script>
-    document.getElementById("fecha").innerText = new Date().toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'}).toUpperCase();
+    document.getElementById("fechaDisplay").innerText = new Date().toLocaleDateString('es-ES', {day:'numeric', month:'long', year:'numeric'}).toUpperCase();
 
-    const tablero = document.getElementById('tablero');
+    const contenedor = document.getElementById('contenedorGauges');
+    
     for (let i = 1; i <= 11; i++) {
-        const div = document.createElement('div');
-        div.className = 'gauge-card';
-        div.innerHTML = `<div class="label-ton">Toneladas</div><canvas id="g-${i}"></canvas><div class="valor">250,000</div>`;
-        tablero.appendChild(div);
+        const card = document.createElement('div');
+        card.className = 'gauge-card';
+        card.innerHTML = `<div class="label-ton">Toneladas</div><canvas id="gauge-${i}"></canvas><div class="valor-num">250,000</div>`;
+        contenedor.appendChild(card);
 
-        new Chart(document.getElementById(`g-${i}`).getContext('2d'), {
+        new Chart(document.getElementById(`gauge-${i}`).getContext('2d'), {
             type: 'doughnut',
             data: {
                 datasets: [{
                     data: [50, 25, 25],
                     backgroundColor: ["#23a446", "#f9b218", "#da291c"],
                     borderWidth: 0,
-                    needleValue: 25
+                    needleValue: 25 
                 }]
             },
             options: {
                 rotation: -120,
                 circumference: 240,
                 cutout: '75%',
+                responsive: true,
                 plugins: { legend: false, tooltip: false }
             },
             plugins: [{
                 afterDatasetDraw(chart) {
-                    const {ctx, data} = chart;
-                    const x = chart.getDatasetMeta(0).data[0].x;
-                    const y = chart.getDatasetMeta(0).data[0].y;
-                    const r = chart.getDatasetMeta(0).data[0].outerRadius;
-                    const angle = (Math.PI * 0.833) + (data.datasets[0].needleValue / 100) * (Math.PI * 1.33);
+                    const {ctx} = chart;
+                    const meta = chart.getDatasetMeta(0);
+                    const x = meta.data[0].x;
+                    const y = meta.data[0].y;
+                    const r = meta.data[0].outerRadius;
+                    const val = chart.data.datasets[0].needleValue;
+                    
+                    const angle = (Math.PI * 0.833) + (val / 100) * (Math.PI * 1.33);
+                    
                     ctx.save();
                     ctx.translate(x, y);
                     ctx.rotate(angle);
                     ctx.beginPath();
-                    ctx.moveTo(0, -1);
-                    ctx.lineTo(r - 5, 0);
-                    ctx.lineTo(0, 1);
+                    ctx.moveTo(0, -0.8);
+                    ctx.lineTo(r - 4, 0);
+                    ctx.lineTo(0, 0.8);
                     ctx.fillStyle = "#333";
                     ctx.fill();
+                    
                     ctx.rotate(-angle);
                     ctx.beginPath();
-                    ctx.arc(0, 0, 4, 0, 2 * Math.PI);
+                    ctx.arc(0, 0, 3, 0, 2 * Math.PI);
                     ctx.fillStyle = "#4285f4";
                     ctx.fill();
                     ctx.strokeStyle = "white";
