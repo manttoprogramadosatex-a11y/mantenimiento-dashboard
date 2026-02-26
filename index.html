@@ -2,9 +2,10 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* --- ESTRUCTURA BLOQUEADA --- */
+    /* ---------------------------------------------------------
+       CANDADO DE ESTRUCTURA - PROPUESTA A (IMAGEN MAESTRA)
+    ------------------------------------------------------------ */
     body { 
         margin: 0; 
         background-color: #2f5577; 
@@ -22,58 +23,69 @@
 
     .header-left { width: 25%; }
     .header-left img { height: 40px; }
-
-    .titulo { 
-        width: 50%; 
-        text-align: center; 
-        font-size: 24px; 
-        font-weight: bold; 
-    }
-
-    .fecha { 
-        width: 25%; 
-        text-align: right; 
-        font-size: 16px; 
-        color: white;
-    }
+    .titulo { width: 50%; text-align: center; font-size: 24px; font-weight: bold; }
+    .fecha { width: 25%; text-align: right; font-size: 16px; color: white; }
 
     .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 25px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
         padding: 40px;
         justify-items: center;
     }
 
-    /* --- INDICADOR SATEX (CIRCULO BLANCO) --- */
-    .gauge-card {
-        background: white;
-        width: 180px; 
-        height: 180px; 
-        border-radius: 50%;
+    /* EL CONTENEDOR USA TU IMAGEN AUTORIZADA COMO FONDO */
+    .gauge-container {
+        width: 200px;
+        height: 200px;
+        background-image: url('fondo_indicador.png'); /* AQUÍ VA TU IMAGEN */
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
         position: relative;
         display: flex;
-        flex-direction: column;
-        align-items: center;
         justify-content: center;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        align-items: center;
     }
 
-    .canvas-container {
-        width: 170px;
-        height: 170px;
+    /* LA AGUJA ES UN ELEMENTO QUE SOLO ROTA */
+    .needle {
         position: absolute;
+        width: 4px;
+        height: 80px; /* Ajustar según el radio de tu imagen */
+        background: #da291c;
+        bottom: 50%; /* La base de la aguja en el centro */
+        left: calc(50% - 2px);
+        transform-origin: bottom center;
+        transition: transform 1s ease-in-out;
+        z-index: 2;
+        border-radius: 4px 4px 0 0;
     }
 
+    /* EL CÍRCULO AZUL CENTRAL (Fijo) */
+    .needle-center {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background: #4285f4;
+        border: 2px solid white;
+        border-radius: 50%;
+        z-index: 3;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* TEXTOS DINÁMICOS SOBRE LA IMAGEN */
     .info-overlay {
-        margin-top: 45px;
+        position: absolute;
+        bottom: 25px;
         text-align: center;
-        z-index: 10;
+        width: 100%;
+        z-index: 4;
     }
 
-    .label-ton { font-size: 30px; font-weight: bold; color: #000; margin: 0; }
-    .valor-ac { font-size: 16px; font-weight: bold; color: #000; margin: 2px 0; }
-    .valor-max { font-size: 13px; font-weight: bold; color: #555; margin: 0; }
+    .valor-ac { font-size: 16px; font-weight: bold; color: #000; margin: 0; }
+    .valor-max { font-size: 12px; font-weight: bold; color: #444; margin: 0; }
+
 </style>
 </head>
 <body>
@@ -87,99 +99,40 @@
 <div class="dashboard-grid" id="contenedorGauges"></div>
 
 <script>
-    // 1. FECHA COMO ORACIÓN (Solo primera mayúscula)
-    const fechaActual = new Date();
+    // 1. FECHA (Formato Oración: "26 de febrero de 2026")
+    const f = new Date();
     const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
-    let fechaTexto = fechaActual.toLocaleDateString('es-ES', opciones);
-    document.getElementById("fechaDisplay").innerText = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
+    let textoFecha = f.toLocaleDateString('es-ES', opciones);
+    document.getElementById("fechaDisplay").innerText = textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
 
-    // 2. CONFIGURACIÓN DE DATOS (Lo único que cambiará después)
-    const valorAc = 250000;
-    const valorMax = 300000;
-    const porcentaje = (valorAc / valorMax) * 100;
+    // 2. DATOS DE EJEMPLO
+    const indicadores = [
+        { id: 1, ac: 250000, max: 300000 },
+        { id: 2, ac: 150000, max: 300000 },
+        { id: 3, ac: 330000, max: 300000 }
+    ];
 
     const contenedor = document.getElementById('contenedorGauges');
-    
-    for (let i = 1; i <= 11; i++) {
+
+    indicadores.forEach(data => {
+        const pct = (data.ac / data.max) * 100;
+        
+        // Lógica de rotación: 
+        // Si 0% es -130 grados y 120% es +130 grados:
+        const rotation = -130 + (pct * (260 / 120));
+
         const card = document.createElement('div');
-        card.className = 'gauge-card';
+        card.className = 'gauge-container';
         card.innerHTML = `
-            <div class="canvas-container"><canvas id="gauge-${i}"></canvas></div>
+            <div class="needle" style="transform: rotate(${rotation}deg)"></div>
+            <div class="needle-center"></div>
             <div class="info-overlay">
-                <p class="label-ton">Ton.</p>
-                <p class="valor-ac">Ac. ${valorAc.toLocaleString()}</p>
-                <p class="valor-max">Max. ${valorMax.toLocaleString()}</p>
+                <p class="valor-ac">Ac. ${data.ac.toLocaleString()}</p>
+                <p class="valor-max">Max. ${data.max.toLocaleString()}</p>
             </div>
         `;
         contenedor.appendChild(card);
-
-        new Chart(document.getElementById(`gauge-${i}`).getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [85, 15, 20], // Verde, Amarillo, Rojo (Hasta 120%)
-                    backgroundColor: ["#23a446", "#f9b218", "#da291c"],
-                    borderWidth: 0,
-                    needleValue: porcentaje
-                }]
-            },
-            options: {
-                rotation: -130,
-                circumference: 260,
-                cutout: '80%',
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: false, tooltip: false }
-            },
-            plugins: [{
-                afterDraw(chart) {
-                    const {ctx, width, height} = chart;
-                    const cx = width / 2;
-                    const cy = height / 2;
-                    const outerR = chart.getDatasetMeta(0).data[0].outerRadius;
-                    const innerR = chart.getDatasetMeta(0).data[0].innerRadius;
-
-                    // --- DIBUJAR EXACTAMENTE 11 LÍNEAS NEGRAS ---
-                    ctx.save();
-                    ctx.translate(cx, cy);
-                    ctx.strokeStyle = "black";
-                    ctx.lineWidth = 2;
-                    for (let n = 0; n <= 10; n++) {
-                        const angle = (Math.PI * 0.778) + (n / 10) * (Math.PI * 1.445);
-                        ctx.beginPath();
-                        ctx.moveTo(Math.cos(angle) * (innerR - 2), Math.sin(angle) * (innerR - 2));
-                        ctx.lineTo(Math.cos(angle) * (outerR + 2), Math.sin(angle) * (outerR + 2));
-                        ctx.stroke();
-                    }
-                    ctx.restore();
-
-                    // --- AGUJA ROJA ---
-                    const val = chart.data.datasets[0].needleValue;
-                    const nAngle = (Math.PI * 0.778) + (val / 120) * (Math.PI * 1.445);
-                    ctx.save();
-                    ctx.translate(cx, cy);
-                    ctx.rotate(nAngle);
-                    ctx.beginPath();
-                    ctx.moveTo(0, -3);
-                    ctx.lineTo(outerR - 10, 0);
-                    ctx.lineTo(0, 3);
-                    ctx.fillStyle = "#da291c";
-                    ctx.fill();
-
-                    // Círculo central azul
-                    ctx.rotate(-nAngle);
-                    ctx.beginPath();
-                    ctx.arc(0, 0, 7, 0, 2 * Math.PI);
-                    ctx.fillStyle = "#4285f4";
-                    ctx.fill();
-                    ctx.strokeStyle = "white";
-                    ctx.lineWidth = 2;
-                    ctx.stroke();
-                    ctx.restore();
-                }
-            }]
-        });
-    }
+    });
 </script>
 </body>
 </html>
