@@ -2,91 +2,133 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Tablero Máster de Mantenimiento - Satex Textil</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<title>Dashboard Ejecutivo</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-body{
-    margin:0;
-    font-family: "Segoe UI", Arial, sans-serif;
-    background:#1e3a5f; /* Azul uniforme más claro */
-    color:white;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f2b46;
+    color: white;
+    text-align: center;
 }
 
-/* ===== HEADER EJECUTIVO ===== */
-header{
-    background:#162c47;
-    padding:8px 30px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-bottom:2px solid #2e6fb5;
+header {
+    padding: 10px 20px;
+    background: #163a5c;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.logo{
-    height:36px;
+header img {
+    height: 40px;
 }
 
-.header-center{
-    font-size:20px;
-    font-weight:600;
-    letter-spacing:0.5px;
+.fecha {
+    font-size: 14px;
 }
 
-.fecha{
-    font-size:14px;
-    color:#81d4fa;
+h1 {
+    margin: 20px 0;
+    font-weight: 500;
 }
 
-/* ===== CONTENIDO PRINCIPAL ===== */
-main{
-    text-align:center;
-    margin-top:120px;
+.cardas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 30px;
 }
 
-/* TARJETA CENTRAL */
-.card{
-    background:#274a73;
-    width:420px;
-    margin:auto;
-    padding:35px;
-    border-radius:12px;
-    box-shadow:0px 8px 20px rgba(0,0,0,0.3);
-    font-size:18px;
+.card {
+    background: #1c4066;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+canvas {
+    max-height: 180px;
 }
 </style>
 </head>
-
 <body>
 
 <header>
-    <img src="logo.png.jpeg" class="logo">
-    <div class="header-center">
-        Tablero Máster de Mantenimiento – Satex Textil
-    </div>
+    <img src="logo.png.jpeg" alt="Logo">
     <div class="fecha" id="fecha"></div>
 </header>
 
-<main>
-    <div class="card">
-        Próximamente indicadores en tiempo real.
-    </div>
-</main>
+<h1>Indicadores Cardas</h1>
+
+<div class="cardas-container" id="cardasContainer"></div>
 
 <script>
-const fechaElemento = document.getElementById("fecha");
-const fechaActual = new Date();
 
-const opciones = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-};
+// Fecha con día en mayúscula
+const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+let fechaTexto = new Date().toLocaleDateString('es-ES', opciones);
+fechaTexto = fechaTexto.charAt(0).toUpperCase() + fechaTexto.slice(1);
+document.getElementById("fecha").innerText = fechaTexto;
 
-let fechaFormateada = fechaActual.toLocaleDateString('es-ES', opciones);
-fechaFormateada = fechaFormateada.charAt(0).toUpperCase() + fechaFormateada.slice(1);
-fechaElemento.textContent = fechaFormateada;
+
+// 🔥 DATOS SIMULADOS (solo demostración)
+const cardas = [
+    { nombre: "Carda 1", actual: 8, max: 10 },
+    { nombre: "Carda 2", actual: 6, max: 10 },
+    { nombre: "Carda 3", actual: 9, max: 10 },
+    { nombre: "Carda 4", actual: 5, max: 10 },
+    { nombre: "Carda 5", actual: 7, max: 10 },
+    { nombre: "Carda 6", actual: 10, max: 10 },
+    { nombre: "Carda 7", actual: 4, max: 10 },
+    { nombre: "Carda 8", actual: 8.5, max: 10 },
+    { nombre: "Carda 9", actual: 6.5, max: 10 },
+    { nombre: "Carda 10", actual: 9.2, max: 10 },
+];
+
+const container = document.getElementById("cardasContainer");
+
+cardas.forEach((carda, index) => {
+
+    const porcentaje = (carda.actual / carda.max) * 100;
+
+    let color = "#2ecc71";
+    if (porcentaje > 85) color = "#e74c3c";
+    else if (porcentaje > 60) color = "#f1c40f";
+
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+        <h3>${carda.nombre}</h3>
+        <canvas id="gauge${index}"></canvas>
+        <p>${carda.actual} / ${carda.max} Ton</p>
+    `;
+
+    container.appendChild(div);
+
+    new Chart(document.getElementById(`gauge${index}`), {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [porcentaje, 100 - porcentaje],
+                backgroundColor: [color, "#2c5a85"],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            rotation: -90,
+            circumference: 180,
+            cutout: "70%",
+            plugins: {
+                tooltip: { enabled: false },
+                legend: { display: false }
+            }
+        }
+    });
+
+});
+
 </script>
 
 </body>
