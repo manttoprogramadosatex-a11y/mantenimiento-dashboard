@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* CANDADO DE DISEÑO SATEX 2026 */
+    /* CANDADO DE DISEÑO SATEX 2026 - MODELO MASTER V4 */
     body { 
         margin: 0; background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
@@ -17,6 +17,7 @@
         position: relative;
     }
     .header-left img { height: 50px; }
+    
     .titulo { 
         width: 60%; text-align: center; font-size: 28px; font-weight: bold; 
         position: absolute; left: 50%; transform: translateX(-50%);
@@ -24,42 +25,51 @@
     }
     .fecha { width: 20%; text-align: right; font-size: 14px; margin-left: auto; }
 
-    /* ESTATUS DE PLANTA: DESGLOSE POR MÁQUINA */
-    .seccion-estatus { padding: 10px 30px; }
-    .frase-estatus { color: white; font-size: 16px; font-weight: bold; margin-bottom: 8px; display: block; }
+    /* SECCIÓN ESTATUS ALINEADA */
+    .seccion-estatus { 
+        padding: 15px 30px; 
+        display: flex; 
+        align-items: center; 
+        gap: 20px; 
+    }
+    .frase-estatus { 
+        color: white; 
+        font-size: 18px; 
+        font-weight: bold; 
+        white-space: nowrap;
+    }
     
     .fila-indicadores-top {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        flex-wrap: nowrap;
+        display: flex; 
+        align-items: center; 
+        gap: 15px; 
+        flex-grow: 1;
     }
 
-    /* BLOQUES INDIVIDUALES POR TIPO DE HUSO */
     .bloque-dato {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.1); 
         padding: 8px 15px;
-        border-radius: 4px;
+        border-radius: 4px; 
         border-left: 4px solid #f9b218;
-        min-width: 140px;
+        min-width: 150px;
     }
-    .dato-etiqueta { font-size: 9px; text-transform: uppercase; color: #ccc; display: block; }
-    .dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; }
+    .dato-etiqueta { font-size: 10px; text-transform: uppercase; color: #ccc; display: block; margin-bottom: 2px; }
+    .dato-valor { font-size: 22px; font-weight: bold; color: #f9b218; }
 
-    /* MÁQUINA PARADA AL EXTREMO */
     .contenedor-paradas { margin-left: auto; display: flex; gap: 10px; }
     .card-parada-unica {
-        background: rgba(218, 41, 28, 0.3);
+        background: rgba(218, 41, 28, 0.3); 
         border: 1px solid #da291c;
-        padding: 8px 20px;
-        border-radius: 4px;
-        color: white;
+        padding: 8px 20px; 
+        border-radius: 4px; 
+        color: white; 
         text-align: center;
+        min-width: 160px;
     }
-    .card-parada-unica span { font-size: 9px; display: block; color: #ff9999; }
-    .card-parada-unica strong { font-size: 16px; text-transform: uppercase; }
+    .card-parada-unica span { font-size: 9px; display: block; color: #ff9999; text-transform: uppercase; }
+    .card-parada-unica strong { font-size: 16px; text-transform: uppercase; display: block; }
 
-    /* INDICADORES CARDAS (POSICIÓN MEDIA BLOQUEADA) */
+    /* INDICADORES CARDAS */
     .dashboard-middle-row {
         display: flex; flex-direction: row; flex-wrap: nowrap; 
         overflow-x: auto; gap: 10px; padding: 25px 15px;
@@ -108,8 +118,8 @@
 
         <div class="contenedor-paradas">
             <div class="card-parada-unica">
-                <span>MÁQUINA PARADA</span>
-                <strong>REGULADOR 10</strong>
+                <span>Máquina Parada</span>
+                <strong>Regulador 10</strong>
             </div>
         </div>
     </div>
@@ -118,11 +128,11 @@
 <div class="dashboard-middle-row" id="contenedorGauges"></div>
 
 <script>
-    // Fecha
+    // Fecha actual
     const f = new Date();
     document.getElementById("fechaDisplay").innerText = f.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-    // Datos Cardas (Pestaña Información Cardas)
+    // Datos extraídos de tu Excel
     const datosExcel = [
         { ac: 800, max: 1000 }, { ac: 500, max: 1000 }, { ac: 600, max: 1000 },
         { ac: 700, max: 1000 }, { ac: 800, max: 1000 }, { ac: 650, max: 1000 },
@@ -160,6 +170,9 @@
                 }]
             });
         });
+
+        // REFRESH AUTOMÁTICO CADA 2 MINUTOS
+        setTimeout(function(){ location.reload(); }, 120000); 
     };
 </script>
 </body>
