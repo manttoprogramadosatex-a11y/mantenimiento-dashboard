@@ -11,11 +11,11 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #1f4e79; /* Azul corporativo claro */
+    background: #2f5d86;
     color: white;
 }
 
-/* ===== HEADER (NO SE TOCA) ===== */
+/* HEADER */
 .header {
     display: flex;
     align-items: center;
@@ -31,31 +31,33 @@ body {
     font-size: 14px;
 }
 
-/* ===== CONTENIDO EXISTENTE ===== */
-.contenido-central {
+/* TÍTULO CENTRAL */
+.titulo-central {
     text-align: center;
-    margin-top: 40px;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 20px;
 }
 
-/* ===== NUEVA SECCIÓN CARDAS ===== */
+/* CONTENEDOR GAUGES */
 .gauges-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 40px;
-    margin-top: 60px;
+    gap: 50px;
+    margin-top: 50px;
 }
 
 .gauge-card {
     background: rgba(255,255,255,0.08);
     padding: 20px;
     border-radius: 15px;
-    width: 260px;
+    width: 280px;
     text-align: center;
 }
 
 canvas {
-    max-width: 220px;
+    max-width: 240px;
     margin: auto;
 }
 
@@ -69,18 +71,18 @@ canvas {
 
 <body>
 
-<!-- HEADER ORIGINAL -->
+<!-- HEADER -->
 <div class="header">
     <img src="logo.png.jpeg" class="logo">
     <div class="fecha" id="fecha"></div>
 </div>
 
-<!-- CONTENIDO QUE YA ESTABA -->
-<div class="contenido-central">
-    <!-- Aquí estaba su contenido anterior y NO lo borramos -->
+<!-- TITULO (NO SE BORRA) -->
+<div class="titulo-central">
+    Tablero Master Mantto. Satex Textil
 </div>
 
-<!-- NUEVA SECCIÓN VELOCÍMETROS CARDAS -->
+<!-- VELOCIMETROS -->
 <div class="gauges-container">
 
     <div class="gauge-card">
@@ -102,28 +104,24 @@ canvas {
 
 <script>
 
-/* ===== FECHA CON DÍA EN MAYÚSCULA ===== */
+/* FECHA CON MAYÚSCULA */
 const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 let fecha = new Date().toLocaleDateString('es-ES', opciones);
 fecha = fecha.charAt(0).toUpperCase() + fecha.slice(1);
 document.getElementById("fecha").innerText = fecha;
 
 
-/* ===== FUNCIÓN VELOCÍMETRO ===== */
+/* FUNCIÓN VELOCÍMETRO CON AGUJA */
 function createGauge(id, value, max) {
 
-    let porcentaje = value / max;
-    let color = "#2ecc71";
+    const ctx = document.getElementById(id);
 
-    if (porcentaje < 0.4) color = "#e74c3c";
-    else if (porcentaje < 0.7) color = "#f39c12";
-
-    new Chart(document.getElementById(id), {
+    const gauge = new Chart(ctx, {
         type: 'doughnut',
         data: {
             datasets: [{
-                data: [value, max - value],
-                backgroundColor: [color, "#2c3e50"],
+                data: [30, 40, 30],
+                backgroundColor: ["#e74c3c", "#f39c12", "#2ecc71"],
                 borderWidth: 0
             }]
         },
@@ -132,26 +130,42 @@ function createGauge(id, value, max) {
             circumference: 180,
             cutout: '70%',
             plugins: {
-                tooltip: { enabled: false },
-                legend: { display: false }
+                legend: { display: false },
+                tooltip: { enabled: false }
             }
         },
         plugins: [{
-            id: 'text',
-            beforeDraw(chart) {
-                const { width, height, ctx } = chart;
+            id: 'needle',
+            afterDraw(chart) {
+                const {ctx} = chart;
+                const centerX = chart.getDatasetMeta(0).data[0].x;
+                const centerY = chart.getDatasetMeta(0).data[0].y;
+
+                const angle = Math.PI * (value / max);
+
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(-Math.PI + angle);
+
+                ctx.beginPath();
+                ctx.moveTo(0, -5);
+                ctx.lineTo(120, 0);
+                ctx.lineTo(0, 5);
+                ctx.fillStyle = "white";
+                ctx.fill();
+
                 ctx.restore();
+
                 ctx.font = "16px Arial";
                 ctx.fillStyle = "white";
                 ctx.textAlign = "center";
-                ctx.fillText(value + " Toneladas", width / 2, height - 30);
-                ctx.save();
+                ctx.fillText(value + " Toneladas", centerX, centerY + 40);
             }
         }]
     });
 }
 
-/* ===== EJEMPLO VISUAL ===== */
+/* EJEMPLO */
 createGauge("gauge1", 18, 25);
 createGauge("gauge2", 12, 25);
 createGauge("gauge3", 22, 25);
