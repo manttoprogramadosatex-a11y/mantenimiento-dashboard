@@ -3,23 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <title>Tablero Master Mantto. Satex Textil</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body{
     margin:0;
     font-family: Arial, sans-serif;
-    background:#2f5577; /* Fondo tablero */
+    background:#2f5577; 
     color:white;
 }
 
-/* ENCABEZADO REDUCIDO AL MÍNIMO */
+/* ENCABEZADO (SIN MODIFICACIONES) */
 .header{
     background:#274a66; 
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:0 30px; /* Sin padding vertical */
-    height: 50px;   /* Altura reducida */
+    padding:0 30px;
+    height: 50px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
@@ -29,12 +30,10 @@ body{
     flex: 1;
 }
 
-/* LOGO AJUSTADO AL NUEVO ENCABEZADO */
 .header img{
-    height:35px; /* Más pequeño para que quepa bien */
+    height:35px;
 }
 
-/* TÍTULO CON TAMAÑO SOLICITADO */
 .titulo{
     font-size:28px; 
     font-weight:bold;
@@ -49,12 +48,49 @@ body{
     text-align: right;
 }
 
-/* ESPACIO PARA LOS FUTUROS INDICADORES */
-.contenedor-principal{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height: 200px;
+/* CONTENEDOR PARA LOS 11 INDICADORES */
+.grid-indicadores {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 30px;
+    justify-items: center;
+}
+
+.gauge-card {
+    background: white;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+}
+
+.label-toneladas {
+    position: absolute;
+    top: 45px;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 10;
+}
+
+.valor-principal {
+    position: absolute;
+    bottom: 30px;
+    color: #000;
+    font-size: 22px;
+    font-weight: 800;
+    z-index: 10;
+}
+
+canvas {
+    max-width: 100%;
+    max-height: 100%;
 }
 </style>
 </head>
@@ -68,19 +104,96 @@ body{
     <div class="fecha" id="fecha"></div>
 </div>
 
-<div class="contenedor-principal">
+<div class="grid-indicadores" id="contenedorGauges">
     </div>
 
 <script>
 /* FECHA ACTUAL */
 const hoy = new Date();
 const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric'};
-let textoFecha = hoy.toLocaleDateString('es-ES', opciones);
-textoFecha = textoFecha.charAt(0).toUpperCase() + textoFecha.slice(1);
-document.getElementById("fecha").innerText = textoFecha;
+document.getElementById("fecha").innerText = hoy.toLocaleDateString('es-ES', opciones).toUpperCase();
 
-/* Lógica de indicadores removida por el momento */
+/* CONFIGURACIÓN Y GENERACIÓN DE LOS 11 GAUGES */
+const numIndicadores = 11;
+const contenedor = document.getElementById('contenedorGauges');
+
+for (let i = 1; i <= numIndicadores; i++) {
+    // Crear estructura HTML para cada indicador
+    const card = document.createElement('div');
+    card.className = 'gauge-card';
+    card.innerHTML = `
+        <div class="label-toneladas">Toneladas</div>
+        <canvas id="gauge-${i}"></canvas>
+        <div class="valor-principal">250,000</div>
+    `;
+    contenedor.appendChild(card);
+
+    // Inicializar Chart.js para cada uno
+    const ctx = document.getElementById(`gauge-${i}`).getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [50, 25, 25], // Verde, Amarillo, Rojo
+                backgroundColor: ["#23a446", "#f9b218", "#da291c"],
+                borderWidth: 0,
+                needleValue: 25 // 25% corresponde a las 250,000 toneladas
+            }]
+        },
+        options: {
+            rotation: -120,
+            circumference: 240,
+            cutout: '75%',
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false }
+            }
+        },
+        plugins: [{
+            id: 'needle',
+            afterDatasetDraw(chart) {
+                const {ctx, data} = chart;
+                const meta = chart.getDatasetMeta(0);
+                const x = meta.data[0].x;
+                const y = meta.data[0].y;
+                const outerR = meta.data[0].outerRadius;
+
+                // Dibujar Escalas
+                ctx.save();
+                ctx.fillStyle = "#666";
+                ctx.font = "bold 10px Arial";
+                ctx.fillText("0", x - 55, y + 60);
+                ctx.fillText("1,000,000", x + 25, y + 60);
+                ctx.restore();
+
+                // Dibujar Aguja
+                const angle = (Math.PI * 0.833) + (data.datasets[0].needleValue / 100) * (Math.PI * 1.33);
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(angle);
+                ctx.beginPath();
+                ctx.moveTo(0, -2);
+                ctx.lineTo(outerR - 10, 0);
+                ctx.lineTo(0, 2);
+                ctx.fillStyle = "#da291c";
+                ctx.fill();
+
+                // Centro azul pequeño
+                ctx.rotate(-angle);
+                ctx.beginPath();
+                ctx.arc(0, 0, 8, 0, 2 * Math.PI);
+                ctx.fillStyle = "#4285f4";
+                ctx.fill();
+                ctx.strokeStyle = "white";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }]
+    });
+}
 </script>
-
 </body>
 </html>
