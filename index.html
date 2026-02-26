@@ -33,6 +33,7 @@ body{
     height:40px;
 }
 
+/* TÍTULO SIN TEXTO SUPERIOR */
 .titulo{
     font-size:28px; 
     font-weight:bold;
@@ -47,7 +48,7 @@ body{
     text-align: right;
 }
 
-/* CONTENEDOR DE GAUGES */
+/* CONTENEDOR DE INDICADORES */
 .gauges{
     display:flex;
     justify-content:center;
@@ -56,8 +57,8 @@ body{
 }
 
 .gauge-container{
-    width:300px; /* Un poco más ancho para las escalas */
-    height:300px;
+    width:320px;
+    height:320px;
     position:relative;
     background: white; 
     border-radius: 50%;
@@ -65,6 +66,7 @@ body{
     box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
+/* PALABRA TONELADAS SOBRE EL EJE AZUL */
 .texto-interior {
     position: absolute;
     top: 52%; 
@@ -119,42 +121,35 @@ const gaugePlugin = {
         const centerX = meta.data[0].x;
         const centerY = meta.data[0].y;
         const outerRadius = meta.data[0].outerRadius;
-        const innerRadius = meta.data[0].innerRadius;
 
-        // --- DIBUJAR ESCALAS (0 a 100) ---
+        // --- ESCALAS (0 a 100) ---
         ctx.translate(centerX, centerY);
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = 'bold 12px Arial';
-        ctx.fillStyle = '#555';
+        ctx.font = 'bold 13px Arial';
+        ctx.fillStyle = '#444';
 
         for (let i = 0; i <= 100; i += 10) {
-            // Calculamos el ángulo para cada número de la escala
             const angle = Math.PI + (i / 100) * Math.PI;
-            
-            // Posición del número (un poco afuera del arco)
-            const x = (outerRadius + 15) * Math.cos(angle);
-            const y = (outerRadius + 15) * Math.sin(angle);
-            
+            const x = (outerRadius + 18) * Math.cos(angle);
+            const y = (outerRadius + 18) * Math.sin(angle);
             ctx.fillText(i, x, y);
         }
 
-        // --- DIBUJAR AGUJA ---
+        // --- AGUJA ROJA ---
         const needleAngle = Math.PI + (needleValue / 100) * Math.PI;
         ctx.rotate(needleAngle);
-
-        // Aguja Roja
         ctx.beginPath();
         ctx.moveTo(0, -3);
-        ctx.lineTo(outerRadius - 20, 0);
+        ctx.lineTo(outerRadius - 25, 0);
         ctx.lineTo(0, 3);
         ctx.fillStyle = "red";
         ctx.fill();
 
-        // Centro Azul
+        // --- CENTRO AZUL ---
         ctx.rotate(-needleAngle);
         ctx.beginPath();
-        ctx.arc(0, 0, 12, 0, 2 * Math.PI);
+        ctx.arc(0, 0, 14, 0, 2 * Math.PI);
         ctx.fillStyle = "#2f6db3"; 
         ctx.fill();
         ctx.strokeStyle = "white";
@@ -170,6 +165,7 @@ function crearGauge(id, valor) {
         type: 'doughnut',
         data: {
             datasets: [{
+                // Colores Invertidos: Verde, Amarillo, Rojo
                 data: [50, 25, 25], 
                 backgroundColor: ["#2ecc71", "#f1c40f", "#e74c3c"],
                 borderWidth: 0,
@@ -184,17 +180,15 @@ function crearGauge(id, valor) {
                 legend: { display: false },
                 tooltip: { enabled: false }
             },
-            layout: {
-                padding: 30 // Espacio para que no se corten los números de la escala
-            }
+            layout: { padding: 40 }
         },
         plugins: [gaugePlugin]
     });
 }
 
-/* INICIALIZACIÓN */
-crearGauge("gauge1", 10); // Cerca del cero (Verde)
-crearGauge("gauge2", 85); // Cerca del final (Rojo)
+/* VALORES DE PRUEBA */
+crearGauge("gauge1", 10); 
+crearGauge("gauge2", 85); 
 </script>
 
 </body>
