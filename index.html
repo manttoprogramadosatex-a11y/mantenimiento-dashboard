@@ -8,63 +8,53 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {
-    margin: 0;
+body{
+    margin:0;
     font-family: Arial, sans-serif;
-    background: #2f5d86;
-    color: white;
+    background:#2f5d86;
 }
 
 /* HEADER */
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 30px;
+.header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:15px 40px;
 }
 
-.logo {
-    height: 45px;
+.logo{
+    height:50px;
 }
 
-.fecha {
-    font-size: 14px;
+.titulo-header{
+    flex:1;
+    text-align:center;
+    font-size:26px;
+    font-weight:bold;
+    color:white;
 }
 
-/* TÍTULO CENTRAL */
-.titulo-central {
-    text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    margin-top: 20px;
+.fecha{
+    color:white;
+    font-size:14px;
 }
 
 /* CONTENEDOR GAUGES */
-.gauges-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 50px;
-    margin-top: 50px;
+.gauges-container{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:60px;
+    margin-top:60px;
 }
 
-.gauge-card {
-    background: rgba(255,255,255,0.08);
-    padding: 20px;
-    border-radius: 15px;
-    width: 280px;
-    text-align: center;
+.gauge-card{
+    text-align:center;
 }
 
-canvas {
-    max-width: 240px;
-    margin: auto;
-}
-
-.card-title {
-    margin-bottom: 10px;
-    font-weight: bold;
-    font-size: 16px;
+canvas{
+    width:260px !important;
+    height:260px !important;
 }
 </style>
 </head>
@@ -74,101 +64,106 @@ canvas {
 <!-- HEADER -->
 <div class="header">
     <img src="logo.png.jpeg" class="logo">
+    <div class="titulo-header">Tablero Master Mantto. Satex Textil</div>
     <div class="fecha" id="fecha"></div>
-</div>
-
-<!-- TITULO (NO SE BORRA) -->
-<div class="titulo-central">
-    Tablero Master Mantto. Satex Textil
 </div>
 
 <!-- VELOCIMETROS -->
 <div class="gauges-container">
-
     <div class="gauge-card">
-        <div class="card-title">Carda 1</div>
-        <canvas id="gauge1"></canvas>
+        <canvas id="g1"></canvas>
     </div>
-
     <div class="gauge-card">
-        <div class="card-title">Carda 2</div>
-        <canvas id="gauge2"></canvas>
+        <canvas id="g2"></canvas>
     </div>
-
     <div class="gauge-card">
-        <div class="card-title">Carda 3</div>
-        <canvas id="gauge3"></canvas>
+        <canvas id="g3"></canvas>
     </div>
-
 </div>
 
 <script>
 
 /* FECHA CON MAYÚSCULA */
-const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+const opciones = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
 let fecha = new Date().toLocaleDateString('es-ES', opciones);
 fecha = fecha.charAt(0).toUpperCase() + fecha.slice(1);
 document.getElementById("fecha").innerText = fecha;
 
 
-/* FUNCIÓN VELOCÍMETRO CON AGUJA */
-function createGauge(id, value, max) {
+/* PLUGIN PARA AGUJA REAL */
+const needlePlugin = {
+    id:'needle',
+    afterDraw(chart, args, options){
+        const {ctx} = chart;
+        const meta = chart.getDatasetMeta(0);
+        const centerX = meta.data[0].x;
+        const centerY = meta.data[0].y;
 
-    const ctx = document.getElementById(id);
+        const value = options.value;
+        const max = options.max;
 
-    const gauge = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            datasets: [{
-                data: [30, 40, 30],
-                backgroundColor: ["#e74c3c", "#f39c12", "#2ecc71"],
-                borderWidth: 0
+        const angle = Math.PI + (value/max)*Math.PI;
+
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(angle);
+
+        // Aguja roja
+        ctx.beginPath();
+        ctx.moveTo(-5,0);
+        ctx.lineTo(0,-110);
+        ctx.lineTo(5,0);
+        ctx.fillStyle="red";
+        ctx.fill();
+
+        ctx.restore();
+
+        // Centro azul
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 12, 0, 2*Math.PI);
+        ctx.fillStyle="#2c6cb0";
+        ctx.fill();
+
+        // Texto valor
+        ctx.font="18px Arial";
+        ctx.fillStyle="black";
+        ctx.textAlign="center";
+        ctx.fillText(value+" Toneladas", centerX, centerY+90);
+    }
+};
+
+
+/* FUNCIÓN GAUGE */
+function createGauge(id, value, max){
+
+    new Chart(document.getElementById(id),{
+        type:'doughnut',
+        data:{
+            datasets:[{
+                data:[max*0.6, max*0.25, max*0.15],
+                backgroundColor:["#2ecc71","#f1c40f","#e74c3c"],
+                borderWidth:0
             }]
         },
-        options: {
-            rotation: -90,
-            circumference: 180,
-            cutout: '70%',
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: false }
+        options:{
+            rotation:180,
+            circumference:180,
+            cutout:"70%",
+            plugins:{
+                legend:{display:false},
+                tooltip:{enabled:false},
+                needle:{ value:value, max:max }
             }
         },
-        plugins: [{
-            id: 'needle',
-            afterDraw(chart) {
-                const {ctx} = chart;
-                const centerX = chart.getDatasetMeta(0).data[0].x;
-                const centerY = chart.getDatasetMeta(0).data[0].y;
-
-                const angle = Math.PI * (value / max);
-
-                ctx.save();
-                ctx.translate(centerX, centerY);
-                ctx.rotate(-Math.PI + angle);
-
-                ctx.beginPath();
-                ctx.moveTo(0, -5);
-                ctx.lineTo(120, 0);
-                ctx.lineTo(0, 5);
-                ctx.fillStyle = "white";
-                ctx.fill();
-
-                ctx.restore();
-
-                ctx.font = "16px Arial";
-                ctx.fillStyle = "white";
-                ctx.textAlign = "center";
-                ctx.fillText(value + " Toneladas", centerX, centerY + 40);
-            }
-        }]
+        plugins:[needlePlugin]
     });
 }
 
+
 /* EJEMPLO */
-createGauge("gauge1", 18, 25);
-createGauge("gauge2", 12, 25);
-createGauge("gauge3", 22, 25);
+createGauge("g1",18,25);
+createGauge("g2",12,25);
+createGauge("g3",22,25);
 
 </script>
 
