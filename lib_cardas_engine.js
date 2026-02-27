@@ -9,12 +9,12 @@ const SatexCardasEngine = {
         this.grid.style.flexWrap = "nowrap";
         this.grid.style.overflowX = "auto";
         
-        // Espacio morado superior 2mm [cite: 486]
-        this.grid.style.marginTop = "8px"; 
+        [cite_start]// Reducción a 1mm arriba [cite: 485, 486]
+        this.grid.style.marginTop = "4px"; 
         this.grid.style.paddingTop = "0px";
         
-        // Espacio morado inferior 2mm [cite: 487]
-        this.grid.style.paddingBottom = "8px"; 
+        [cite_start]// Reducción a 1mm abajo (espacio con la barra amarilla) [cite: 487, 488]
+        this.grid.style.paddingBottom = "4px"; 
         
         this.grid.style.gap = "8px";
         this.grid.style.width = "100%";
