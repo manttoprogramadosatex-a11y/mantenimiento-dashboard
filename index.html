@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <title>Satex Master</title>
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -18,11 +19,13 @@
 
     <script>
         window.onload = () => {
+            // Renderizamos las estructuras
             SatexHeaderDesign.render("header-lib");
             SatexEstatusDesign.render("estatus-lib");
             SatexCardasEngine.dibujar("cardas-lib");
 
-            // Ejemplo: Actualizar Husos sin mover nada más
+            // Insertamos los datos (puedes cambiar estos números según tu Excel)
+            // SatexEstatusData.actualizar(Continuas, OpenEnd, Coneras, MaquinasParadas)
             SatexEstatusData.actualizar(14, 6, 4, 2);
         };
     </script>
