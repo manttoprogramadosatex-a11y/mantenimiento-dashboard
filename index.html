@@ -2,51 +2,50 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Satex Master Project</title>
+    <title>Satex Master Project 2026</title>
     <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body style="margin: 0; background-color: #2f5577; overflow: hidden; display: flex; flex-direction: column; height: 100vh;">
+<body>
 
     <div id="header-container"></div>
     <div id="estatus-container"></div>
 
-    <div id="main-area" style="flex-grow: 1; overflow-y: auto; padding: 20px;">
-        <div id="cardas-container" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;"></div>
+    <div id="main-content">
+        <div id="cardas-grid" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;"></div>
     </div>
 
-    <script src="lib_header.js"></script>
     <script src="lib_header_design.js"></script>
-    <script src="lib_estatus.js"></script>
     <script src="lib_estatus_design.js"></script>
     <script src="lib_estatus_data.js"></script>
     <script src="lib_maquinas_inactivas.js"></script>
-    <script src="lib_cardas.js"></script>
     <script src="lib_cardas_design.js"></script>
     <script src="lib_cardas_engine.js"></script>
 
     <script>
         window.onload = () => {
-            // Renderizado de Header
+            // 1. Header
             SatexHeaderDesign.render("header-container");
 
-            // Renderizado de Franja de Estatus
+            // 2. Franja de Estatus (Diseño Reducido)
             SatexEstatusDesign.render("estatus-container");
 
-            // Actualización de Indicadores (Más largos y letra +grande)
-            SatexEstatusData.actualizar(14, 6, 4, 2);
+            // 3. Datos de Husos
+            SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            // Detalle de Máquinas (Dentro de la franja)
+            // 4. Detalle de Paros con cálculo de días y scroll
             const paros = [
-                { tipo: "Continua", numero: "C-08", desde: "26/02/26" },
-                { tipo: "Open-End", numero: "OE-03", desde: "27/02/26" }
+                { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
+                { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
+                { tipo: "Con.", num: "CON-1", fecha: "26/02/2026" },
+                { tipo: "Cont.", num: "C-12", fecha: "27/02/2026" }
             ];
-            SatexMaquinasInactivas.render("maquinas-inactivas-container", paros);
+            SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
 
-            // Motor de Cardas
+            // 5. Iniciar Motor de Cardas (Llamando a tus librerías design/engine)
             if(typeof SatexCardasEngine !== 'undefined') {
-                SatexCardasEngine.dibujar("cardas-container");
+                SatexCardasEngine.dibujar("cardas-grid");
             }
         };
     </script>
