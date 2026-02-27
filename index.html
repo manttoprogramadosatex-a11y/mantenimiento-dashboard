@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
     /* =========================================
-       ZONA 1: ESTRUCTURA INAMOVIBLE (CANDADO)
+       ZONA 1: ESTRUCTURA BLINDADA - SATEX 2026
        ========================================= */
     body { 
         margin: 0; background-color: #2f5577; 
@@ -26,29 +26,32 @@
     }
     .fecha-hoy { width: 20%; text-align: right; font-size: 13px; margin-left: auto; }
 
+    /* SECCIÓN ESTATUS - ESPACIOS OPTIMIZADOS */
     .seccion-estatus { 
-        padding: 5px 20px; display: flex; align-items: center; gap: 12px;
+        padding: 5px 15px; display: flex; align-items: center; gap: 8px; /* Gap reducido */
         background: rgba(0,0,0,0.1); min-height: 60px;
     }
-    .frase-estatus { color: white; font-size: 15px; font-weight: bold; white-space: nowrap; }
-    .contenedor-bloques { display: flex; align-items: center; gap: 8px; }
+    .frase-estatus { color: white; font-size: 14px; font-weight: bold; white-space: nowrap; margin-right: 5px; }
+    
+    .contenedor-bloques { display: flex; align-items: center; gap: 5px; } /* Espacio entre tarjetas reducido */
 
     .bloque-dato {
-        background: rgba(255, 255, 255, 0.1); padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.1); padding: 4px 8px;
         border-radius: 4px; border-left: 4px solid #f9b218;
-        min-width: 110px; height: 45px;
+        min-width: 115px; height: 45px;
         display: flex; flex-direction: column; justify-content: center;
     }
-    .dato-etiqueta { font-size: 8px; text-transform: uppercase; color: #ccc; margin-bottom: 1px; }
+    .dato-etiqueta { font-size: 8px; text-transform: uppercase; color: #ccc; margin-bottom: 1px; line-height: 1.1; }
     .dato-valor { font-size: 18px; font-weight: bold; color: #f9b218; line-height: 1; }
 
+    /* SECCIÓN PARADAS - COMPACTADA */
     .seccion-paradas-scroll {
-        display: flex; align-items: center; gap: 10px;
+        display: flex; align-items: center; gap: 8px;
         margin-left: 5px; border-left: 1px solid rgba(255,255,255,0.2);
-        padding-left: 15px; flex-grow: 1;
+        padding-left: 10px; flex-grow: 1;
     }
 
-    .lista-vertical-container { height: 50px; overflow-y: auto; width: 450px; padding-right: 5px; }
+    .lista-vertical-container { height: 50px; overflow-y: auto; width: 420px; padding-right: 5px; }
     .lista-vertical-container::-webkit-scrollbar { width: 4px; }
     .lista-vertical-container::-webkit-scrollbar-thumb { background: #da291c; border-radius: 10px; }
 
@@ -60,18 +63,16 @@
     .info-maq { font-size: 11px; display: flex; gap: 10px; align-items: center; }
     .cont-dias { font-size: 10px; font-weight: bold; color: #ffffff; background: #da291c; padding: 1px 5px; border-radius: 2px; }
 
-    /* =========================================
-       ZONA 2: CUADRO DE CONTROL (BLINDADO A LA DERECHA)
-       ========================================= */
+    /* CUADRO DE CONTROL */
     .ctrl-satex {
-        margin-left: auto; display: flex; align-items: center; gap: 10px;
-        background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.1);
+        margin-left: auto; display: flex; align-items: center; gap: 8px;
+        background: rgba(255,255,255,0.05); padding: 5px 10px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.1);
     }
     .last-upd-text { font-size: 10px; color: #00d4ff; font-weight: bold; }
     .btn-cardas { background: #f9b218; color: #000; border: none; padding: 5px 12px; font-weight: bold; border-radius: 3px; cursor: pointer; font-size: 10px; text-transform: uppercase; }
     .btn-close-master { background: #da291c; color: white; border: none; width: 25px; height: 25px; font-weight: bold; border-radius: 3px; cursor: pointer; }
 
-    /* GAUGES AREA */
+    /* ÁREA DE GAUGES */
     .dashboard-middle-row {
         display: flex; flex-direction: row; flex-wrap: nowrap; 
         overflow-x: auto; gap: 8px; padding: 10px 15px;
@@ -88,7 +89,6 @@
     .valor-ac { font-size: 10px; font-weight: bold; color: #000; margin: 0; }
     .valor-max { font-size: 8px; color: #666; margin: 0; }
 
-    /* MODAL BLINDADO */
     #overlayCardas { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; padding: 30px; }
 </style>
 </head>
@@ -101,15 +101,15 @@
 </div>
 
 <div class="seccion-estatus">
-    <span class="frase-estatus">Estatus de Planta:</span>
+    <span class="frase-estatus">Estatus Planta:</span>
     <div class="contenedor-bloques">
-        <div class="bloque-dato"><span class="dato-etiqueta">Continuas (Inact.)</span><span class="dato-valor">16</span></div>
-        <div class="bloque-dato"><span class="dato-etiqueta">Open-End (Inact.)</span><span class="dato-valor">1</span></div>
-        <div class="bloque-dato"><span class="dato-etiqueta">Coneras (Inact.)</span><span class="dato-valor">0</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Husos Continuas (Inact.)</span><span class="dato-valor">16</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Husos Open-End (Inact.)</span><span class="dato-valor">1</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Husos Coneras (Inact.)</span><span class="dato-valor">0</span></div>
     </div>
 
     <div class="seccion-paradas-scroll">
-        <div class="bloque-dato" style="border-left-color: #da291c; min-width: 130px;"><span class="dato-etiqueta">Máquinas Paradas</span><span id="totalParadas" class="dato-valor" style="color: #ff9999;">0</span></div>
+        <div class="bloque-dato" style="border-left-color: #da291c; min-width: 115px;"><span class="dato-etiqueta">Máquinas Paradas</span><span id="totalParadas" class="dato-valor" style="color: #ff9999;">0</span></div>
         <div class="lista-vertical-container" id="listaParadas"></div>
     </div>
 
@@ -132,7 +132,6 @@
 </div>
 
 <script>
-    // ESTADO: CONGELADO - VERSIÓN DE ORO SATEX 2026
     const hoy = new Date();
     document.getElementById("fechaDisplay").innerText = hoy.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
     document.getElementById("updTime").innerText = "Ultima actualización: " + hoy.toLocaleDateString('es-ES');
@@ -143,25 +142,21 @@
         { nombre: "Continua 8", fechaParo: "2025-02-20" }
     ];
 
-    function calcularDias(fechaStr) {
-        const diffDays = Math.ceil(Math.abs(hoy - new Date(fechaStr)) / (1000 * 60 * 60 * 24));
-        return diffDays;
-    }
-
     window.onload = function() {
         const listaDiv = document.getElementById('listaParadas');
         document.getElementById('totalParadas').innerText = maquinasParadasData.length;
 
         maquinasParadasData.forEach(m => {
-            const dias = calcularDias(m.fechaParo);
+            const fParo = new Date(m.fechaParo);
+            const dias = Math.ceil(Math.abs(hoy - fParo) / (1000 * 60 * 60 * 24));
             const item = document.createElement('div');
             item.className = 'item-parada';
-            item.innerHTML = `<div class="info-maq"><strong>${m.nombre}</strong><span>${new Date(m.fechaParo).toLocaleDateString('es-ES')}</span></div><div class="cont-dias">${dias} Días Parada</div>`;
+            item.innerHTML = `<div class="info-maq"><strong>${m.nombre}</strong><span>${fParo.toLocaleDateString('es-ES')}</span></div><div class="cont-dias">${dias} Días Parada</div>`;
             listaDiv.appendChild(item);
         });
 
-        // Configuración Cardas - No se modifica el diseño
-        const datosCardas = [{ac:800,max:1000},{ac:500,max:1000},{ac:600,max:1000},{ac:700,max:1000},{ac:800,max:1000},{ac:650,max:1000},{ac:400,max:1000},{ac:650,max:1000},{ac:800,max:1000}];
+        // Simulación de 9 Cardas (Estructura Blindada)
+        const datosCardas = Array(9).fill({ac:800, max:1000});
         const contenedor = document.getElementById('contenedorGauges');
         
         datosCardas.forEach((datos, index) => {
