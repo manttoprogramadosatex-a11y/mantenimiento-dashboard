@@ -5,7 +5,7 @@ const SatexCardasDesign = {
         const rotacionFinal = rotacion > 90 ? 90 : (rotacion < -90 ? -90 : rotacion);
 
         return `
-        <div style="min-width: 125px; max-width: 125px; background: white; border-radius: 8px; padding: 10px; margin: 0px 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); flex-shrink: 0; display: flex; flex-direction: column; align-items: center; border: 1px solid #ddd; font-family: 'Segoe UI', sans-serif;">
+        <div class="carda-individual" style="min-width: 125px; max-width: 125px; background: white; border-radius: 8px; padding: 10px; margin: 0px 5px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); flex-shrink: 0; display: flex; flex-direction: column; align-items: center; border: 1px solid #ddd; font-family: 'Segoe UI', sans-serif;">
             <div style="color: #003366; font-weight: 900; font-size: 14px; margin-bottom: 5px; text-transform: uppercase;">Carda ${numero}</div>
             <div style="width: 100%; height: 75px; position: relative; display: flex; justify-content: center; align-items: flex-end;">
                 <canvas id="gauge-${numero}"></canvas>
