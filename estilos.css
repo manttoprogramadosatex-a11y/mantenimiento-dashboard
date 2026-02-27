@@ -1,13 +1,17 @@
-/* CONFIGURACIÓN ESTRUCTURAL PROTEGIDA */
-body { margin: 0; background-color: #2f5577; font-family: 'Segoe UI', Arial, sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
-
-/* El área de cardas ahora es solo un contenedor de scroll limpio */
-#cardas-area-container { flex-grow: 1; overflow-y: auto; }
-
-/* SECCIÓN: ESTATUS PLANTA (Formatos Tipo oración protegidos) */
-.estatus-bar { padding: 10px 20px; display: flex; align-items: center; height: 85px; gap: 15px; background: rgba(0,0,0,0.15); flex-shrink: 0; }
-.estatus-bar .label-main { color: white; font-size: 15px; font-weight: bold; line-height: 1.2; text-transform: none; }
-.estatus-bar .sub-txt { font-size: 11px; font-weight: normal; opacity: 0.8; }
-.estatus-bar .bloque-dato { background: #3c546d; padding: 5px 15px; border-radius: 4px; border-left: 4px solid #f9b218; min-width: 140px; height: 55px; display: flex; flex-direction: column; justify-content: center; }
-.estatus-bar .dato-etiqueta { font-size: 10px; color: #a1b1c1; font-weight: bold; text-transform: none; margin-bottom: 2px; }
-.estatus-bar .dato-valor { font-size: 26px; font-weight: bold; color: #f9b218; line-height: 1; }
+body { 
+    margin: 0; 
+    background-color: #2f5577; 
+    height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
+    font-family: sans-serif;
+}
+#header-lib, #estatus-lib { width: 100%; flex-shrink: 0; }
+#main-content { 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+    overflow-y: auto; 
+    padding: 10px;
+}
