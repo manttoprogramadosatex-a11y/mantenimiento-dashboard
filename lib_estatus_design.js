@@ -9,7 +9,7 @@ const SatexEstatusDesign = {
                 
                 <div id="data-husos-container" style="display: flex; gap: 10px;"></div>
                 
-                <div id="maquinas-paradas-scroll" class="scroll-paros" style="flex-grow: 1; max-width: 450px; height: 52px; overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px solid #da291c; border-radius: 4px; padding: 2px 10px; margin-left: 10px;">
+                <div id="maquinas-paradas-scroll" class="scroll-paros" style="flex-grow: 1; max-width: 500px; height: 52px; overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px solid #da291c; border-radius: 4px; padding: 2px 12px; margin-left: 20px;">
                 </div>
 
                 <div style="margin-left: auto;">
