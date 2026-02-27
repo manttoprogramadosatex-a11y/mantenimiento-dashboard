@@ -2,42 +2,74 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Satex - Tablero Master</title>
+    <title>Satex Master Project 2026</title>
     <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        #cardas-grid {
+            display: flex;
+            flex-wrap: nowrap; /* Fuerza a las cardas a estar en una sola fila */
+            overflow-x: auto;  /* Activa el scroll horizontal */
+            gap: 15px;
+            padding: 20px 10px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Mejora el scroll en dispositivos móviles */
+        }
+
+        /* Estilo personalizado para la barra de scroll lateral */
+        #cardas-grid::-webkit-scrollbar {
+            height: 8px; /* Altura de la barra horizontal */
+        }
+        #cardas-grid::-webkit-scrollbar-thumb {
+            background: #f9b218; /* Color del tirador (amarillo Satex) */
+            border-radius: 10px;
+        }
+        #cardas-grid::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1); /* Color del fondo de la barra */
+        }
+    </style>
 </head>
-<body style="background-color: #012a4a; margin: 0; padding: 0; overflow-x: hidden;">
+<body style="margin: 0; background-color: #2f5577; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
 
-    <div id="estatus-superior" style="background: #1a2a3a; padding: 10px; display: flex; gap: 20px; align-items: center;">
-        <div id="contenedor-maquinas-paradas"></div>
+    <div id="header-container"></div>
+    <div id="estatus-container"></div>
+
+    <div id="main-content" style="flex-grow: 1; overflow-y: hidden; padding: 0;">
+        <div id="cardas-grid"></div>
     </div>
-
-    <div id="contenedor-principal-cardas"></div>
 
     <script src="lib_header.js"></script>
     <script src="lib_header_design.js"></script>
-    <script src="lib_estatus_data.js"></script>
-    <script src="lib_estatus_design.js"></script>
     <script src="lib_estatus.js"></script>
-    <script src="lib_maquinas_paradas.js"></script>
+    <script src="lib_estatus_design.js"></script>
+    <script src="lib_estatus_data.js"></script>
+    <script src="lib_maquinas_inactivas.js"></script>
     <script src="lib_cardas.js"></script>
     <script src="lib_cardas_design.js"></script>
     <script src="lib_cardas_engine.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // 1. Cargar Máquinas Paradas (Número 3 Centrado)
-            const divParadas = document.getElementById('contenedor-maquinas-paradas');
-            if (divParadas && typeof SatexMaquinasParadas !== 'undefined') {
-                divParadas.innerHTML = SatexMaquinasParadas.crearEstructura(3);
-            }
+        window.onload = () => {
+            // Renderizar componentes principales
+            SatexHeaderDesign.render("header-container");
+            SatexEstatusDesign.render("estatus-container");
 
-            // 2. Cargar Fila de 11 Cardas
-            if (typeof SatexCardasEngine !== 'undefined') {
-                SatexCardasEngine.dibujar('contenedor-principal-cardas');
-            }
-        });
+            // Actualizar Husos con palabra "Husos" y letra grande
+            SatexEstatusData.actualizar(14, 6, 4, 3);
+
+            // Cargar Tabla de Máquinas Paradas con scroll y días
+            const parosActuales = [
+                { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
+                { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
+                { tipo: "Con.", num: "CON-1", fecha: "26/02/2026" }
+            ];
+            SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosActuales);
+
+            // Dibujar las 11 CARÁTULAS AUTORIZADAS EN FILA ÚNICA
+            SatexCardasEngine.dibujar("cardas-grid");
+        };
     </script>
 </body>
 </html>
