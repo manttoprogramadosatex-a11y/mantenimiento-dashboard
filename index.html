@@ -6,30 +6,9 @@
     <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <style>
-        #cardas-grid {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            gap: 15px;
-            padding: 20px 10px;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-        }
-        #cardas-grid::-webkit-scrollbar {
-            height: 8px;
-        }
-        #cardas-grid::-webkit-scrollbar-thumb {
-            background: #f9b218;
-            border-radius: 10px;
-        }
-        #cardas-grid::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.1);
-        }
-    </style>
 </head>
 <body style="margin: 0; background-color: #2f5577; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
+    
     <div id="header-container"></div>
     <div id="estatus-container"></div>
     
@@ -39,26 +18,25 @@
         <div id="mantenimiento-container" style="flex-grow: 1; display: flex;"></div>
     </div>
 
-    <script src="lib_header.js"></script>
     <script src="lib_header_design.js"></script>
-    <script src="lib_estatus.js"></script>
     <script src="lib_estatus_design.js"></script>
     <script src="lib_estatus_data.js"></script>
     <script src="lib_maquinas_inactivas.js"></script>
-    <script src="lib_mantenimiento.js"></script> <script src="lib_cardas.js"></script>
+    <script src="lib_mantenimiento.js"></script>
+    <script src="lib_cardas.js"></script>
     <script src="lib_cardas_design.js"></script>
     <script src="lib_cardas_engine.js"></script>
 
     <script>
         window.onload = () => {
-            // 1. Renderizar Encabezado y Estatus
+            // Inicialización de componentes
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
 
-            // 2. Actualizar Datos de Husos y Máquinas
+            // Datos de prueba para estatus
             SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            // 3. Cargar Tabla de Máquinas Paradas
+            // Cargar tabla de máquinas inactivas
             const parosActuales = [
                 { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
                 { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
@@ -66,10 +44,10 @@
             ];
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosActuales);
 
-            // 4. Dibujar Cardas
+            // Generar Cardas
             SatexCardasEngine.dibujar("cardas-grid");
 
-            // 5. Renderizar nueva sección de Mantenimiento
+            // Renderizar nueva división de Mantenimiento
             SatexMantenimiento.render("mantenimiento-container");
         };
     </script>
