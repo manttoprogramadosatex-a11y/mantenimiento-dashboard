@@ -2,23 +2,22 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Tablero Master Satex</title>
+    <title>Satex Master Dashboard</title>
     <link rel="stylesheet" href="estilos.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div id="cabecera-sitio"></div>
-    <div id="estatus-sitio"></div>
-    <div id="cardas-sitio"></div>
+    <div id="cabecera"></div>
+    <div id="estatus"></div>
+    <div id="cardas"></div>
 
     <script src="lib_header.js"></script>
     <script src="lib_estatus.js"></script>
-    <script src="lib_cardas.js"></script> <script>
+    <script>
         window.onload = () => {
-            SatexHeader.dibujar("cabecera-sitio");
-            SatexEstatus.dibujar("estatus-sitio");
-            // Aquí llamaremos a las cardas
-            console.log("Sistema Modular Satex 2026 cargado.");
+            SatexHeader.dibujar("cabecera");
+            SatexEstatus.dibujar("estatus");
+            console.log("Tablero Satex Modular Cargado.");
         };
     </script>
 </body>
