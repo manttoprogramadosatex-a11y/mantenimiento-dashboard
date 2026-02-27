@@ -1,19 +1,17 @@
 #cardas-grid {
     display: flex !important;
-    flex-wrap: nowrap !important; /* Prohibido saltar de línea */
-    overflow-x: scroll !important; /* Forzar scroll lateral */
+    flex-wrap: nowrap !important;
+    overflow-x: scroll !important;
     overflow-y: hidden;
     gap: 20px;
     padding: 20px;
     width: 100%;
     box-sizing: border-box;
 }
-
-/* Hacer la barra de scroll visible para que sepas que hay más a la derecha */
 #cardas-grid::-webkit-scrollbar {
     height: 10px;
 }
 #cardas-grid::-webkit-scrollbar-thumb {
-    background: #f9b218; 
+    background: #f9b218;
     border-radius: 5px;
 }
