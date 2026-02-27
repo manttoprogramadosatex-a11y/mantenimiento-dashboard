@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* CANDADO ULTRA RESTRINGIDO SATEX 2026 - V7 FINAL */
+    /* BLOQUEO DE ESTRUCTURA SATEX 2026 - NO MODIFICAR VISUALES */
     body { 
         margin: 0; background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
@@ -22,145 +22,105 @@
         position: absolute; left: 50%; transform: translateX(-50%);
         color: #ffffff; text-transform: uppercase;
     }
+    /* FECHA ORIGINAL RESTAURADA */
+    .fecha-header { margin-left: auto; font-size: 14px; }
 
     .seccion-estatus { 
         padding: 5px 20px; display: flex; align-items: center; gap: 10px;
         background: rgba(0,0,0,0.1); min-height: 55px;
     }
 
-    /* CONTENEDOR DE ACTUALIZACIÓN Y BOTONES (CUADRO ROJO) */
-    .contenedor-control {
-        margin-left: auto; display: flex; align-items: center; gap: 12px;
-        background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 5px;
-        border: 1px solid rgba(255,255,255,0.1);
+    /* CONTENEDOR DE ACTUALIZACIÓN (EL CUADRO NUEVO SIN MOVER LO DEMÁS) */
+    .contenedor-control-nuevo {
+        margin-left: auto; display: flex; align-items: center; gap: 10px;
+        background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 5px;
     }
-    .fecha-actualizacion { font-size: 11px; color: #00d4ff; font-weight: bold; }
-    
-    .btn-cardas {
-        background: #f9b218; color: #000; border: none; padding: 6px 15px;
-        font-weight: bold; border-radius: 3px; cursor: pointer; text-transform: uppercase;
-        font-size: 11px; transition: 0.3s;
-    }
-    .btn-cardas:hover { background: #e09e15; }
+    .fecha-dato { font-size: 11px; color: #00d4ff; font-weight: bold; }
+    .btn-cardas { background: #f9b218; color: #000; border: none; padding: 5px 12px; font-weight: bold; border-radius: 3px; cursor: pointer; font-size: 11px; }
+    .btn-x { background: #da291c; color: white; border: none; width: 25px; height: 25px; font-weight: bold; border-radius: 3px; cursor: pointer; }
 
-    .btn-cerrar {
-        background: #da291c; color: white; border: none; width: 28px; height: 28px;
-        font-weight: bold; border-radius: 3px; cursor: pointer; display: flex;
-        align-items: center; justify-content: center; font-size: 16px;
+    /* ESTILOS DE INDICADORES (RESTAURADOS SEGÚN IMAGEN) */
+    .bloque-dato {
+        background: rgba(255, 255, 255, 0.1); padding: 5px 10px;
+        border-radius: 4px; border-left: 4px solid #f9b218;
+        min-width: 120px;
     }
+    .dato-etiqueta { font-size: 9px; text-transform: uppercase; color: #ccc; display: block; }
+    .dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; }
 
-    /* MODAL DE INFORMACIÓN COMPLETA */
-    #overlayCardas {
-        display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.9); z-index: 1000; padding: 20px; box-sizing: border-box;
-    }
-    .tabla-info { width: 100%; border-collapse: collapse; background: white; color: #333; }
-    .tabla-info th, .tabla-info td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    .tabla-info th { background: #274a66; color: white; }
-
-    /* ESTILOS DE MÁQUINAS PARADAS */
-    .lista-vertical-container { height: 45px; overflow-y: auto; width: 380px; }
+    .lista-vertical-container { height: 45px; overflow-y: auto; width: 350px; }
     .item-parada {
         background: rgba(218, 41, 28, 0.25); border: 1px solid #da291c;
         border-radius: 3px; padding: 3px 8px; margin-bottom: 2px;
-        color: white; display: flex; align-items: center; justify-content: space-between;
+        color: white; display: flex; justify-content: space-between; font-size: 10px;
     }
-    .info-maq { font-size: 10px; display: flex; gap: 8px; }
-    .cont-dias { font-size: 9px; font-weight: bold; background: #da291c; padding: 1px 4px; border-radius: 2px; }
 
-    .dashboard-middle-row {
-        display: flex; overflow-x: auto; gap: 8px; padding: 10px;
-        margin-top: auto; margin-bottom: auto;
-    }
-    .gauge-card {
-        background: white; min-width: 120px; height: 150px; border-radius: 5px;
-        display: flex; flex-direction: column; align-items: center; padding: 5px;
-    }
-    .canvas-container { width: 95px; height: 70px; }
+    .dashboard-middle-row { display: flex; overflow-x: auto; gap: 8px; padding: 15px; margin-top: auto; margin-bottom: auto; }
+    .gauge-card { background: white; min-width: 120px; height: 160px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; padding: 5px; }
+
+    /* MODAL CARDAS */
+    #overlayCardas { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; padding: 40px; }
 </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="header-left"><img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg" alt="Logo"></div>
+    <div class="header-left"><img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg"></div>
     <div class="titulo">Tablero Master Mantto. Satex Textil</div>
+    <div class="fecha-header">26 de febrero de 2026</div>
 </div>
 
 <div class="seccion-estatus">
-    <div class="contenedor-bloques">
-        <div class="bloque-dato">
-            <span class="dato-etiqueta">Máquinas Paradas</span>
-            <span id="totalParadas" class="dato-valor" style="color: #ff9999;">0</span>
-        </div>
-    </div>
+    <div class="bloque-dato"><span class="dato-etiqueta">CONTINUAS (INACTIVOS)</span><span class="dato-valor">16</span></div>
+    <div class="bloque-dato"><span class="dato-etiqueta">OPEN-END (INACTIVOS)</span><span class="dato-valor">1</span></div>
+    <div class="bloque-dato"><span class="dato-etiqueta">CONERAS (INACTIVOS)</span><span class="dato-valor">0</span></div>
 
     <div class="lista-vertical-container" id="listaParadas"></div>
 
-    <div class="contenedor-control">
-        <span class="fecha-actualizacion" id="lastUpdate">Última actualización: --/--/----</span>
-        <button class="btn-cardas" onclick="abrirCardas()">Cardas</button>
-        <button class="btn-cerrar" onclick="cerrarTodo()">X</button>
+    <div class="contenedor-control-nuevo">
+        <span class="fecha-dato" id="actualizacionA1">Ultima actualización: --/--/----</span>
+        <button class="btn-cardas" onclick="abrirCardas()">CARDAS</button>
+        <button class="btn-x" onclick="cerrarTodo()">X</button>
     </div>
 </div>
 
 <div class="dashboard-middle-row" id="contenedorGauges"></div>
 
 <div id="overlayCardas">
-    <h2 style="color: white; text-align: center;">Información Completa de Cardas</h2>
-    <table class="tabla-info">
-        <thead>
-            <tr>
-                <th>Máquina</th><th>Estado</th><th>Producción Ac.</th><th>Meta</th><th>Eficiencia</th>
-            </tr>
-        </thead>
-        <tbody id="cuerpoTablaCardas">
-            </tbody>
-    </table>
+    <div style="background: white; padding: 20px; border-radius: 5px; height: 80%; overflow: auto;">
+        <h2 style="margin-top:0">Información Completa Cardas</h2>
+        <div id="tablaCardasPlaceholder">Cargando datos de la pestaña Cardas...</div>
+    </div>
 </div>
 
 <script>
-    // 1. Simulación de dato de columna A1 de "Husos inactivos continuas"
-    const fechaExcelA1 = "26/02/2026"; 
-    document.getElementById("lastUpdate").innerText = `Última actualización: ${fechaExcelA1}`;
+    // Sincronización con celda A1 (Simulado)
+    document.getElementById("actualizacionA1").innerText = "Ultima actualización: 26/02/2026";
 
-    // 2. Datos de Máquinas Paradas
-    const maquinasParadasData = [
-        { nombre: "Regulador 10", fechaParo: "2025-02-25" },
-        { nombre: "Conera 5", fechaParo: "2025-02-26" }
+    const paradas = [
+        {m: "REGULADOR 10", f: "25/02/2025"},
+        {m: "CONERA 5", f: "26/02/2025"}
     ];
 
-    function abrirCardas() {
-        document.getElementById('overlayCardas').style.display = 'block';
-    }
-
-    function cerrarTodo() {
-        document.getElementById('overlayCardas').style.display = 'none';
-        // Aquí puedes añadir lógica para cerrar cualquier otro div o reporte abierto
-    }
+    function abrirCardas() { document.getElementById('overlayCardas').style.display = 'block'; }
+    function cerrarTodo() { document.getElementById('overlayCardas').style.display = 'none'; }
 
     window.onload = function() {
-        const listaDiv = document.getElementById('listaParadas');
-        const totalSpan = document.getElementById('totalParadas');
-        totalSpan.innerText = maquinasParadasData.length;
-
-        maquinasParadasData.forEach(m => {
+        const lista = document.getElementById('listaParadas');
+        paradas.forEach(p => {
             const item = document.createElement('div');
             item.className = 'item-parada';
-            item.innerHTML = `<div class="info-maq"><strong>${m.nombre}</strong><span>${m.fechaParo}</span></div><div class="cont-dias">Días: 1</div>`;
-            listaDiv.appendChild(item);
+            item.innerHTML = `<span>${p.m}</span><span>${p.f}</span>`;
+            lista.appendChild(item);
         });
 
-        // Generación de Gauges (Candado de Estructura)
-        const contenedor = document.getElementById('contenedorGauges');
+        const cont = document.getElementById('contenedorGauges');
         for(let i=1; i<=9; i++) {
             const card = document.createElement('div');
             card.className = 'gauge-card';
-            card.innerHTML = `<div style="font-size:11px;font-weight:bold;">CARDA ${i}</div><div class="canvas-container"><canvas id="g-${i}"></canvas></div><div style="font-size:10px;">Ac. 800</div>`;
-            contenedor.appendChild(card);
-            // Lógica de Chart.js aquí...
+            card.innerHTML = `<div style="font-size:11px;font-weight:bold;">CARDA ${i}</div><div style="height:80px"></div><div style="font-size:10px;">Ac. 800</div>`;
+            cont.appendChild(card);
         }
-
-        setTimeout(() => { location.reload(); }, 120000);
     };
 </script>
 </body>
