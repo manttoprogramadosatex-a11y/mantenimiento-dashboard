@@ -3,30 +3,27 @@ const SatexCardasEngine = {
         const grid = document.getElementById(contenedorId);
         if (!grid) return;
         
-        // Aplicamos estilos de scroll lateral directamente al contenedor
+        // Estilo de Scroll Lateral
         grid.style.display = "flex";
         grid.style.flexWrap = "nowrap";
         grid.style.overflowX = "auto";
-        grid.style.overflowY = "hidden";
-        grid.style.width = "100%";
-        grid.style.padding = "10px";
+        grid.style.padding = "20px";
         grid.style.gap = "10px";
-        grid.style.boxSizing = "border-box";
 
-        grid.innerHTML = ""; // Limpiar
+        grid.innerHTML = ""; 
         
-        // Generar exactamente las 11 cardas
+        // Generar 11
         for (let i = 1; i <= 11; i++) {
             grid.innerHTML += SatexCardasDesign.crearEstructura(i);
         }
 
-        // Inicializar los indicadores (esperamos un momento a que el DOM cargue)
+        // Esperar un momento para que los canvas existan en el HTML
         setTimeout(() => {
             for (let i = 1; i <= 11; i++) {
-                if (window.SatexCardas && typeof SatexCardas.inicializarIndicador === 'function') {
+                if (typeof SatexCardas !== 'undefined') {
                     SatexCardas.inicializarIndicador(`gauge-${i}`, 0, 1000);
                 }
             }
-        }, 150);
+        }, 200);
     }
 };
