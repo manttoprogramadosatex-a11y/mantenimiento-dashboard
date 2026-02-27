@@ -10,12 +10,13 @@
 <body style="margin: 0; background-color: #2f5577; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
     
     <div id="header-container"></div>
-    <div id="estatus-container"></div>
+    
+    <div id="estatus-container" style="margin-bottom: 8px;"></div>
     
     <div id="main-content" style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; padding: 0;">
         <div id="cardas-grid"></div>
         
-        <div id="mantenimiento-container" style="flex-grow: 1; display: flex;"></div>
+        <div id="mantenimiento-container" style="flex-grow: 1; display: flex; padding-top: 8px;"></div>
     </div>
 
     <script src="lib_header_design.js"></script>
@@ -29,14 +30,10 @@
 
     <script>
         window.onload = () => {
-            // Inicialización de componentes
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
-
-            // Datos de prueba para estatus
             SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            // Cargar tabla de máquinas inactivas
             const parosActuales = [
                 { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
                 { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
@@ -44,10 +41,7 @@
             ];
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosActuales);
 
-            // Generar Cardas
             SatexCardasEngine.dibujar("cardas-grid");
-
-            // Renderizar nueva división de Mantenimiento
             SatexMantenimiento.render("mantenimiento-container");
         };
     </script>
