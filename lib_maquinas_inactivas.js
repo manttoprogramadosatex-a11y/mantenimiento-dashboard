@@ -10,7 +10,7 @@ const SatexMaquinasInactivas = {
         const tabla = datos.map(m => {
             const dias = this.calcularDias(m.fecha);
             return `
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1.5fr 1fr; color: white; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 3px 0; align-items: center;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1.5fr 1fr; color: white; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 4px 0; align-items: center;">
                 <span style="font-weight: 500;">${m.tipo}</span>
                 <span style="color: #ff9999; font-weight: bold; text-align: center;">${m.num}</span>
                 <span style="text-align: center; opacity: 0.9;">${m.fecha}</span>
@@ -19,7 +19,7 @@ const SatexMaquinasInactivas = {
         }).join('');
 
         document.getElementById(id).innerHTML = `
-            <div style="color: #ff9999; font-size: 10px; font-weight: bold; margin-bottom: 3px; text-transform: uppercase; position: sticky; top: 0; background: rgba(30,30,30,0.5); z-index: 1;">
+            <div style="color: #ff9999; font-size: 11px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; position: sticky; top: 0; background: rgba(30,30,30,0.6); z-index: 1;">
                 TIPO | NÚM | DESDE | DÍAS
             </div>
             ${tabla}`;
