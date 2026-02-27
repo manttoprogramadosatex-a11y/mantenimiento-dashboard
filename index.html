@@ -31,16 +31,16 @@
         window.onload = () => {
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
-            SatexEstatusData.actualizar(14, 6, 4, 3);
+            SatexEstatusData.actualizar(14, 6, 4, 3); [cite: 407]
 
             const parosActuales = [
                 { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
                 { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
                 { tipo: "Con.", num: "CON-1", fecha: "26/02/2026" }
-            ];
-            SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosActuales);
+            ]; [cite: 409, 410, 411, 412]
+            SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosActuales); [cite: 414]
 
-            SatexCardasEngine.dibujar("cardas-grid");
+            SatexCardasEngine.dibujar("cardas-grid"); [cite: 416]
             SatexMantenimiento.render("mantenimiento-container");
         };
     </script>
