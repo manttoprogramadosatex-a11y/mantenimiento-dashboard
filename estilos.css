@@ -1,0 +1,34 @@
+/* ESTILOS MAESTROS SATEX - NO MODIFICAR ESTRUCTURA */
+body { margin: 0; background-color: #2f5577; font-family: 'Segoe UI', Arial, sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+
+/* HEADER */
+.header { background-color: #274a66; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 50px; color: white; border-bottom: 2px solid #1e3a50; }
+.header img { height: 35px; }
+.titulo { font-size: 20px; font-weight: bold; text-transform: uppercase; }
+.fecha-header { font-size: 14px; font-weight: bold; color: #ffffff; }
+
+/* ESTATUS PLANTA */
+.seccion-estatus { padding: 10px 20px; display: flex; align-items: center; background: rgba(0,0,0,0.15); height: 75px; gap: 15px; }
+.etiqueta-planta { color: white; font-size: 13px; font-weight: bold; text-transform: uppercase; line-height: 1.2; }
+
+.contenedor-bloques { display: flex; gap: 8px; }
+.bloque-dato { background: #3c546d; padding: 5px 12px; border-radius: 4px; border-left: 4px solid #f9b218; min-width: 145px; height: 55px; display: flex; flex-direction: column; justify-content: center; }
+.box-paradas { border-left-color: #da291c; }
+.dato-etiqueta { font-size: 9px; text-transform: uppercase; color: #a1b1c1; margin: 0; font-weight: bold; }
+.dato-valor { font-size: 24px; font-weight: bold; color: #f9b218; margin: 0; line-height: 1; }
+
+/* TABLA DE PARADAS */
+.scroll-paradas { flex-grow: 1; max-width: 500px; height: 60px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px; overflow-y: auto; }
+.item-parada { background: rgba(218, 41, 28, 0.2); border: 1px solid #da291c; border-radius: 3px; padding: 4px 10px; margin-bottom: 4px; color: white; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+.dias-badge { background: #da291c; padding: 2px 6px; border-radius: 2px; font-weight: bold; font-size: 10px; }
+
+/* GAUGES CARDAS */
+.dashboard-middle-row { display: flex; justify-content: center; gap: 10px; padding: 20px; background-color: rgba(0, 0, 0, 0.05); flex-grow: 1; align-items: center; overflow-x: auto; }
+.gauge-card { background: white; width: 130px; height: 165px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); flex-shrink: 0; }
+.gauge-title { font-size: 12px; font-weight: bold; color: #222; margin-bottom: 5px; text-transform: uppercase; }
+.canvas-container { width: 110px; height: 85px; }
+.info-labels { text-align: center; }
+.valor-ac { font-size: 11px; font-weight: bold; color: #000; margin: 0; }
+.valor-max { font-size: 9px; color: #666; margin: 0; }
+
+.btn-refresh { background: #da291c; color: white; border: none; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 18px; margin-left:10px; }
