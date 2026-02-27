@@ -4,36 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Satex Master Project</title>
-    <link rel="stylesheet" href="style_layout.css">
+    <link rel="stylesheet" href="estilos.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
+<body style="margin: 0; background-color: #2f5577; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
 
-    <div id="header-lib"></div>
-    <div id="estatus-lib"></div>
-    <div id="cardas-lib"></div>
+    <div id="header-container"></div>
+    <div id="estatus-container"></div>
+    
+    <div id="maquinas-inactivas-container"></div>
+    
+    <div id="cardas-container" style="flex-grow: 1; overflow-y: auto;"></div>
 
-    <script src="lib_header_design.js"></script>
+    <script src="lib_header.js"></script>
     <script src="lib_estatus_design.js"></script>
     <script src="lib_estatus_data.js"></script>
-    <script src="lib_cardas_design.js"></script>
-    <script src="lib_cardas_engine.js"></script>
+    <script src="lib_maquinas_inactivas.js"></script>
+    <script src="lib_cardas.js"></script>
 
     <script>
-        // Función principal de carga
         window.onload = () => {
-            // 1. Dibujar el encabezado (Calibri 26px, Logo, Fecha)
-            SatexHeaderDesign.render("header-lib");
+            // 1. Renderizar Encabezado (Inalterado)
+            SatexHeader.dibujar("header-container");
 
-            // 2. Dibujar la barra de estatus compacta (55px altura)
-            SatexEstatusDesign.render("estatus-lib");
+            // 2. Renderizar Franja de Estatus (Compacta 48px)
+            SatexEstatusDesign.render("estatus-container");
 
-            // 3. Dibujar la grilla de cardas (140px x 185px)
-            SatexCardasEngine.dibujar("cardas-lib");
+            // 3. Cargar Datos de Husos (Valores de ejemplo)
+            SatexEstatusData.actualizar(14, 6, 4, 2);
 
-            // 4. Actualizar los datos de Husos y Máquinas Paradas
-            // Formato: actualizar(Continuas, OpenEnd, Coneras, MaquinasParadas)
-            SatexEstatusData.actualizar(12, 8, 5, 3);
+            // 4. Cargar Información de Máquinas Paradas (Recuperado de la conversación)
+            const listaParos = [
+                { tipo: "Continua", numero: "C-08", desde: "26/02/2026" },
+                { tipo: "Open-End", numero: "OE-03", desde: "27/02/2026" }
+            ];
+            SatexMaquinasInactivas.render("maquinas-inactivas-container", listaParos);
+
+            // 5. Iniciar Indicadores de Cardas
+            SatexCardas.iniciar("cardas-container");
         };
     </script>
 </body>
