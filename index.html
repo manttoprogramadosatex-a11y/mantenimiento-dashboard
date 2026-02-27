@@ -4,16 +4,14 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* =========================================
-       PROTOCOLO DE BLINDAJE DIAMANTE SATEX 2026
-       ========================================= */
+    /* RESET Y FONDO */
     body { 
         margin: 0; background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
         display: flex; flex-direction: column; height: 100vh; overflow: hidden;
     }
     
-    /* HEADER (ZONA CONGELADA) */
+    /* HEADER SATEX */
     .header {
         background-color: #274a66; display: flex; align-items: center;
         padding: 0 20px; height: 55px; color: white; border-bottom: 2px solid #1e3a50;
@@ -27,20 +25,20 @@
     }
     .fecha-hoy { width: 20%; text-align: right; font-size: 14px; margin-left: auto; }
 
-    /* SECCIÓN ESTATUS (DIMENSIONES FIJAS) */
+    /* SECCIÓN ESTATUS PLANTA */
     .seccion-estatus { 
         padding: 5px 20px; display: flex; align-items: center; gap: 20px;
         background: rgba(0,0,0,0.1); min-height: 75px;
     }
 
-    /* ESTATUS PLANTA / INFO CARDAS - MISMA FUENTE */
     .labels-maestras {
         display: flex; flex-direction: column; align-items: center;
-        color: white; min-width: 150px; line-height: 1.1;
+        color: white; min-width: 150px; line-height: 1.1; text-align: center;
     }
     .txt-principal { font-size: 16px; font-weight: bold; }
     .flecha-v { font-size: 14px; margin-top: 4px; color: #f9b218; }
 
+    /* INDICADORES RESTAURADOS */
     .contenedor-bloques { display: flex; align-items: center; gap: 15px; }
 
     .bloque-dato {
@@ -54,29 +52,26 @@
     .dato-etiqueta { font-size: 9px; text-transform: uppercase; color: #a1b1c1; margin-bottom: 2px; }
     .dato-valor { font-size: 22px; font-weight: bold; color: #f9b218; }
 
-    /* LISTA PARADAS (SCROLL ROJO) */
+    /* LISTA SCROLL MÁQUINAS */
     .seccion-paradas-scroll {
         display: flex; align-items: center; gap: 10px;
         margin-left: 10px; border-left: 1px solid rgba(255,255,255,0.2);
         padding-left: 20px; flex-grow: 1;
     }
-    .lista-vertical-container { height: 60px; overflow-y: auto; width: 350px; padding-right: 5px; }
-    .lista-vertical-container::-webkit-scrollbar { width: 5px; }
-    .lista-vertical-container::-webkit-scrollbar-thumb { background: #da291c; border-radius: 10px; }
-
+    .lista-vertical-container { height: 60px; overflow-y: auto; width: 350px; }
     .item-parada {
         background: rgba(218, 41, 28, 0.25); border: 1px solid #da291c;
         border-radius: 3px; padding: 4px 10px; margin-bottom: 4px;
         color: white; display: flex; align-items: center; justify-content: space-between; font-size: 11px;
     }
 
-    /* CONTROLES (VALOR A1) */
+    /* CONTROLES DERECHA */
     .ctrl-derecha { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-    .val-actualizado { color: #00d4ff; font-size: 12px; font-weight: bold; text-align: right; line-height: 1.2; }
-    .btn-cardas { background: #f9b218; color: #000; border: none; padding: 10px 18px; font-weight: bold; border-radius: 3px; cursor: pointer; text-transform: uppercase; }
+    .val-actualizado { color: #00d4ff; font-size: 12px; font-weight: bold; text-align: right; }
+    .btn-cardas { background: #f9b218; color: #000; border: none; padding: 10px 18px; font-weight: bold; border-radius: 3px; cursor: pointer; }
     .btn-x { background: #da291c; color: white; border: none; width: 32px; height: 32px; font-weight: bold; border-radius: 3px; cursor: pointer; }
 
-    /* AREA GAUGES */
+    /* GAUGES (CARDA 1-8) */
     .dashboard-middle-row {
         display: flex; flex-direction: row; flex-wrap: nowrap; 
         overflow-x: auto; gap: 12px; padding: 20px;
@@ -85,7 +80,6 @@
     .gauge-card {
         background: white; min-width: 135px; height: 170px; border-radius: 5px;
         display: flex; flex-direction: column; align-items: center; padding: 10px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 </style>
 </head>
@@ -112,9 +106,7 @@
     </div>
 
     <div class="seccion-paradas-scroll">
-        <div class="lista-vertical-container" id="lista-p">
-            <div style="color:white; font-size:11px;">Conectando con Excel...</div>
-        </div>
+        <div class="lista-vertical-container" id="lista-p"></div>
     </div>
 
     <div class="ctrl-derecha">
@@ -128,9 +120,9 @@
 
 <script>
     // =========================================================================
-    // LINEA 156: PEGA TU URL DE GOOGLE APPS SCRIPT ENTRE LAS COMILLAS ABAJO
+    // LÍNEA 141: PEGA TU URL DE IMPLEMENTACIÓN AQUÍ
     // =========================================================================
-    const WEB_APP_URL = "AQUÍ_VA_TU_URL_DE_IMPLEMENTACION";
+    const WEB_APP_URL = "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT";
     // =========================================================================
 
     async function fetchData() {
@@ -138,7 +130,7 @@
             const hoy = new Date();
             document.getElementById("fechaDisplay").innerText = hoy.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-            const response = await fetch(https://script.google.com/macros/s/AKfycbxUiLGtoJCER42Ar9jUWvfknrjPgbsbdcYY768Lt0YaOQdBLGckeQ9edDgkDzUxAw5Crg/exec);
+            const response = await fetch(https://script.google.com/macros/s/AKfycbzf7jE1RbzyG6K4qrnGW6SlTCATeRIuHJDJEhhm6KEVTEJRxKfXGP3mNi9ADgaM8htpHA/exec);
             const data = await response.json();
 
             document.getElementById("valA1").innerText = data.actualizado || "Sin Datos"; 
@@ -157,9 +149,7 @@
                 lista.innerHTML = `<div style="color:#ccc; font-size:11px;">No hay máquinas paradas</div>`;
                 document.getElementById('total-p').innerText = "0";
             }
-
         } catch (error) {
-            console.error("Error:", error);
             document.getElementById("valA1").innerText = "Error de Enlace";
         }
     }
@@ -183,7 +173,7 @@
     window.onload = () => {
         initGauges();
         fetchData();
-        setInterval(fetchData, 120000); // 2 Minutos
+        setInterval(fetchData, 120000);
     };
 </script>
 </body>
