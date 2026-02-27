@@ -2,15 +2,15 @@ const SatexCardas = {
     charts: [],
     iniciar: function(id) {
         const contenedor = document.getElementById(id);
-        contenedor.innerHTML = ""; // Limpiar
+        contenedor.innerHTML = "";
         for (let i = 1; i <= 8; i++) {
             const card = document.createElement('div');
-            card.className = 'carda-mini';
+            card.className = 'carda-container';
             card.innerHTML = `
-                <div class="titulo-carda">Carda ${i}</div>
-                <div class="canvas-box"><canvas id="gauge-${i}"></canvas></div>
-                <div style="text-align:center">
-                    <p style="font-size:12px; font-weight:bold; margin:5px 0 0 0;" id="val-${i}">Ac. 0</p>
+                <div class="carda-nombre">Carda ${i}</div>
+                <div class="canvas-wrapper"><canvas id="gauge-${i}"></canvas></div>
+                <div style="text-align:center; margin-top:5px;">
+                    <p style="font-size:13px; font-weight:bold; margin:0; color:black;" id="val-${i}">Ac. 0</p>
                     <p style="font-size:10px; color:#666; margin:0;" id="max-${i}">Max. 1000</p>
                 </div>`;
             contenedor.appendChild(card);
