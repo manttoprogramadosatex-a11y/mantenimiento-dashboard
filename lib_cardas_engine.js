@@ -9,10 +9,12 @@ const SatexCardasEngine = {
         this.grid.style.flexWrap = "nowrap";
         this.grid.style.overflowX = "auto";
         
-        // Ajuste estricto de espacios morados (2mm = 8px)
+        // Espacio exacto de 2mm arriba (Morado superior)
         this.grid.style.marginTop = "8px"; 
         this.grid.style.paddingTop = "0px";
-        this.grid.style.paddingBottom = "4px"; // Minimiza espacio con el scroll
+        
+        // Espacio exacto de 2mm abajo del scroll (Morado inferior)
+        this.grid.style.paddingBottom = "4px"; 
         
         this.grid.style.gap = "8px";
         this.grid.style.width = "100%";
@@ -23,7 +25,7 @@ const SatexCardasEngine = {
             const maxVal = 1000;
             const acVal = Math.floor(Math.random() * 1100);
             this.datosUnidades.push({ ac: acVal, max: maxVal });
-            this.grid.innerHTML += SatexCardasDesign.crearEstructura(i, acVal, maxVal);
+            this.grid.innerHTML += SatexCardasDesign.crearEstructura(i, acVal, maxVal); [cite: 501]
         }
         this.actualizarGraficos();
     },
@@ -31,7 +33,7 @@ const SatexCardasEngine = {
         setTimeout(() => {
             this.datosUnidades.forEach((dato, index) => {
                 if (typeof SatexCardas !== 'undefined') {
-                    SatexCardas.inicializarIndicador(`gauge-${index + 1}`, dato.ac, dato.max);
+                    SatexCardas.inicializarIndicador(`gauge-${index + 1}`, dato.ac, dato.max); [cite: 509]
                 }
             });
         }, 300);
