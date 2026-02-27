@@ -1,67 +1,203 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <title>Tablero Master Mantto. Satex Textil</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* ESTILO VISUAL FIJO - NO SE TOCA DESPUÉS */
-        body { margin: 0; background: #2f5577; font-family: 'Segoe UI', sans-serif; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
-        .header { background: #274a66; padding: 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #1e3a50; height: 45px;}
-        .status-bar { display: flex; align-items: center; background: rgba(0,0,0,0.2); padding: 5px 15px; gap: 10px; height: 55px; }
-        .box { background: #3c546d; border-left: 3px solid #f9b218; padding: 3px 10px; min-width: 90px; height: 35px; border-radius: 3px; }
-        .box-red { border-left-color: #da291c; }
-        .box-t { font-size: 7px; color: #a1b1c1; text-transform: uppercase; margin: 0; }
-        .box-v { font-size: 18px; font-weight: bold; color: #f9b218; margin: 0; line-height: 1; }
-        .list-p { flex-grow: 1; max-width: 280px; height: 45px; overflow-y: auto; background: rgba(0,0,0,0.1); padding: 2px; }
-        .item-p { font-size: 9px; background: rgba(218,41,28,0.2); margin-bottom: 2px; padding: 2px 5px; display: flex; justify-content: space-between; border: 1px solid #da291c; }
-        .gauge-area { display: flex; justify-content: center; gap: 12px; padding: 20px; flex-grow: 1; align-items: center; }
-        .card { background: white; color: black; width: 115px; padding: 10px; border-radius: 5px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        /* BASE Y ESTRUCTURA */
+        body { 
+            margin: 0; background-color: #2f5577; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            display: flex; flex-direction: column; height: 100vh; overflow: hidden;
+        }
+
+        /* HEADER COMPACTO LOGO IZQUIERDA - TITULO CENTRO */
+        .header {
+            background-color: #274a66; display: flex; align-items: center;
+            padding: 0 20px; height: 50px; color: white; border-bottom: 2px solid #1e3a50;
+        }
+        .header img { height: 35px; }
+        .titulo { 
+            flex-grow: 1; text-align: center; font-size: 20px; font-weight: bold; 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* SECCIÓN ESTATUS (UNA SOLA LÍNEA) */
+        .seccion-estatus { 
+            padding: 5px 15px; display: flex; align-items: center; justify-content: space-between;
+            background: rgba(0,0,0,0.15); height: 55px; gap: 10px;
+        }
+        .etiqueta-planta { color: white; font-size: 12px; font-weight: bold; min-width: 90px; }
+
+        .contenedor-bloques { display: flex; gap: 6px; }
+        .bloque-dato {
+            background: #3c546d; padding: 2px 8px; border-radius: 3px; 
+            border-left: 3px solid #f9b218; width: 100px; height: 38px;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .box-paradas { border-left-color: #da291c; background: rgba(218, 41, 28, 0.1); }
+        .dato-etiqueta { font-size: 7.5px; text-transform: uppercase; color: #a1b1c1; margin: 0; }
+        .dato-valor { font-size: 17px; font-weight: bold; color: #f9b218; margin: 0; line-height: 1; }
+
+        /* LISTA DE PARADAS SCROLL HORIZONTAL/VERTICAL COMPACTO */
+        .scroll-paradas {
+            flex-grow: 1; max-width: 350px; height: 42px; 
+            border-left: 1px solid rgba(255,255,255,0.2); padding-left: 10px; overflow-y: auto;
+        }
+        .item-parada {
+            background: rgba(218, 41, 28, 0.2); border: 1px solid #da291c;
+            border-radius: 2px; padding: 2px 6px; margin-bottom: 2px;
+            color: white; display: flex; justify-content: space-between; font-size: 9px;
+        }
+        .item-parada strong { text-transform: uppercase; }
+
+        .info-sync { color: #00d4ff; font-size: 9px; font-weight: bold; text-align: right; min-width: 130px; }
+        .btn-refresh { background: #da291c; color: white; border: none; width: 25px; height: 25px; border-radius: 2px; cursor: pointer; font-weight: bold; }
+
+        /* CONTENEDOR DE GAUGES */
+        .dashboard-middle-row {
+            display: flex; justify-content: center; gap: 10px; padding: 15px;
+            background-color: rgba(0, 0, 0, 0.05); flex-grow: 1; overflow-x: auto; align-items: center;
+        }
+        .gauge-card {
+            background: white; width: 115px; height: 145px; border-radius: 5px;
+            display: flex; flex-direction: column; align-items: center; padding: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); flex-shrink: 0;
+        }
+        .gauge-title { font-size: 11px; font-weight: bold; color: #222; margin-bottom: 5px; text-transform: uppercase; }
+        .canvas-container { width: 100px; height: 75px; }
+        .info-labels { text-align: center; margin-top: 5px; }
+        .valor-ac { font-size: 10px; font-weight: bold; color: #000; margin: 0; }
+        .valor-max { font-size: 8px; color: #666; margin: 0; }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg" height="30">
-    <div style="font-size: 18px; font-weight: bold;">DISEÑO VISUAL (MODO PREVIA)</div>
-    <div style="width: 50px;"></div>
+    <img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg" alt="Logo">
+    <div class="titulo">Tablero Master Mantto. Satex Textil</div>
+    <div id="reloj" style="color: white; font-size: 12px; font-weight: bold;"></div>
 </div>
 
-<div class="status-bar">
-    <div style="font-size: 11px; font-weight: bold; min-width: 80px;">ESTATUS PLANTA ▶</div>
-    <div class="box"><p class="box-t">Continuas</p><p class="box-v">150</p></div>
-    <div class="box"><p class="box-t">Open-End</p><p class="box-v">80</p></div>
-    <div class="box"><p class="box-t">Coneras</p><p class="box-v">45</p></div>
-    <div class="box box-red"><p class="box-t">Paradas</p><p class="box-v" style="color:#ff9999">2</p></div>
-    <div class="list-p">
-        <div class="item-p"><span>CARDA 5 - MOTOR</span><b>3 Días</b></div>
-        <div class="item-p"><span>CONERA 2 - FAJA</span><b>1 Días</b></div>
+<div class="seccion-estatus">
+    <div class="etiqueta-planta">ESTATUS<br>PLANTA ▶</div>
+    
+    <div class="contenedor-bloques">
+        <div class="bloque-dato"><span class="dato-etiqueta">Continuas</span><span class="dato-valor" id="h-cont">--</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Open-End</span><span class="dato-valor" id="h-oe">--</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Coneras</span><span class="dato-valor" id="h-con">--</span></div>
+        <div class="bloque-dato box-paradas"><span class="dato-etiqueta">Paradas</span><span class="dato-valor" id="total-p" style="color:#ff9999">--</span></div>
     </div>
-    <div style="font-size: 9px; min-width: 120px; text-align: right;">Vista Previa Visual</div>
+
+    <div class="scroll-paradas" id="listaParadas"></div>
+
+    <div class="info-sync">Actualizado:<br><span id="last-sync">Sincronizando...</span></div>
+    <button class="btn-refresh" onclick="location.reload()">X</button>
 </div>
 
-<div class="gauge-area" id="contenedor-visual">
-    </div>
+<div class="dashboard-middle-row" id="contenedorGauges"></div>
 
 <script>
-    // Generar 8 indicadores de prueba
-    const cont = document.getElementById('contenedor-visual');
-    for(let i=1; i<=8; i++) {
-        cont.innerHTML += `
-            <div class="card">
-                <b>CARDA ${i}</b>
-                <canvas id="ch${i}"></canvas>
-                <b style="font-size:11px">Ac. 500</b>
-            </div>`;
-    }
-    // Darles color de prueba
-    window.onload = () => {
-        for(let i=1; i<=8; i++) {
-            new Chart(document.getElementById(`ch${i}`), {
-                type: 'doughnut',
-                data: { datasets: [{ data: [50, 50], backgroundColor: ['#23a446', '#eee'] }] },
-                options: { rotation: -110, circumference: 220, cutout: '75%', plugins: { legend: false } }
+    // CAMBIA ESTA URL POR TU URL DE GOOGLE APPS SCRIPT
+    const WEB_APP_URL = "TU_URL_AQUI"; 
+
+    let myCharts = [];
+
+    async function fetchData() {
+        try {
+            const response = await fetch(WEB_APP_URL);
+            const data = await response.json();
+            
+            // 1. Actualizar Bloques Superiores
+            document.getElementById('h-cont').innerText = data.husos.continuas;
+            document.getElementById('h-oe').innerText = data.husos.oe;
+            document.getElementById('h-con').innerText = data.husos.coneras;
+            document.getElementById('total-p').innerText = data.paradas.length;
+            document.getElementById('last-sync').innerText = data.actualizado;
+
+            // 2. Actualizar Lista de Paradas
+            const listaDiv = document.getElementById('listaParadas');
+            listaDiv.innerHTML = data.paradas.map(m => `
+                <div class="item-parada">
+                    <strong>${m.nombre}</strong>
+                    <span>${m.dias} Días Parada</span>
+                </div>
+            `).join('');
+
+            // 3. Actualizar Gauges Cardas (Solo valores y aguja)
+            data.cardas.forEach((datos, i) => {
+                if (myCharts[i]) {
+                    const perc = (datos.act / datos.max) * 100;
+                    myCharts[i].data.datasets[0].needleValue = perc;
+                    myCharts[i].update();
+                    document.getElementById(`val-${i}`).innerText = `Ac. ${datos.act}`;
+                    document.getElementById(`max-${i}`).innerText = `Max. ${datos.max}`;
+                }
             });
+        } catch (e) {
+            console.error("Error al obtener datos:", e);
+            document.getElementById('last-sync').innerText = "Error de Red";
         }
     }
+
+    function initGauges() {
+        const contenedor = document.getElementById('contenedorGauges');
+        for (let i = 0; i < 8; i++) {
+            const card = document.createElement('div');
+            card.className = 'gauge-card';
+            card.innerHTML = `
+                <div class="gauge-title">Carda ${i+1}</div>
+                <div class="canvas-container"><canvas id="gauge-${i}"></canvas></div>
+                <div class="info-labels">
+                    <p class="valor-ac" id="val-${i}">Ac. --</p>
+                    <p class="valor-max" id="max-${i}">Max. --</p>
+                </div>`;
+            contenedor.appendChild(card);
+
+            const ctx = document.getElementById(`gauge-${i}`).getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [70, 15, 15],
+                        backgroundColor: ["#23a446", "#f9b218", "#da291c"],
+                        needleValue: 0
+                    }]
+                },
+                options: { 
+                    rotation: -110, circumference: 220, cutout: '75%', 
+                    plugins: { legend: false, tooltip: false } 
+                },
+                plugins: [{
+                    afterDraw: (chart) => {
+                        const { ctx, width, height } = chart;
+                        ctx.save();
+                        const cx = width / 2; const cy = height / 1.35;
+                        const r = chart.getDatasetMeta(0).data[0].outerRadius;
+                        const angle = (Math.PI * 0.88) + (chart.data.datasets[0].needleValue / 100) * (Math.PI * 1.23);
+                        ctx.translate(cx, cy); ctx.rotate(angle);
+                        ctx.beginPath(); ctx.moveTo(0, -2); ctx.lineTo(r - 8, 0); ctx.lineTo(0, 2);
+                        ctx.fillStyle = '#000'; ctx.fill();
+                        ctx.rotate(-angle); ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI * 2);
+                        ctx.fillStyle = '#000'; ctx.fill(); ctx.restore();
+                    }
+                }]
+            });
+            myCharts.push(chart);
+        }
+    }
+
+    // Reloj en tiempo real
+    setInterval(() => {
+        document.getElementById('reloj').innerText = new Date().toLocaleTimeString();
+    }, 1000);
+
+    window.onload = () => {
+        initGauges();
+        fetchData();
+        setInterval(fetchData, 60000); // Refresco cada 1 min
+    };
 </script>
 </body>
 </html>
