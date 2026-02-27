@@ -2,14 +2,15 @@ const SatexEstatusDesign = {
     render: function(id) {
         document.getElementById(id).innerHTML = `
             <div style="background: rgba(15, 32, 50, 0.9); height: 65px; display: flex; align-items: center; padding: 0 15px; gap: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
-                <div style="color: white; min-width: 115px;">
-                    <div style="font-size: 14px; font-weight: bold;">Estatus planta ▶</div>
-                    <div style="font-size: 11px; opacity: 0.7;">Info. Cardas ▼</div>
+                
+                <div style="color: white; min-width: 130px; display: flex; flex-direction: column; justify-content: center; height: 100%;">
+                    <div style="font-size: 14px; font-weight: bold; margin-bottom: -2px; opacity: 0.9;">Estatus planta ▶</div>
+                    <div style="font-size: 15px; font-weight: bold; color: #a1b1c1; margin-top: 2px;">Info. Cardas ▼</div>
                 </div>
                 
                 <div id="data-husos-container" style="display: flex; gap: 10px;"></div>
                 
-                <div id="maquinas-paradas-scroll" class="scroll-paros" style="flex-grow: 1; max-width: 500px; height: 52px; overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px solid #da291c; border-radius: 4px; padding: 2px 12px; margin-left: 20px;">
+                <div id="maquinas-paradas-scroll" class="scroll-paros" style="flex-grow: 1; max-width: 520px; height: 52px; overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px solid #da291c; border-radius: 4px; padding: 2px 12px; margin-left: 15px;">
                 </div>
 
                 <div style="margin-left: auto;">
