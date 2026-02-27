@@ -6,5 +6,5 @@ body {
     flex-direction: column;
     overflow: hidden;
 }
-#header-lib, #estatus-lib { width: 100%; flex-shrink: 0; }
-#cardas-lib { flex-grow: 1; overflow-y: auto; }
+#header-container, #estatus-container { width: 100%; flex-shrink: 0; }
+#main-content { flex-grow: 1; }
