@@ -6,71 +6,48 @@ const SatexCardasEngine = {
         this.grid = document.getElementById(contenedorId);
         if (!this.grid) return;
         
-        // Estilos para Fila Única y Scroll Lateral
+        // Reducción drástica de espacio arriba y abajo (padding: 5px 0)
         this.grid.style.display = "flex";
         this.grid.style.flexWrap = "nowrap";
         this.grid.style.overflowX = "auto";
-        this.grid.style.overflowY = "hidden";
-        this.grid.style.padding = "20px";
-        this.grid.style.gap = "8px";
-        this.grid.style.scrollBehavior = "smooth";
-        this.grid.style.borderTop = "1px solid rgba(255,255,255,0.1)";
+        this.grid.style.padding = "5px 0px"; 
+        this.grid.style.gap = "4px";
+        this.grid.style.width = "100%";
 
-        this.grid.innerHTML = ""; // Limpiar
+        this.grid.innerHTML = ""; 
         this.datosUnidades = [];
 
-        // Generar 11 cardas con valores iniciales
         for (let i = 1; i <= 11; i++) {
             const maxVal = 1000;
-            // Valor inicial aleatorio para la primera carga
             const acVal = Math.floor(Math.random() * 1100); 
             this.datosUnidades.push({ ac: acVal, max: maxVal });
             this.grid.innerHTML += SatexCardasDesign.crearEstructura(i, acVal, maxVal);
         }
 
-        // Ejecutar el primer dibujo de las agujas
-        this.actualizarGraficosyAgujas();
+        this.actualizarGraficos();
 
-        // --- BLOQUE DE SIMULACIÓN DINÁMICA ---
-        // Actualiza los datos aleatorios cada 3 segundos
-        setInterval(() => {
-            console.log("Simulando nuevos datos para cardas...");
-            this.simularNuevosDatos();
-        }, 3000); 
+        // Simulación cada 3 segundos
+        setInterval(() => { this.simular(); }, 3000); 
     },
 
-    actualizarGraficosyAgujas: function() {
-        if (!this.grid || typeof SatexCardas === 'undefined') return;
-
-        // Esperar a que el DOM esté listo
+    actualizarGraficos: function() {
         setTimeout(() => {
             this.datosUnidades.forEach((dato, index) => {
-                const numCarda = index + 1;
-                // Pintar el gráfico (arco de color)
-                SatexCardas.inicializarIndicador(`gauge-${numCarda}`, dato.ac, dato.max);
+                SatexCardas.inicializarIndicador(`gauge-${index + 1}`, dato.ac, dato.max);
             });
-        }, 400);
+        }, 300);
     },
 
-    simularNuevosDatos: function() {
-        if (typeof SatexCardas === 'undefined') return;
-
+    simular: function() {
         this.datosUnidades.forEach((dato, index) => {
-            const numCarda = index + 1;
-            // Generar nuevo valor AC dinámico (Verde, Amarillo o Rojo hasta 1400)
-            dato.ac = Math.floor(Math.random() * (1380 - 150 + 1)) + 150;
-
-            // Actualizar la aguja gruesa y larga por CSS (transición suave)
-            const needle = document.getElementById(`needle-${numCarda}`);
+            const num = index + 1;
+            dato.ac = Math.floor(Math.random() * 1350);
+            const needle = document.getElementById(`needle-${num}`);
             if (needle) {
-                const escalaVisual = dato.max * 1.4;
-                const rotacion = ((dato.ac / escalaVisual) * 180) - 90;
-                const rotacionFinal = rotacion > 90 ? 90 : (rotacion < -90 ? -90 : rotacion);
-                needle.style.transform = `translateX(-50%) rotate(${rotacionFinal}deg)`;
+                const rot = ((dato.ac / (dato.max * 1.4)) * 180) - 90;
+                needle.style.transform = `translateX(-50%) rotate(${rot > 90 ? 90 : (rot < -90 ? -90 : rot)}deg)`;
             }
-
-            // Redibujar el arco con el nuevo color según el rango
-            SatexCardas.inicializarIndicador(`gauge-${numCarda}`, dato.ac, dato.max);
+            SatexCardas.inicializarIndicador(`gauge-${num}`, dato.ac, dato.max);
         });
     }
 };
