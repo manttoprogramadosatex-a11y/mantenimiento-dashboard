@@ -1,14 +1,15 @@
 const SatexCardasDesign = {
-    config: { width: 140, height: 185 },
-    crearTarjetaHTML: function(i) {
+    crearEstructura: function(numero) {
         return `
-            <div style="background:white; width:140px; height:185px; border-radius:8px; padding:10px; display:flex; flex-direction:column; align-items:center; box-shadow:0 4px 10px rgba(0,0,0,0.3); box-sizing:border-box;">
-                <div style="font-family:sans-serif; font-size:12px; font-weight:bold; margin-bottom:5px;">Carda ${i}</div>
-                <div style="width:120px; height:85px;"><canvas id="gauge-${i}"></canvas></div>
-                <div style="text-align:center; margin-top:5px; font-family:sans-serif;">
-                    <p style="font-size:14px; font-weight:bold; margin:0;" id="ac-${i}">Ac. 0</p>
-                    <p style="font-size:10px; color:#666; margin:0;" id="max-${i}">Max. 1000</p>
-                </div>
-            </div>`;
+        <div class="carda-item" style="min-width: 200px; max-width: 200px; background: white; border-radius: 8px; padding: 15px; margin: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); flex-shrink: 0; display: flex; flex-direction: column; align-items: center;">
+            <div style="color: #003366; font-weight: bold; font-size: 16px; margin-bottom: 10px; font-family: sans-serif;">Carda ${numero}</div>
+            <div style="width: 100%; height: 120px; position: relative;">
+                <canvas id="gauge-${numero}"></canvas>
+            </div>
+            <div style="text-align: center; margin-top: 10px; font-family: sans-serif;">
+                <div style="font-size: 18px; font-weight: bold; color: #333;">Ac. 0</div>
+                <div style="font-size: 12px; color: #666; font-weight: bold;">Max. 1000</div>
+            </div>
+        </div>`;
     }
 };
