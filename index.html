@@ -16,7 +16,7 @@
             flex-direction: column; 
         }
 
-        /* 2. HEADER - TÍTULO EN CALIBRI Y MÁS PEQUEÑO */
+        /* 2. HEADER - TÍTULO EN CALIBRI */
         .satex-header { 
             background-color: #274a66; 
             display: flex; 
@@ -31,75 +31,75 @@
         .satex-header img { height: 40px; width: auto; }
         
         .satex-header .titulo-central { 
-            font-family: 'Calibri', 'Candara', 'Segoe UI', sans-serif !important; 
-            font-size: 22px !important; /* Reducido para mejor balance */
+            font-family: 'Calibri', sans-serif !important; 
+            font-size: 22px !important; 
             font-weight: bold; 
             text-transform: uppercase; 
             margin: 0; 
             flex-grow: 1; 
             text-align: center; 
-            letter-spacing: 0.5px;
         }
         .satex-header .fecha-derecha { font-size: 13px; min-width: 150px; text-align: right; font-weight: bold; }
 
-        /* 3. ESTATUS PLANTA - FORMATO TIPO ORACIÓN */
+        /* 3. ESTATUS PLANTA - ESPACIO REDUCIDO AL MÁXIMO */
         .satex-estatus-bar { 
-            padding: 10px 20px; 
+            padding: 5px 20px; /* Padding vertical reducido de 10px a 5px */
             display: flex; 
             align-items: center; 
-            height: 85px; 
+            height: 65px; /* Altura reducida de 85px a 65px */
             gap: 15px; 
             background: rgba(0,0,0,0.15);
             flex-shrink: 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .satex-estatus-bar .label-main { 
             color: white; 
             font-size: 14px; 
             font-weight: bold; 
             text-transform: none; 
-            line-height: 1.2;
+            line-height: 1.1;
         }
         .satex-estatus-bar .bloque-dato { 
             background: #3c546d; 
-            padding: 5px 15px; 
+            padding: 2px 15px; 
             border-radius: 4px; 
             border-left: 4px solid #f9b218; 
             min-width: 130px; 
-            height: 55px; 
+            height: 48px; /* Bloques más compactos */
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
         }
-        .satex-estatus-bar .dato-etiqueta { font-size: 10px; color: #a1b1c1; font-weight: bold; text-transform: none; margin-bottom: 2px; }
-        .satex-estatus-bar .dato-valor { font-size: 24px; font-weight: bold; color: #f9b218; line-height: 1; }
+        .satex-estatus-bar .dato-etiqueta { font-size: 9px; color: #a1b1c1; font-weight: bold; text-transform: none; margin-bottom: 0px; }
+        .satex-estatus-bar .dato-valor { font-size: 22px; font-weight: bold; color: #f9b218; line-height: 1; }
 
-        /* 4. CONTENEDOR DE CARDAS - TAMAÑO ORIGINAL RECUPERADO */
+        /* 4. CONTENEDOR DE CARDAS */
         #contenedor-cardas { 
             display: flex; 
             flex-wrap: wrap; 
             justify-content: center; 
-            gap: 20px; 
-            padding: 20px; 
+            gap: 15px; 
+            padding: 15px; 
             flex-grow: 1; 
             overflow-y: auto; 
         }
         .carda-box { 
             background: white; 
             width: 145px; 
-            height: 195px; 
+            height: 190px; 
             border-radius: 8px; 
-            padding: 12px; 
+            padding: 10px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        .carda-box .canvas-container { width: 125px; height: 90px; }
-        .carda-box .carda-titulo { font-size: 13px; font-weight: bold; color: #333; text-transform: none; margin-bottom: 8px; }
-        .carda-box .ac-val { font-size: 14px; font-weight: bold; color: black; margin: 8px 0 0 0; }
+        .carda-box .canvas-container { width: 125px; height: 85px; }
+        .carda-box .carda-titulo { font-size: 13px; font-weight: bold; color: #333; text-transform: none; margin-bottom: 5px; }
+        .carda-box .ac-val { font-size: 14px; font-weight: bold; color: black; margin: 5px 0 0 0; }
         .carda-box .max-val { font-size: 10px; color: #666; margin: 0; }
 
-        .btn-x { background:#da291c; color:white; border:none; width: 35px; height: 35px; border-radius: 4px; cursor:pointer; font-weight:bold; margin-left: auto;}
+        .btn-x { background:#da291c; color:white; border:none; width: 30px; height: 30px; border-radius: 4px; cursor:pointer; font-weight:bold; margin-left: auto;}
     </style>
 </head>
 <body>
@@ -112,39 +112,19 @@
 
     <div class="satex-estatus-bar">
         <div class="label-main">Estatus planta<br><span style="font-size:10px; font-weight:normal; opacity:0.8;">Info. Cardas ▶</span></div>
-        
-        <div class="bloque-dato">
-            <span class="dato-etiqueta">Continuas (Inact.)</span>
-            <span class="dato-valor" id="h-cont">0</span>
-        </div>
-        
-        <div class="bloque-dato">
-            <span class="dato-etiqueta">Open-end (Inact.)</span>
-            <span class="dato-valor" id="h-oe">0</span>
-        </div>
-        
-        <div class="bloque-dato">
-            <span class="dato-etiqueta">Coneras (Inact.)</span>
-            <span class="dato-valor" id="h-con">0</span>
-        </div>
-        
-        <div class="bloque-dato" style="border-left-color:#da291c">
-            <span class="dato-etiqueta">Máquinas paradas</span>
-            <span class="dato-valor" id="total-p" style="color:#ff9999">0</span>
-        </div>
-
+        <div class="bloque-dato"><span class="dato-etiqueta">Continuas (Inact.)</span><span class="dato-valor" id="h-cont">0</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Open-end (Inact.)</span><span class="dato-valor" id="h-oe">0</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Coneras (Inact.)</span><span class="dato-valor" id="h-con">0</span></div>
+        <div class="bloque-dato" style="border-left-color:#da291c"><span class="dato-etiqueta">Máquinas paradas</span><span class="dato-valor" id="total-p" style="color:#ff9999">0</span></div>
         <button class="btn-x" onclick="location.reload()">X</button>
     </div>
 
     <div id="contenedor-cardas"></div>
 
     <script>
-        // Fecha Actual
         const d = new Date();
-        const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
-        document.getElementById('fecha-actual').innerText = d.toLocaleDateString('es-ES', opciones);
+        document.getElementById('fecha-actual').innerText = d.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
 
-        // Generar Cardas
         const gauges = [];
         function initDashboard() {
             const container = document.getElementById('contenedor-cardas');
@@ -155,65 +135,39 @@
                     <div class="carda-titulo">Carda ${i}</div>
                     <div class="canvas-container"><canvas id="g-${i}"></canvas></div>
                     <p class="ac-val" id="v-${i}">Ac. 0</p>
-                    <p class="max-val">Max. 1000</p>
-                `;
+                    <p class="max-val">Max. 1000</p>`;
                 container.appendChild(card);
                 
                 const ctx = document.getElementById(`g-${i}`).getContext('2d');
                 const chart = new Chart(ctx, {
                     type: 'doughnut',
-                    data: {
-                        datasets: [{
-                            data: [70, 15, 15],
-                            backgroundColor: ["#23a446", "#f9b218", "#da291c"],
-                            needleValue: 0
-                        }]
-                    },
-                    options: {
-                        rotation: -110,
-                        circumference: 220,
-                        cutout: '75%',
-                        plugins: { legend: false, tooltip: false },
-                        animation: false
-                    },
+                    data: { datasets: [{ data: [70, 15, 15], backgroundColor: ["#23a446", "#f9b218", "#da291c"], needleValue: 0 }] },
+                    options: { rotation: -110, circumference: 220, cutout: '75%', plugins: { legend: false, tooltip: false }, animation: false },
                     plugins: [{
                         afterDraw: (chart) => {
                             const { ctx, width, height } = chart;
                             ctx.save();
-                            const cx = width / 2;
-                            const cy = height / 1.35;
+                            const cx = width / 2; const cy = height / 1.35;
                             const r = chart.getDatasetMeta(0).data[0].outerRadius;
                             const angle = (Math.PI * 0.88) + (chart.data.datasets[0].needleValue / 100) * (Math.PI * 1.23);
-                            ctx.translate(cx, cy);
-                            ctx.rotate(angle);
-                            ctx.beginPath();
-                            ctx.moveTo(0, -2);
-                            ctx.lineTo(r - 10, 0);
-                            ctx.lineTo(0, 2);
-                            ctx.fillStyle = '#000';
-                            ctx.fill();
-                            ctx.rotate(-angle);
-                            ctx.beginPath();
-                            ctx.arc(0, 0, 4, 0, Math.PI * 2);
-                            ctx.fillStyle = '#000';
-                            ctx.fill();
-                            ctx.restore();
+                            ctx.translate(cx, cy); ctx.rotate(angle);
+                            ctx.beginPath(); ctx.moveTo(0, -2); ctx.lineTo(r - 10, 0); ctx.lineTo(0, 2);
+                            ctx.fillStyle = '#000'; ctx.fill();
+                            ctx.rotate(-angle); ctx.beginPath(); ctx.arc(0, 0, 4, 0, Math.PI * 2);
+                            ctx.fillStyle = '#000'; ctx.fill(); ctx.restore();
                         }
                     }]
                 });
                 gauges.push(chart);
             }
         }
-
         initDashboard();
 
-        // Simulación de Datos
         setInterval(() => {
-            document.getElementById('h-cont').innerText = Math.floor(Math.random() * 25);
-            document.getElementById('h-oe').innerText = Math.floor(Math.random() * 12);
-            document.getElementById('h-con').innerText = Math.floor(Math.random() * 8);
-            document.getElementById('total-p').innerText = Math.floor(Math.random() * 5);
-            
+            document.getElementById('h-cont').innerText = Math.floor(Math.random() * 20);
+            document.getElementById('h-oe').innerText = Math.floor(Math.random() * 10);
+            document.getElementById('h-con').innerText = Math.floor(Math.random() * 5);
+            document.getElementById('total-p').innerText = Math.floor(Math.random() * 4);
             gauges.forEach((g, idx) => {
                 const val = Math.floor(Math.random() * 950);
                 g.data.datasets[0].needleValue = (val / 1000) * 100;
