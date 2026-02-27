@@ -24,9 +24,6 @@ const SatexEstatus = {
                         <span class="dato-valor" id="total-p" style="color:#ff9999">0</span>
                     </div>
                 </div>
-                <div style="margin-left: auto; color: #00d4ff; font-size: 11px; font-weight: bold; text-align: right; padding-right: 15px;">
-                    Actualizado:<br><span id="last-sync">Simulando...</span>
-                </div>
                 <button class="btn-refresh" onclick="location.reload()">X</button>
             </div>`;
     }
