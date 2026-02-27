@@ -2,7 +2,7 @@ const SatexEstatusData = {
     actualizar: function(hCont, hOe, hCon, mParadas) {
         const container = document.getElementById('data-husos-container');
         const crearBloque = (label, valor, color = "#f9b218") => `
-            <div style="background: #3c546d; border-left: 3px solid ${color}; padding: 2px 10px; min-width: 125px; height: 42px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="background: #3c546d; border-left: 3px solid ${color}; padding: 2px 10px; min-width: 130px; height: 45px; display: flex; flex-direction: column; justify-content: center;">
                 <span style="color: #a1b1c1; font-size: 12px; font-weight: bold; text-transform: uppercase; line-height: 1.1;">${label}</span>
                 <span style="color: ${color}; font-size: 28px; font-weight: bold; line-height: 1;">${valor}</span>
             </div>`;
