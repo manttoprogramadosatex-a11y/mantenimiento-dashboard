@@ -1,19 +1,19 @@
-body { 
-    margin: 0; 
-    background-color: #2f5577; 
-    height: 100vh; 
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden; 
-    font-family: 'Segoe UI', sans-serif;
+#cardas-grid {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* Prohibido saltar de línea */
+    overflow-x: scroll !important; /* Forzar scroll lateral */
+    overflow-y: hidden;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-#main-content { 
-    flex-grow: 1; 
-    overflow-y: auto; 
-    padding: 15px;
+/* Hacer la barra de scroll visible para que sepas que hay más a la derecha */
+#cardas-grid::-webkit-scrollbar {
+    height: 10px;
 }
-
-/* Scroll personalizado para la tabla de paros */
-.scroll-paros::-webkit-scrollbar { width: 4px; }
-.scroll-paros::-webkit-scrollbar-thumb { background: #da291c; border-radius: 10px; }
+#cardas-grid::-webkit-scrollbar-thumb {
+    background: #f9b218; 
+    border-radius: 5px;
+}
