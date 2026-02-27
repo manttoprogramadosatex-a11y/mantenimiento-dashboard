@@ -1,28 +1,25 @@
+/* ESTILOS SATEX 2026 - TÍTULO EN MAYÚSCULAS Y RESTO EN TIPO ORACIÓN */
 body { margin: 0; background-color: #2f5577; font-family: 'Segoe UI', Arial, sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
 
 /* HEADER */
-.header { background-color: #274a66; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 50px; color: white; border-bottom: 2px solid #1e3a50; }
-.header img { height: 35px; }
-.titulo { font-size: 18px; font-weight: bold; } /* Quitamos uppercase */
-.fecha-header { font-size: 14px; font-weight: bold; }
+.header { background-color: #274a66; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 60px; color: white; border-bottom: 2px solid #1e3a50; }
+.header img { height: 40px; }
+/* Título en Mayúsculas y tamaño resaltado */
+.titulo { font-size: 26px; font-weight: 800; text-align: center; flex-grow: 1; text-transform: uppercase; letter-spacing: 1px; } 
+.fecha-header { font-size: 14px; font-weight: bold; min-width: 150px; text-align: right; }
 
 /* ESTATUS PLANTA */
 .seccion-estatus { padding: 10px 20px; display: flex; align-items: center; background: rgba(0,0,0,0.15); height: 85px; gap: 15px; }
-.etiqueta-planta { color: white; font-size: 14px; font-weight: bold; line-height: 1.2; }
+.etiqueta-planta { color: white; font-size: 15px; font-weight: bold; line-height: 1.2; text-transform: none; }
 .info-cardas-txt { font-size: 11px; font-weight: normal; opacity: 0.8; }
 
-.contenedor-bloques { display: flex; gap: 8px; }
-.bloque-dato { background: #3c546d; padding: 5px 12px; border-radius: 4px; border-left: 4px solid #f9b218; min-width: 140px; height: 55px; display: flex; flex-direction: column; justify-content: center; }
+.contenedor-bloques { display: flex; gap: 10px; }
+.bloque-dato { background: #3c546d; padding: 5px 15px; border-radius: 4px; border-left: 4px solid #f9b218; min-width: 140px; height: 55px; display: flex; flex-direction: column; justify-content: center; }
 .box-paradas { border-left-color: #da291c; }
-.dato-etiqueta { font-size: 9px; color: #a1b1c1; font-weight: bold; margin-bottom: 2px; } /* Quitamos uppercase */
-.dato-valor { font-size: 24px; font-weight: bold; color: #f9b218; line-height: 1; }
+.dato-etiqueta { font-size: 10px; color: #a1b1c1; font-weight: bold; text-transform: none; margin-bottom: 2px; }
+.dato-valor { font-size: 26px; font-weight: bold; color: #f9b218; line-height: 1; }
 
 /* CARDAS */
-#cardas-sitio { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; flex-grow: 1; overflow-y: auto; }
-.gauge-card { background: white; width: 140px; height: 185px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-.gauge-title { font-size: 12px; font-weight: bold; color: #333; margin-bottom: 5px; } /* Quitamos uppercase */
-.canvas-container { width: 120px; height: 85px; }
-.valor-ac { font-size: 12px; font-weight: bold; color: #000; margin: 5px 0 0 0; }
-.valor-max { font-size: 10px; color: #666; }
-
-.btn-refresh { background: #da291c; color: white; border: none; width: 35px; height: 35px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+#cardas-sitio { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; flex-grow: 1; overflow-y: auto; }
+.gauge-card { background: white; width: 145px; height: 190px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+.gauge-title { font-size: 13px; font-weight: bold; color: #333; text-transform: none; margin-bottom: 5px; }
