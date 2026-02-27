@@ -3,7 +3,6 @@ const SatexCardas = {
         const ctx = document.getElementById(id);
         if (!ctx) return;
 
-        // Calculamos el porcentaje real
         const porcentaje = (actual / maximo) * 100;
         let colorArco = '#28a745'; // Verde (0-80%)
 
@@ -20,9 +19,9 @@ const SatexCardas = {
             type: 'doughnut',
             data: {
                 datasets: [{
-                    // El gráfico siempre se dibuja sobre una base de 140 para que la escala sea real
+                    // Graficamos sobre base 140% para que el arco coincida con la aguja
                     data: [actual, (maximo * 1.4) - actual],
-                    backgroundColor: [colorArco, '#e9ecef'],
+                    backgroundColor: [colorArco, '#f0f0f0'],
                     borderWidth: 0,
                     circumference: 180,
                     rotation: 270
@@ -31,7 +30,8 @@ const SatexCardas = {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '80%',
+                cutout: '78%',
+                animation: { animateRotate: true },
                 plugins: {
                     legend: { display: false },
                     tooltip: { enabled: false }
