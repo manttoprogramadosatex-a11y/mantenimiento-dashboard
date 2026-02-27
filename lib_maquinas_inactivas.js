@@ -19,7 +19,7 @@ const SatexMaquinasInactivas = {
         }).join('');
 
         document.getElementById(id).innerHTML = `
-            <div style="color: #ff9999; font-size: 11px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; position: sticky; top: 0; background: rgba(30,30,30,0.6); z-index: 1;">
+            <div style="color: #ff9999; font-size: 11px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; position: sticky; top: 0; background: rgba(30,30,30,0.8); z-index: 1;">
                 TIPO | NÚM | DESDE | DÍAS
             </div>
             ${tabla}`;
