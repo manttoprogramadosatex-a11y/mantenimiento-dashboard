@@ -1,214 +1,113 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<style>
-    /* CANDADO ULTRA RESTRINGIDO SATEX 2026 - OPTIMIZACIÓN MÁXIMA */
-    body { 
-        margin: 0; background-color: #2f5577; 
-        font-family: 'Segoe UI', Arial, sans-serif; 
-        display: flex; flex-direction: column; height: 100vh; overflow: hidden;
-    }
-    
-    /* HEADER COMPACTO */
-    .header {
-        background-color: #274a66; display: flex; align-items: center;
-        padding: 0 20px; height: 55px; color: white; border-bottom: 2px solid #1e3a50;
-        position: relative;
-    }
-    .header-left img { height: 45px; } 
-    .titulo { 
-        width: 60%; text-align: center; font-size: 28px; font-weight: bold; 
-        position: absolute; left: 50%; transform: translateX(-50%);
-        color: #ffffff; text-transform: uppercase;
-    }
-    .fecha-hoy { width: 20%; text-align: right; font-size: 13px; margin-left: auto; }
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { margin: 0; background: #2f5577; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        .header { background: #274a66; color: white; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #1e3a50; height: 40px; }
+        .titulo { font-size: 20px; font-weight: bold; text-transform: uppercase; }
+        
+        /* SECCIÓN DE UNA SOLA LÍNEA */
+        .status-bar { display: flex; align-items: center; background: rgba(0,0,0,0.15); padding: 5px 10px; gap: 8px; height: 50px; justify-content: space-between; }
+        .label-main { color: white; font-size: 11px; font-weight: bold; line-height: 1; min-width: 80px; }
+        
+        .box { background: #3c546d; border-left: 3px solid #f9b218; padding: 2px 8px; width: 90px; height: 35px; border-radius: 3px; display: flex; flex-direction: column; justify-content: center; }
+        .box-red { border-left-color: #da291c; background: rgba(218,41,28,0.1); }
+        .box-t { font-size: 7px; color: #a1b1c1; text-transform: uppercase; margin: 0; }
+        .box-v { font-size: 16px; font-weight: bold; color: #f9b218; margin: 0; line-height: 1; }
 
-    /* SECCIÓN ESTATUS ULTRA COMPACTA */
-    .seccion-estatus { 
-        padding: 5px 20px; 
-        display: flex; align-items: center; gap: 12px;
-        background: rgba(0,0,0,0.1);
-        min-height: 60px;
-    }
-    .frase-estatus { color: white; font-size: 15px; font-weight: bold; white-space: nowrap; }
-    
-    .contenedor-bloques { display: flex; align-items: center; gap: 8px; }
+        .stop-list { flex-grow: 1; max-width: 250px; height: 40px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 8px; overflow-y: auto; }
+        .stop-item { background: rgba(218,41,28,0.2); border: 1px solid #da291c; color: white; font-size: 9px; padding: 2px 5px; margin-bottom: 2px; display: flex; justify-content: space-between; border-radius: 2px; }
 
-    .bloque-dato {
-        background: rgba(255, 255, 255, 0.1); 
-        padding: 4px 10px;
-        border-radius: 4px; 
-        border-left: 4px solid #f9b218;
-        min-width: 110px;
-        height: 45px;
-        display: flex; flex-direction: column; justify-content: center;
-    }
-    .dato-etiqueta { font-size: 8px; text-transform: uppercase; color: #ccc; margin-bottom: 1px; }
-    .dato-valor { font-size: 18px; font-weight: bold; color: #f9b218; line-height: 1; }
+        .update-info { color: #00d4ff; font-size: 9px; font-weight: bold; text-align: right; min-width: 130px; }
+        .btn-refresh { background: #da291c; color: white; border: none; width: 25px; height: 25px; border-radius: 2px; cursor: pointer; font-weight: bold; }
 
-    /* ÁREA DE MÁQUINAS PARADAS CON SCROLL Y DATOS NUEVOS */
-    .seccion-paradas-scroll {
-        display: flex; align-items: center; gap: 10px;
-        margin-left: 5px; border-left: 1px solid rgba(255,255,255,0.2);
-        padding-left: 15px; flex-grow: 1;
-    }
-
-    .lista-vertical-container {
-        height: 50px; 
-        overflow-y: auto;
-        width: 450px;
-        padding-right: 5px;
-    }
-    
-    .lista-vertical-container::-webkit-scrollbar { width: 4px; }
-    .lista-vertical-container::-webkit-scrollbar-thumb { background: #da291c; border-radius: 10px; }
-
-    .item-parada {
-        background: rgba(218, 41, 28, 0.25); border: 1px solid #da291c;
-        border-radius: 3px; padding: 3px 10px; margin-bottom: 3px;
-        color: white; display: flex; align-items: center; justify-content: space-between;
-    }
-    /* Estructura interna: Nombre + Fecha --- Días */
-    .info-maq { font-size: 11px; display: flex; gap: 10px; align-items: center; }
-    .info-maq strong { text-transform: uppercase; }
-    .info-maq span { color: #ff9999; font-size: 10px; }
-    .cont-dias { font-size: 10px; font-weight: bold; color: #ffffff; background: #da291c; padding: 1px 5px; border-radius: 2px; }
-
-    /* INDICADORES CARDAS */
-    .dashboard-middle-row {
-        display: flex; flex-direction: row; flex-wrap: nowrap; 
-        overflow-x: auto; gap: 8px; padding: 10px 15px;
-        background-color: rgba(0, 0, 0, 0.15);
-        margin-top: auto; margin-bottom: auto;
-    }
-    .gauge-card {
-        background: white; min-width: 125px; height: 155px; border-radius: 5px;
-        display: flex; flex-direction: column; align-items: center;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.3); padding: 5px; flex-shrink: 0;
-    }
-    .gauge-title { font-size: 12px; font-weight: bold; color: #222; margin-bottom: 2px; text-transform: uppercase; }
-    .canvas-container { width: 100px; height: 75px; position: relative; }
-    .info-labels { text-align: center; margin-top: -3px; }
-    .valor-ac { font-size: 10px; font-weight: bold; color: #000; margin: 0; }
-    .valor-max { font-size: 8px; color: #666; margin: 0; }
-</style>
+        /* AREA DE INDICADORES */
+        .gauge-area { display: flex; flex-wrap: nowrap; gap: 8px; padding: 15px; justify-content: center; background: rgba(0,0,0,0.05); flex-grow: 1; overflow-x: auto; align-items: center; }
+        .gauge-card { background: white; min-width: 110px; height: 140px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; padding: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+    </style>
 </head>
 <body>
 
 <div class="header">
-    <div class="header-left"><img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg" alt="Logo"></div>
-    <div class="titulo">Tablero Master Mantto. Satex Textil</div>
-    <div id="fechaDisplay" class="fecha-hoy"></div>
+    <img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg" height="30">
+    <div class="titulo">TABLERO MASTER SATEX</div>
+    <div id="clock" style="color:white; font-size:12px;"></div>
 </div>
 
-<div class="seccion-estatus">
-    <span class="frase-estatus">Estatus de Planta:</span>
+<div class="status-bar">
+    <div class="label-main">ESTATUS<br>PLANTA ▶</div>
+    <div class="box"><p class="box-t">Continuas</p><p class="box-v" id="h-cont">--</p></div>
+    <div class="box"><p class="box-t">Open-End</p><p class="box-v" id="h-oe">--</p></div>
+    <div class="box"><p class="box-t">Coneras</p><p class="box-v" id="h-con">--</p></div>
+    <div class="box box-red"><p class="box-t">Paradas</p><p class="box-v" id="total-p" style="color:#ff9999">--</p></div>
     
-    <div class="contenedor-bloques">
-        <div class="bloque-dato">
-            <span class="dato-etiqueta">Continuas (Inact.)</span>
-            <span class="dato-valor">16</span>
-        </div>
-        <div class="bloque-dato">
-            <span class="dato-etiqueta">Open-End (Inact.)</span>
-            <span class="dato-valor">1</span>
-        </div>
-        <div class="bloque-dato">
-            <span class="dato-etiqueta">Coneras (Inact.)</span>
-            <span class="dato-valor">0</span>
-        </div>
-    </div>
-
-    <div class="seccion-paradas-scroll">
-        <div class="bloque-dato" style="border-left-color: #da291c; min-width: 130px;">
-            <span class="dato-etiqueta">Máquinas Paradas</span>
-            <span id="totalParadas" class="dato-valor" style="color: #ff9999;">0</span>
-        </div>
-        
-        <div class="lista-vertical-container" id="listaParadas">
-            </div>
-    </div>
+    <div class="stop-list" id="stop-container"></div>
+    
+    <div class="update-info">Actualizado:<br><span id="last-sync">...</span></div>
+    <button class="btn-refresh" onclick="location.reload()">X</button>
 </div>
 
-<div class="dashboard-middle-row" id="contenedorGauges"></div>
+<div class="gauge-area" id="gauge-container"></div>
 
 <script>
-    // Fecha de hoy para el header y cálculo
-    const hoy = new Date();
-    document.getElementById("fechaDisplay").innerText = hoy.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
+    // ==========================================
+    // LÍNEA 140: PEGA TU URL DE GOOGLE SCRIPT AQUÍ
+    const API_URL = "https://script.google.com/macros/s/AKfycbz1_nwP2PXBM8iswDpg_8WDhDUHfAkRxPw2pCfpyusx_Lpyo4GxwOlFZ4tH2MgqPm3enA/exec";
+    // ==========================================
 
-    // DATOS DE MÁQUINAS (Simulando filas de Excel)
-    const maquinasParadasData = [
-        { nombre: "Regulador 10", fechaParo: "2025-02-25" },
-        { nombre: "Conera 5", fechaParo: "2025-02-26" },
-        { nombre: "Continua 8", fechaParo: "2025-02-20" }
-    ];
+    let myCharts = [];
 
-    function calcularDias(fechaStr) {
-        const fechaParo = new Date(fechaStr);
-        const diffTime = Math.abs(hoy - fechaParo);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays;
+    async function getData() {
+        try {
+            const response = await fetch(API_URL);
+            const data = await response.json();
+            
+            // Actualizar Husos e info superior
+            document.getElementById('h-cont').innerText = data.husos.cont;
+            document.getElementById('h-oe').innerText = data.husos.oe;
+            document.getElementById('h-con').innerText = data.husos.con;
+            document.getElementById('total-p').innerText = data.paradas.length;
+            document.getElementById('last-sync').innerText = data.actualizado;
+
+            // Actualizar lista de paradas
+            const list = document.getElementById('stop-container');
+            list.innerHTML = data.paradas.map(p => `<div class="stop-item"><span>${p.maquina}</span><b>${p.dias} Días</b></div>`).join('');
+
+            // Actualizar Gauges con datos reales del Excel
+            data.cardas.forEach((c, i) => {
+                const porc = Math.min((c.act / c.max) * 100, 100);
+                myCharts[i].data.datasets[0].data = [porc, 100 - porc];
+                document.getElementById(`val-${i}`).innerText = `Ac. ${c.act}`;
+                document.getElementById(`max-${i}`).innerText = `Max. ${c.max}`;
+                myCharts[i].update();
+            });
+        } catch(e) { console.error("Error cargando datos", e); }
     }
 
-    window.onload = function() {
-        const listaDiv = document.getElementById('listaParadas');
-        const totalSpan = document.getElementById('totalParadas');
-        
-        totalSpan.innerText = maquinasParadasData.length;
-
-        maquinasParadasData.forEach(m => {
-            const dias = calcularDias(m.fechaParo);
-            const item = document.createElement('div');
-            item.className = 'item-parada';
-            // Formatear fecha para mostrar
-            const fShow = new Date(m.fechaParo).toLocaleDateString('es-ES');
-            item.innerHTML = `
-                <div class="info-maq">
-                    <strong>${m.nombre}</strong>
-                    <span>${fShow}</span>
-                </div>
-                <div class="cont-dias">${dias} Días Parada</div>
-            `;
-            listaDiv.appendChild(item);
-        });
-
-        // Configuración de Cardas (Candado de Estructura)
-        const datosCardas = [{ac:800,max:1000},{ac:500,max:1000},{ac:600,max:1000},{ac:700,max:1000},{ac:800,max:1000},{ac:650,max:1000},{ac:400,max:1000},{ac:650,max:1000},{ac:800,max:1000}];
-        const contenedor = document.getElementById('contenedorGauges');
-        datosCardas.forEach((datos, index) => {
-            const num = index + 1;
-            const card = document.createElement('div');
-            card.className = 'gauge-card';
-            card.innerHTML = `<div class="gauge-title">Carda ${num}</div><div class="canvas-container"><canvas id="gauge-${num}"></canvas></div><div class="info-labels"><p class="valor-ac">Ac. ${datos.ac}</p><p class="valor-max">Max. ${datos.max}</p></div>`;
-            contenedor.appendChild(card);
-            new Chart(document.getElementById(`gauge-${num}`).getContext('2d'), {
+    function init() {
+        const container = document.getElementById('gauge-container');
+        for(let i=0; i<8; i++) {
+            container.innerHTML += `
+                <div class="gauge-card">
+                    <b style="font-size:11px">CARDA ${i+1}</b>
+                    <canvas id="chart-${i}"></canvas>
+                    <p id="val-${i}" style="font-size:10px; font-weight:bold; margin:5px 0 0 0">--</p>
+                    <p id="max-${i}" style="font-size:8px; color:#666; margin:0">--</p>
+                </div>`;
+        }
+        for(let i=0; i<8; i++) {
+            myCharts.push(new Chart(document.getElementById(`chart-${i}`), {
                 type: 'doughnut',
-                data: { datasets: [{ data: [70, 15, 15], backgroundColor: ["#23a446", "#f9b218", "#da291c"], needleValue: (datos.ac/datos.max)*100 }] },
-                options: { rotation: -110, circumference: 220, cutout: '75%', plugins: { legend: false, tooltip: false } },
-                plugins: [{
-                    afterDraw: (chart) => {
-                        const { ctx, width, height } = chart;
-                        ctx.save();
-                        const cx = width / 2; const cy = height / 1.35;
-                        const r = chart.getDatasetMeta(0).data[0].outerRadius;
-                        const angle = (Math.PI * 0.88) + (chart.data.datasets[0].needleValue / 100) * (Math.PI * 1.23);
-                        ctx.translate(cx, cy); ctx.rotate(angle);
-                        ctx.beginPath(); ctx.moveTo(0, -2); ctx.lineTo(r - 8, 0); ctx.lineTo(0, 2);
-                        ctx.fillStyle = '#000'; ctx.fill();
-                        ctx.rotate(-angle); ctx.beginPath(); ctx.arc(0, 0, 3, 0, Math.PI * 2);
-                        ctx.fillStyle = '#000'; ctx.fill(); ctx.restore();
-                    }
-                }]
-            });
-        });
-
-        // REFRESH AUTOMÁTICO 2 MINUTOS
-        setTimeout(() => { location.reload(); }, 120000); 
-    };
+                data: { datasets: [{ data: [0, 100], backgroundColor: ['#23a446', '#eee'] }] },
+                options: { rotation: -110, circumference: 220, cutout: '75%', plugins: { legend: false, tooltip: false } }
+            }));
+        }
+        getData();
+        setInterval(getData, 60000); // Auto-actualizar cada minuto
+    }
+    window.onload = init;
 </script>
 </body>
 </html>
-
