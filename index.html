@@ -2,46 +2,45 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satex Master Project</title>
+    <title>Satex Master 2026</title>
     <link rel="stylesheet" href="estilos.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body style="margin: 0; background-color: #2f5577; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
+<body>
 
-    <div id="header-container"></div>
-    <div id="estatus-container"></div>
-    
-    <div id="maquinas-inactivas-container"></div>
-    
-    <div id="cardas-container" style="flex-grow: 1; overflow-y: auto;"></div>
+    <div id="header-lib"></div>
+    <div id="estatus-lib"></div>
+
+    <div id="main-content">
+        <div id="detalle-paros-lib"></div>
+
+        <div id="cardas-lib" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;"></div>
+    </div>
 
     <script src="lib_header.js"></script>
     <script src="lib_estatus_design.js"></script>
     <script src="lib_estatus_data.js"></script>
-    <script src="lib_maquinas_inactivas.js"></script>
-    <script src="lib_cardas.js"></script>
-
-    <script>
+    <script src="lib_maquinas_paradas.js"></script>
+    <script src="lib_cardas.js"></script> <script>
         window.onload = () => {
-            // 1. Renderizar Encabezado (Inalterado)
-            SatexHeader.dibujar("header-container");
+            // Render de estructuras
+            SatexHeader.render("header-lib");
+            SatexEstatusDesign.render("estatus-lib");
 
-            // 2. Renderizar Franja de Estatus (Compacta 48px)
-            SatexEstatusDesign.render("estatus-container");
-
-            // 3. Cargar Datos de Husos (Valores de ejemplo)
+            // Actualización de Husos (Indicadores más largos y letras +grandes)
             SatexEstatusData.actualizar(14, 6, 4, 2);
 
-            // 4. Cargar Información de Máquinas Paradas (Recuperado de la conversación)
-            const listaParos = [
-                { tipo: "Continua", numero: "C-08", desde: "26/02/2026" },
-                { tipo: "Open-End", numero: "OE-03", desde: "27/02/2026" }
+            // DETALLE DE MÁQUINAS PARADAS (Información solicitada)
+            const datosParos = [
+                { tipo: "Continua", numero: "C-08", fechaParo: "26/02/2026" },
+                { tipo: "Open-End", numero: "OE-03", fechaParo: "27/02/2026" }
             ];
-            SatexMaquinasInactivas.render("maquinas-inactivas-container", listaParos);
+            SatexMaquinasParadas.render("detalle-paros-lib", datosParos);
 
-            // 5. Iniciar Indicadores de Cardas
-            SatexCardas.iniciar("cardas-container");
+            // Cardas (Manteniendo tu lógica original)
+            if(typeof SatexCardas !== 'undefined') {
+                SatexCardas.iniciar("cardas-lib");
+            }
         };
     </script>
 </body>
