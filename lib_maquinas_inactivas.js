@@ -5,7 +5,6 @@ const SatexMaquinasInactivas = {
         const diferencia = Math.floor((hoy - inicio) / (1000 * 60 * 60 * 24));
         return diferencia >= 0 ? diferencia : 0;
     },
-
     render: function(id, datos) {
         const tabla = datos.map(m => {
             const dias = this.calcularDias(m.fecha);
@@ -17,11 +16,8 @@ const SatexMaquinasInactivas = {
                 <span style="color: #f9b218; text-align: right; font-weight: bold;">${dias}d</span>
             </div>`;
         }).join('');
-
         document.getElementById(id).innerHTML = `
-            <div style="color: #ff9999; font-size: 11px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; position: sticky; top: 0; background: rgba(30,30,30,0.8); z-index: 1;">
-                TIPO | NÚM | DESDE | DÍAS
-            </div>
-            ${tabla}`;
+        <div style="color: #ff9999; font-size: 11px; font-weight: bold; margin-bottom: 4px; text-transform: uppercase; position: sticky; top: 0; background: rgba(30,30,30,0.8); z-index: 1;">TIPO | NÚM | DESDE | DÍAS</div>
+        ${tabla}`;
     }
 };
