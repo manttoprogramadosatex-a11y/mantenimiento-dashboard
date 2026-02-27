@@ -1,10 +1,40 @@
-<script>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satex Master Project</title>
+    <link rel="stylesheet" href="style_layout.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div id="header-lib"></div>
+    <div id="estatus-lib"></div>
+    <div id="cardas-lib"></div>
+
+    <script src="lib_header_design.js"></script>
+    <script src="lib_estatus_design.js"></script>
+    <script src="lib_estatus_data.js"></script>
+    <script src="lib_cardas_design.js"></script>
+    <script src="lib_cardas_engine.js"></script>
+
+    <script>
+        // Función principal de carga
         window.onload = () => {
+            // 1. Dibujar el encabezado (Calibri 26px, Logo, Fecha)
             SatexHeaderDesign.render("header-lib");
+
+            // 2. Dibujar la barra de estatus compacta (55px altura)
             SatexEstatusDesign.render("estatus-lib");
+
+            // 3. Dibujar la grilla de cardas (140px x 185px)
             SatexCardasEngine.dibujar("cardas-lib");
 
-            // Pasamos los datos: Continuas, Open-End, Coneras, Máquinas Paradas
-            SatexEstatusData.actualizar(14, 6, 4, 2);
+            // 4. Actualizar los datos de Husos y Máquinas Paradas
+            // Formato: actualizar(Continuas, OpenEnd, Coneras, MaquinasParadas)
+            SatexEstatusData.actualizar(12, 8, 5, 3);
         };
     </script>
+</body>
+</html>
