@@ -9,9 +9,10 @@ const SatexCardasEngine = {
         this.grid.style.flexWrap = "nowrap";
         this.grid.style.overflowX = "auto";
         
-        // Espacio exacto de 2mm (8px) arriba y abajo según marcas rojas
+        // Ajuste estricto de espacios morados (2mm = 8px)
         this.grid.style.marginTop = "8px"; 
-        this.grid.style.paddingBottom = "8px"; 
+        this.grid.style.paddingTop = "0px";
+        this.grid.style.paddingBottom = "4px"; // Minimiza espacio con el scroll
         
         this.grid.style.gap = "8px";
         this.grid.style.width = "100%";
