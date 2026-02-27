@@ -1,124 +1,67 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Satex Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { margin: 0; background: #2f5577; font-family: 'Segoe UI', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; color: white; }
-        
-        /* HEADER */
-        .header { background: #274a66; padding: 5px 15px; display: flex; align-items: center; justify-content: space-between; height: 45px; border-bottom: 2px solid #1e3a50; }
-        .logo { height: 32px; }
-        .title { flex-grow: 1; text-align: center; font-size: 18px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* BARRA DE ESTATUS (UNA SOLA LÍNEA) */
-        .status-bar { display: flex; align-items: center; background: rgba(0,0,0,0.2); padding: 5px 10px; gap: 8px; height: 50px; justify-content: space-between; }
-        .label-main { font-size: 10px; font-weight: bold; line-height: 1.1; min-width: 80px; text-align: center; color: #fff; }
-
-        .box { background: #3c546d; border-left: 3px solid #f9b218; padding: 2px 8px; width: 95px; height: 35px; border-radius: 3px; display: flex; flex-direction: column; justify-content: center; }
-        .box-red { border-left-color: #da291c; background: rgba(218,41,28,0.1); }
+        /* ESTILO VISUAL FIJO - NO SE TOCA DESPUÉS */
+        body { margin: 0; background: #2f5577; font-family: 'Segoe UI', sans-serif; color: white; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+        .header { background: #274a66; padding: 10px; display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #1e3a50; height: 45px;}
+        .status-bar { display: flex; align-items: center; background: rgba(0,0,0,0.2); padding: 5px 15px; gap: 10px; height: 55px; }
+        .box { background: #3c546d; border-left: 3px solid #f9b218; padding: 3px 10px; min-width: 90px; height: 35px; border-radius: 3px; }
+        .box-red { border-left-color: #da291c; }
         .box-t { font-size: 7px; color: #a1b1c1; text-transform: uppercase; margin: 0; }
-        .box-v { font-size: 17px; font-weight: bold; color: #f9b218; margin: 0; line-height: 1; }
-
-        .stop-list { flex-grow: 1; max-width: 250px; height: 40px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 8px; overflow-y: auto; }
-        .stop-item { background: rgba(218,41,28,0.25); border: 1px solid #da291c; font-size: 9px; padding: 2px 5px; margin-bottom: 2px; display: flex; justify-content: space-between; border-radius: 2px; }
-
-        .update-info { font-size: 9px; font-weight: bold; text-align: right; min-width: 120px; color: #00d4ff; }
-        .btn-x { background: #da291c; color: white; border: none; width: 28px; height: 28px; border-radius: 3px; cursor: pointer; font-weight: bold; }
-
-        /* AREA DE GAUGES */
-        .gauge-area { display: flex; flex-wrap: nowrap; gap: 10px; padding: 15px; justify-content: center; flex-grow: 1; background: rgba(0,0,0,0.05); align-items: center; overflow-x: auto; }
-        .card { background: white; min-width: 115px; height: 150px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; padding: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); color: #333; }
-        .card b { font-size: 11px; margin-bottom: 5px; }
-        .val-text { font-size: 10px; font-weight: bold; margin-top: 5px; }
-        .max-text { font-size: 8px; color: #666; }
+        .box-v { font-size: 18px; font-weight: bold; color: #f9b218; margin: 0; line-height: 1; }
+        .list-p { flex-grow: 1; max-width: 280px; height: 45px; overflow-y: auto; background: rgba(0,0,0,0.1); padding: 2px; }
+        .item-p { font-size: 9px; background: rgba(218,41,28,0.2); margin-bottom: 2px; padding: 2px 5px; display: flex; justify-content: space-between; border: 1px solid #da291c; }
+        .gauge-area { display: flex; justify-content: center; gap: 12px; padding: 20px; flex-grow: 1; align-items: center; }
+        .card { background: white; color: black; width: 115px; padding: 10px; border-radius: 5px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
 
 <div class="header">
-    <img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg" class="logo">
-    <div class="title">Tablero Master Mantto. Satex Textil</div>
-    <div style="width: 32px;"></div>
+    <img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg" height="30">
+    <div style="font-size: 18px; font-weight: bold;">DISEÑO VISUAL (MODO PREVIA)</div>
+    <div style="width: 50px;"></div>
 </div>
 
 <div class="status-bar">
-    <div class="label-main">ESTATUS<br>PLANTA ▶</div>
-    <div class="box"><p class="box-t">Continuas</p><p class="box-v" id="h-cont">0</p></div>
-    <div class="box"><p class="box-t">Open-End</p><p class="box-v" id="h-oe">0</p></div>
-    <div class="box"><p class="box-t">Coneras</p><p class="box-v" id="h-con">0</p></div>
-    <div class="box box-red"><p class="box-t">Paradas</p><p class="box-v" id="total-p" style="color:#ff9999">0</p></div>
-    
-    <div class="stop-list" id="stop-list"></div>
-    
-    <div class="update-info">Actualizado:<br><span id="sync-time">...</span></div>
-    <button class="btn-x" onclick="location.reload()">X</button>
+    <div style="font-size: 11px; font-weight: bold; min-width: 80px;">ESTATUS PLANTA ▶</div>
+    <div class="box"><p class="box-t">Continuas</p><p class="box-v">150</p></div>
+    <div class="box"><p class="box-t">Open-End</p><p class="box-v">80</p></div>
+    <div class="box"><p class="box-t">Coneras</p><p class="box-v">45</p></div>
+    <div class="box box-red"><p class="box-t">Paradas</p><p class="box-v" style="color:#ff9999">2</p></div>
+    <div class="list-p">
+        <div class="item-p"><span>CARDA 5 - MOTOR</span><b>3 Días</b></div>
+        <div class="item-p"><span>CONERA 2 - FAJA</span><b>1 Días</b></div>
+    </div>
+    <div style="font-size: 9px; min-width: 120px; text-align: right;">Vista Previa Visual</div>
 </div>
 
-<div class="gauge-area" id="gauge-container"></div>
+<div class="gauge-area" id="contenedor-visual">
+    </div>
 
 <script>
-    // ==========================================
-    // LÍNEA 134: PEGA TU URL AQUÍ
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz5Ifq8U_zna97RWTH-OcIAj9l2lclIqoHlYaP4L_DJTue_KEkJzOCtLaDzs0DFTyUQlg/exec";
-    // ==========================================
-
-    let charts = [];
-
-    async function fetchData() {
-        try {
-            const response = await fetch(WEB_APP_URL);
-            const data = await response.json();
-            
-            // Llenar indicadores superiores
-            document.getElementById('h-cont').innerText = data.husos.cont;
-            document.getElementById('h-oe').innerText = data.husos.oe;
-            document.getElementById('h-con').innerText = data.husos.con;
-            document.getElementById('total-p').innerText = data.paradas.length;
-            document.getElementById('sync-time').innerText = data.actualizado;
-
-            // Lista de máquinas paradas
-            const list = document.getElementById('stop-list');
-            list.innerHTML = data.paradas.map(p => `
-                <div class="stop-item"><span>${p.m}</span><b>${p.d} D</b></div>
-            `).join('');
-
-            // Actualizar Gauges
-            data.cardas.forEach((c, i) => {
-                const perc = Math.min((c.a / c.m) * 100, 100);
-                charts[i].data.datasets[0].data = [perc, 100 - perc];
-                charts[i].update();
-                document.getElementById(`v-${i}`).innerText = `Ac. ${c.a}`;
-                document.getElementById(`m-${i}`).innerText = `Max. ${c.m}`;
-            });
-        } catch (e) {
-            document.getElementById('sync-time').innerText = "Error de Red";
-        }
+    // Generar 8 indicadores de prueba
+    const cont = document.getElementById('contenedor-visual');
+    for(let i=1; i<=8; i++) {
+        cont.innerHTML += `
+            <div class="card">
+                <b>CARDA ${i}</b>
+                <canvas id="ch${i}"></canvas>
+                <b style="font-size:11px">Ac. 500</b>
+            </div>`;
     }
-
-    function init() {
-        const container = document.getElementById('gauge-container');
-        for(let i=0; i<8; i++) {
-            container.innerHTML += `
-                <div class="card">
-                    <b>CARDA ${i+1}</b>
-                    <canvas id="c-${i}"></canvas>
-                    <span class="val-text" id="v-${i}">--</span>
-                    <span class="max-text" id="m-${i}">--</span>
-                </div>`;
-        }
-        for(let i=0; i<8; i++) {
-            charts.push(new Chart(document.getElementById(`c-${i}`).getContext('2d'), {
+    // Darles color de prueba
+    window.onload = () => {
+        for(let i=1; i<=8; i++) {
+            new Chart(document.getElementById(`ch${i}`), {
                 type: 'doughnut',
-                data: { datasets: [{ data: [0, 100], backgroundColor: ['#23a446', '#eee'], borderWidth: 0 }] },
-                options: { rotation: -110, circumference: 220, cutout: '80%', plugins: { legend: false, tooltip: false } }
-            }));
+                data: { datasets: [{ data: [50, 50], backgroundColor: ['#23a446', '#eee'] }] },
+                options: { rotation: -110, circumference: 220, cutout: '75%', plugins: { legend: false } }
+            });
         }
-        fetchData();
-        setInterval(fetchData, 60000);
     }
-    window.onload = init;
 </script>
 </body>
 </html>
