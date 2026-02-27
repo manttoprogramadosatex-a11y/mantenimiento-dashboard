@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-    /* BLOQUEO DE ESTRUCTURA SATEX 2026 - NO MODIFICAR VISUALES */
+    /* CANDADO ULTRA RESTRINGIDO - SATEX 2026 */
     body { 
         margin: 0; background-color: #2f5577; 
         font-family: 'Segoe UI', Arial, sans-serif; 
@@ -13,53 +13,52 @@
     
     .header {
         background-color: #274a66; display: flex; align-items: center;
-        padding: 0 15px; height: 50px; color: white; border-bottom: 2px solid #1e3a50;
+        padding: 0 15px; height: 45px; color: white; border-bottom: 2px solid #1e3a50;
         position: relative;
     }
-    .header-left img { height: 40px; } 
+    .header-left img { height: 38px; } 
     .titulo { 
-        width: 50%; text-align: center; font-size: 24px; font-weight: bold; 
+        width: 40%; text-align: center; font-size: 24px; font-weight: bold; 
         position: absolute; left: 50%; transform: translateX(-50%);
         color: #ffffff; text-transform: uppercase;
     }
-    /* FECHA ORIGINAL RESTAURADA */
-    .fecha-header { margin-left: auto; font-size: 14px; }
+    .fecha-header { margin-left: auto; font-size: 13px; }
 
     .seccion-estatus { 
-        padding: 5px 20px; display: flex; align-items: center; gap: 10px;
-        background: rgba(0,0,0,0.1); min-height: 55px;
+        padding: 4px 15px; display: flex; align-items: center; gap: 10px;
+        background: rgba(0,0,0,0.1); min-height: 50px;
     }
+    .frase-estatus { color: white; font-size: 14px; font-weight: bold; white-space: nowrap; }
 
-    /* CONTENEDOR DE ACTUALIZACIÓN (EL CUADRO NUEVO SIN MOVER LO DEMÁS) */
-    .contenedor-control-nuevo {
-        margin-left: auto; display: flex; align-items: center; gap: 10px;
-        background: rgba(255,255,255,0.05); padding: 5px 12px; border-radius: 5px;
-    }
-    .fecha-dato { font-size: 11px; color: #00d4ff; font-weight: bold; }
-    .btn-cardas { background: #f9b218; color: #000; border: none; padding: 5px 12px; font-weight: bold; border-radius: 3px; cursor: pointer; font-size: 11px; }
-    .btn-x { background: #da291c; color: white; border: none; width: 25px; height: 25px; font-weight: bold; border-radius: 3px; cursor: pointer; }
-
-    /* ESTILOS DE INDICADORES (RESTAURADOS SEGÚN IMAGEN) */
     .bloque-dato {
-        background: rgba(255, 255, 255, 0.1); padding: 5px 10px;
+        background: rgba(255, 255, 255, 0.1); padding: 2px 10px;
         border-radius: 4px; border-left: 4px solid #f9b218;
-        min-width: 120px;
+        min-width: 90px; height: 38px;
+        display: flex; flex-direction: column; justify-content: center;
     }
-    .dato-etiqueta { font-size: 9px; text-transform: uppercase; color: #ccc; display: block; }
-    .dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; }
+    .dato-etiqueta { font-size: 8px; text-transform: uppercase; color: #ccc; }
+    .dato-valor { font-size: 16px; font-weight: bold; color: #f9b218; line-height: 1; }
 
-    .lista-vertical-container { height: 45px; overflow-y: auto; width: 350px; }
+    .lista-vertical-container { height: 42px; overflow-y: auto; width: 380px; padding-right: 5px; }
     .item-parada {
         background: rgba(218, 41, 28, 0.25); border: 1px solid #da291c;
-        border-radius: 3px; padding: 3px 8px; margin-bottom: 2px;
-        color: white; display: flex; justify-content: space-between; font-size: 10px;
+        border-radius: 3px; padding: 2px 8px; margin-bottom: 2px;
+        color: white; display: flex; justify-content: space-between; align-items: center;
     }
+    .info-maq { font-size: 10px; display: flex; gap: 8px; }
+    .cont-dias { font-size: 9px; font-weight: bold; background: #da291c; padding: 1px 4px; border-radius: 2px; }
 
-    .dashboard-middle-row { display: flex; overflow-x: auto; gap: 8px; padding: 15px; margin-top: auto; margin-bottom: auto; }
-    .gauge-card { background: white; min-width: 120px; height: 160px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; padding: 5px; }
+    .contenedor-control {
+        margin-left: auto; display: flex; align-items: center; gap: 10px;
+        background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 5px;
+    }
+    .fecha-actualizacion { font-size: 10px; color: #00d4ff; font-weight: bold; }
+    .btn-cardas { background: #f9b218; color: #000; border: none; padding: 4px 10px; font-weight: bold; border-radius: 3px; cursor: pointer; font-size: 10px; text-transform: uppercase; }
+    .btn-cerrar { background: #da291c; color: white; border: none; width: 22px; height: 22px; font-weight: bold; border-radius: 3px; cursor: pointer; }
 
-    /* MODAL CARDAS */
-    #overlayCardas { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; padding: 40px; }
+    .dashboard-middle-row { display: flex; overflow-x: auto; gap: 8px; padding: 10px; margin-top: auto; margin-bottom: auto; }
+    .gauge-card { background: white; min-width: 115px; height: 145px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; padding: 5px; }
+    #overlayCardas { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; padding: 20px; }
 </style>
 </head>
 <body>
@@ -71,54 +70,60 @@
 </div>
 
 <div class="seccion-estatus">
-    <div class="bloque-dato"><span class="dato-etiqueta">CONTINUAS (INACTIVOS)</span><span class="dato-valor">16</span></div>
-    <div class="bloque-dato"><span class="dato-etiqueta">OPEN-END (INACTIVOS)</span><span class="dato-valor">1</span></div>
-    <div class="bloque-dato"><span class="dato-etiqueta">CONERAS (INACTIVOS)</span><span class="dato-valor">0</span></div>
+    <span class="frase-estatus">Estatus de Planta:</span>
+    <div class="contenedor-bloques">
+        <div class="bloque-dato"><span class="dato-etiqueta">Continuas</span><span class="dato-valor">16</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Open-End</span><span class="dato-valor">1</span></div>
+    </div>
 
-    <div class="lista-vertical-container" id="listaParadas"></div>
+    <div style="display:flex; align-items:center; gap:8px; flex-grow:1; margin-left:10px;">
+        <div class="bloque-dato" style="border-left-color: #da291c;"><span class="dato-etiqueta">Máq. Paradas</span><span id="totalParadas" class="dato-valor" style="color:#ff9999;">0</span></div>
+        <div class="lista-vertical-container" id="listaParadas"></div>
+    </div>
 
-    <div class="contenedor-control-nuevo">
-        <span class="fecha-dato" id="actualizacionA1">Ultima actualización: --/--/----</span>
-        <button class="btn-cardas" onclick="abrirCardas()">CARDAS</button>
-        <button class="btn-x" onclick="cerrarTodo()">X</button>
+    <div class="contenedor-control">
+        <span class="fecha-actualizacion" id="updateText">Ultima actualización: 26/02/2026</span>
+        <button class="btn-cardas" onclick="document.getElementById('overlayCardas').style.display='block'">Cardas</button>
+        <button class="btn-cerrar" onclick="document.getElementById('overlayCardas').style.display='none'">X</button>
     </div>
 </div>
 
 <div class="dashboard-middle-row" id="contenedorGauges"></div>
 
 <div id="overlayCardas">
-    <div style="background: white; padding: 20px; border-radius: 5px; height: 80%; overflow: auto;">
-        <h2 style="margin-top:0">Información Completa Cardas</h2>
-        <div id="tablaCardasPlaceholder">Cargando datos de la pestaña Cardas...</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; color:white;">
+        <h2>Pestaña Información Cardas</h2>
+        <button class="btn-cerrar" style="width:40px; height:40px;" onclick="document.getElementById('overlayCardas').style.display='none'">X</button>
+    </div>
+    <div style="background:white; height:80%; margin-top:10px; border-radius:5px; padding:20px; overflow:auto;">
+        <p>Datos completos de la pestaña Cardas del Excel.</p>
     </div>
 </div>
 
 <script>
-    // Sincronización con celda A1 (Simulado)
-    document.getElementById("actualizacionA1").innerText = "Ultima actualización: 26/02/2026";
-
-    const paradas = [
-        {m: "REGULADOR 10", f: "25/02/2025"},
-        {m: "CONERA 5", f: "26/02/2025"}
+    const maquinasData = [
+        { n: "Regulador 10", f: "2025-02-24" },
+        { n: "Conera 5", f: "2025-02-25" },
+        { n: "Continua 8", f: "2025-02-20" }
     ];
-
-    function abrirCardas() { document.getElementById('overlayCardas').style.display = 'block'; }
-    function cerrarTodo() { document.getElementById('overlayCardas').style.display = 'none'; }
 
     window.onload = function() {
         const lista = document.getElementById('listaParadas');
-        paradas.forEach(p => {
-            const item = document.createElement('div');
-            item.className = 'item-parada';
-            item.innerHTML = `<span>${p.m}</span><span>${p.f}</span>`;
-            lista.appendChild(item);
+        document.getElementById('totalParadas').innerText = maquinasData.length;
+        
+        maquinasData.forEach(m => {
+            const dias = Math.ceil(Math.abs(new Date() - new Date(m.f)) / (1000*60*60*24));
+            const div = document.createElement('div');
+            div.className = 'item-parada';
+            div.innerHTML = `<div class="info-maq"><strong>${m.n}</strong> <span>${m.f}</span></div><div class="cont-dias">${dias} Días</div>`;
+            lista.appendChild(div);
         });
 
         const cont = document.getElementById('contenedorGauges');
-        for(let i=1; i<=9; i++) {
+        for(let i=1; i<=11; i++){
             const card = document.createElement('div');
             card.className = 'gauge-card';
-            card.innerHTML = `<div style="font-size:11px;font-weight:bold;">CARDA ${i}</div><div style="height:80px"></div><div style="font-size:10px;">Ac. 800</div>`;
+            card.innerHTML = `<div style="font-size:10px;font-weight:bold;">CARDA ${i}</div><div style="height:60px;width:100px;background:#eee;margin:5px 0;"></div><div style="font-size:10px;">Ac. 800</div>`;
             cont.appendChild(card);
         }
     };
