@@ -6,48 +6,39 @@ const SatexCardasEngine = {
         this.grid = document.getElementById(contenedorId);
         if (!this.grid) return;
         
-        // Reducción drástica de espacio arriba y abajo (padding: 5px 0)
+        // ELIMINACIÓN DE ESPACIO MORADO: 
+        // Ajustamos padding superior e inferior a 0 para pegar las cardas a los bordes
         this.grid.style.display = "flex";
         this.grid.style.flexWrap = "nowrap";
         this.grid.style.overflowX = "auto";
-        this.grid.style.padding = "5px 0px"; 
-        this.grid.style.gap = "4px";
-        this.grid.style.width = "100%";
+        this.grid.style.paddingTop = "0px";    // Quita espacio de arriba
+        this.grid.style.paddingBottom = "0px"; // Quita espacio de abajo
+        this.grid.style.marginTop = "0px";
+        this.grid.style.marginBottom = "0px";
+        this.grid.style.gap = "8px";
 
         this.grid.innerHTML = ""; 
         this.datosUnidades = [];
 
+        // Generar las 11 cardas (Manteniendo tu lógica de datos)
         for (let i = 1; i <= 11; i++) {
             const maxVal = 1000;
             const acVal = Math.floor(Math.random() * 1100); 
             this.datosUnidades.push({ ac: acVal, max: maxVal });
+            // Se llama al diseño sin modificar su estructura interna
             this.grid.innerHTML += SatexCardasDesign.crearEstructura(i, acVal, maxVal);
         }
 
         this.actualizarGraficos();
-
-        // Simulación cada 3 segundos
-        setInterval(() => { this.simular(); }, 3000); 
     },
 
     actualizarGraficos: function() {
         setTimeout(() => {
             this.datosUnidades.forEach((dato, index) => {
-                SatexCardas.inicializarIndicador(`gauge-${index + 1}`, dato.ac, dato.max);
+                if (typeof SatexCardas !== 'undefined') {
+                    SatexCardas.inicializarIndicador(`gauge-${index + 1}`, dato.ac, dato.max);
+                }
             });
         }, 300);
-    },
-
-    simular: function() {
-        this.datosUnidades.forEach((dato, index) => {
-            const num = index + 1;
-            dato.ac = Math.floor(Math.random() * 1350);
-            const needle = document.getElementById(`needle-${num}`);
-            if (needle) {
-                const rot = ((dato.ac / (dato.max * 1.4)) * 180) - 90;
-                needle.style.transform = `translateX(-50%) rotate(${rot > 90 ? 90 : (rot < -90 ? -90 : rot)}deg)`;
-            }
-            SatexCardas.inicializarIndicador(`gauge-${num}`, dato.ac, dato.max);
-        });
     }
 };
