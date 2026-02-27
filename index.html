@@ -2,67 +2,32 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SATEX 2026 - Control de Producción</title>
-    
+    <title>Satex Textil - Tablero Maestro</title>
     <link rel="stylesheet" href="estilos.css">
-    <link rel="stylesheet" href="style_layout.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <style>
-        body {
-            background-color: #001f3f; /* Azul oscuro Satex */
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-        
-        #header-superior {
-            width: 100%;
-            background: #003366;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Contenedor de la Fila de Estatus (Husos / Paradas) */
-        #fila-estatus-husos {
-            width: 100%;
-            background: #222;
-            display: flex;
-            padding: 5px 10px;
-            gap: 15px;
-            align-items: center;
-            min-height: 60px;
-        }
-
-        /* Contenedor de las 11 Cardas */
-        #contenedor-cardas-scroll {
-            width: 100%;
-            background: #333;
-            /* Aquí el motor aplicará el marginTop de 2mm y paddingBottom de 2mm */
-        }
-    </style>
 </head>
-<body>
+<body style="background-color: #001f3f; margin: 0; font-family: sans-serif;">
 
-    <header id="header-superior">
-        <img src="logo.png.jpeg" alt="Satex Logo" style="height: 40px;">
-    </header>
-
-    <div id="fila-estatus-husos">
-        <div id="indicador-paradas"></div>
-        
-        <div id="otros-indicadores-estatus"></div>
+    <div id="fila-estatus" style="background: #1a2a3a; padding: 10px; display: flex; gap: 20px;">
+        <div id="cont-paradas"></div>
     </div>
 
-    <div id="contenedor-cardas-scroll"></div>
+    <div id="cont-cardas"></div>
 
-    <div id="seccion-maquinas-paradas-detalle"></div>
+    <script src="lib_maquinas_paradas.js"></script>
+    <script src="lib_cardas.js"></script>
+    <script src="lib_cardas_design.js"></script>
+    <script src="lib_cardas_engine.js"></script>
 
-    <script src="lib_header.js"></script>
-    <script src="lib_header_design.js"></script>
-    
-    <script src="lib_estatus_data.js"></script>
-    <script src="lib_estatus_design.js"></script
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Cargar Máquinas Paradas
+            const divParadas = document.getElementById('cont-paradas');
+            if (divParadas) divParadas.innerHTML = SatexMaquinasParadas.crearEstructura(3);
+
+            // Cargar Fila de Cardas
+            SatexCardasEngine.dibujar('cont-cardas');
+        });
+    </script>
+</body>
+</html>
