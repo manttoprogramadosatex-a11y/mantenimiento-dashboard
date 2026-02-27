@@ -1,48 +1,30 @@
-/* ESTRUCTURA GENERAL PROTEGIDA */
+/* ESTRUCTURA */
 body { margin: 0; background-color: #2f5577; font-family: 'Segoe UI', Arial, sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
 
-/* --- SECCIÓN 1: HEADER (Única en MAYÚSCULAS y Calibri) --- */
+/* HEADER - Calibri 22px / Mayúsculas */
 .header-satex { 
-    background-color: #274a66; 
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
-    padding: 0 15px; 
-    height: 60px; 
-    color: white; 
-    border-bottom: 2px solid #1e3a50;
+    background-color: #274a66; display: flex; align-items: center; justify-content: space-between; 
+    padding: 0 20px; height: 60px; color: white; border-bottom: 2px solid #1e3a50; flex-shrink: 0;
 }
-.header-satex img { height: 45px; flex-shrink: 0; }
-.header-satex .titulo-master { 
-    font-family: 'Calibri', sans-serif !important; 
-    font-size: 26px; 
-    font-weight: bold; 
-    text-transform: uppercase; 
-    flex-grow: 1; 
-    text-align: center; 
-    margin: 0;
+.header-satex .titulo-principal { 
+    font-family: 'Calibri', sans-serif !important; font-size: 22px !important; 
+    font-weight: bold; text-transform: uppercase; flex-grow: 1; text-align: center; margin: 0; 
 }
-.header-satex .fecha-txt { font-size: 14px; min-width: 150px; text-align: right; }
 
-/* --- SECCIÓN 2: ESTATUS PLANTA (Tipo Oración) --- */
-.estatus-seccion { padding: 10px 20px; display: flex; align-items: center; height: 85px; gap: 15px; background: rgba(0,0,0,0.1); }
-.estatus-seccion .etiqueta-principal { color: white; font-size: 15px; font-weight: bold; line-height: 1.2; text-transform: none; }
-.estatus-seccion .bloque-dato { background: #3c546d; padding: 5px 12px; border-radius: 4px; border-left: 4px solid #f9b218; min-width: 135px; height: 55px; display: flex; flex-direction: column; justify-content: center; }
-.estatus-seccion .dato-titulo { font-size: 10px; color: #a1b1c1; font-weight: bold; text-transform: none; }
-.estatus-seccion .dato-valor { font-size: 26px; font-weight: bold; color: #f9b218; line-height: 1; }
-
-/* --- SECCIÓN 3: CARDAS (Tamaño Original Protegido) --- */
-#cardas-sitio { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 20px; flex-grow: 1; overflow-y: auto; }
-.carda-container { 
-    background: white; 
-    width: 140px; 
-    height: 190px; 
-    border-radius: 8px; 
-    padding: 10px; 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+/* ESTATUS - REDUCCIÓN MÁXIMA DE ESPACIO (50px de altura) */
+.seccion-estatus { 
+    padding: 0 20px; display: flex; align-items: center; height: 50px; 
+    background: rgba(0,0,0,0.15); flex-shrink: 0; gap: 10px;
 }
-.carda-container .canvas-wrapper { width: 120px; height: 85px; }
-.carda-container .carda-nombre { font-size: 13px; font-weight: bold; color: #333; text-transform: none; margin-bottom: 5px; }
+.bloque-dato { 
+    background: #3c546d; padding: 2px 12px; border-radius: 4px; border-left: 3px solid #f9b218; 
+    min-width: 120px; height: 38px; display: flex; flex-direction: column; justify-content: center; 
+}
+.dato-etiqueta { font-size: 9px; color: #a1b1c1; font-weight: bold; text-transform: none; }
+.dato-valor { font-size: 18px; font-weight: bold; color: #f9b218; line-height: 1; }
+
+/* CARDAS - PROTEGIDAS */
+.gauge-card { 
+    background: white; width: 140px; height: 185px; border-radius: 8px; 
+    display: flex; flex-direction: column; align-items: center; padding: 10px;
+}
