@@ -6,13 +6,38 @@
     <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        #cardas-grid {
+            display: flex;
+            flex-wrap: nowrap; /* Fuerza a las cardas a estar en una sola fila */
+            overflow-x: auto;  /* Activa el scroll horizontal */
+            gap: 15px;
+            padding: 20px 10px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Mejora el scroll en dispositivos móviles */
+        }
+
+        /* Estilo personalizado para la barra de scroll lateral */
+        #cardas-grid::-webkit-scrollbar {
+            height: 8px; /* Altura de la barra horizontal */
+        }
+        #cardas-grid::-webkit-scrollbar-thumb {
+            background: #f9b218; /* Color del tirador (amarillo Satex) */
+            border-radius: 10px;
+        }
+        #cardas-grid::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1); /* Color del fondo de la barra */
+        }
+    </style>
 </head>
-<body>
+<body style="margin: 0; background-color: #2f5577; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
+
     <div id="header-container"></div>
     <div id="estatus-container"></div>
 
-    <div id="main-content">
-        <div id="cardas-grid" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center;"></div>
+    <div id="main-content" style="flex-grow: 1; overflow-y: hidden; padding: 0;">
+        <div id="cardas-grid"></div>
     </div>
 
     <script src="lib_header.js"></script>
@@ -27,22 +52,23 @@
 
     <script>
         window.onload = () => {
+            // Renderizar componentes principales
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
 
-            // Datos de Husos con la nueva palabra "Husos" a la derecha
+            // Actualizar Husos con palabra "Husos" y letra grande
             SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            const paros = [
+            // Cargar Tabla de Máquinas Paradas con scroll y días
+            const parosActuales = [
                 { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
                 { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
                 { tipo: "Con.", num: "CON-1", fecha: "26/02/2026" }
             ];
-            SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
+            SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosActuales);
 
-            if(typeof SatexCardasEngine !== 'undefined') {
-                SatexCardasEngine.dibujar("cardas-grid");
-            }
+            // Dibujar las 11 CARÁTULAS AUTORIZADAS EN FILA ÚNICA
+            SatexCardasEngine.dibujar("cardas-grid");
         };
     </script>
 </body>
