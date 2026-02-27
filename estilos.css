@@ -3,18 +3,21 @@
     flex-wrap: nowrap !important;
     overflow-x: scroll !important;
     overflow-y: hidden;
-    gap: 20px;
-    padding: 20px;
+    gap: 8px;
+    padding: 0px 10px;
     width: 100%;
     box-sizing: border-box;
 }
+
 #cardas-grid::-webkit-scrollbar {
-    height: 10px;
+    height: 8px;
 }
+
 #cardas-grid::-webkit-scrollbar-thumb {
     background: #f9b218;
     border-radius: 5px;
 }
+
 #cardas-grid::-webkit-scrollbar-track {
     background: rgba(255,255,255,0.1);
 }
