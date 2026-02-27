@@ -22,7 +22,6 @@ const SatexCardas = {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: { padding: 0 },
                 cutout: '75%',
                 plugins: { legend: { display: false }, tooltip: { enabled: false } }
             }
