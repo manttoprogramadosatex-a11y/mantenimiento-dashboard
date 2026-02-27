@@ -12,7 +12,7 @@ const SatexEstatus = {
                         <span class="dato-valor" id="h-cont">0</span>
                     </div>
                     <div class="bloque-dato">
-                        <span class="dato-etiqueta">Open-End (Inact.)</span>
+                        <span class="dato-etiqueta">Open-end (Inact.)</span>
                         <span class="dato-valor" id="h-oe">0</span>
                     </div>
                     <div class="bloque-dato">
