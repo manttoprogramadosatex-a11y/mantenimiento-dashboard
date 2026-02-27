@@ -6,26 +6,30 @@ const SatexCardasEngine = {
         this.grid = document.getElementById(contenedorId);
         if (!this.grid) return;
         
-        // ELIMINACIÓN DE ESPACIO MORADO: 
-        // Ajustamos padding superior e inferior a 0 para pegar las cardas a los bordes
+        // DISEÑO DE POSICIONAMIENTO SATEX
         this.grid.style.display = "flex";
         this.grid.style.flexWrap = "nowrap";
         this.grid.style.overflowX = "auto";
-        this.grid.style.paddingTop = "0px";    // Quita espacio de arriba
-        this.grid.style.paddingBottom = "0px"; // Quita espacio de abajo
-        this.grid.style.marginTop = "0px";
-        this.grid.style.marginBottom = "0px";
+        
+        // Espacio de 2mm (8px) entre Husos y Carátulas
+        this.grid.style.marginTop = "8px"; 
+        
+        this.grid.style.paddingTop = "0px";
+        this.grid.style.paddingBottom = "0px";
         this.grid.style.gap = "8px";
+        this.grid.style.width = "100%";
 
         this.grid.innerHTML = ""; 
         this.datosUnidades = [];
 
-        // Generar las 11 cardas (Manteniendo tu lógica de datos)
+        // Generar las 11 cardas autorizadas
         for (let i = 1; i <= 11; i++) {
             const maxVal = 1000;
-            const acVal = Math.floor(Math.random() * 1100); 
+            // Simulación de datos para visualización
+            const acVal = Math.floor(Math.random() * 1150); 
             this.datosUnidades.push({ ac: acVal, max: maxVal });
-            // Se llama al diseño sin modificar su estructura interna
+            
+            // Llamada a la librería de diseño
             this.grid.innerHTML += SatexCardasDesign.crearEstructura(i, acVal, maxVal);
         }
 
