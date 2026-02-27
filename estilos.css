@@ -1,47 +1,54 @@
-/* ESTILOS SATEX 2026 - MÁXIMO TÍTULO EN BARRA FIJA */
+/* ESTRUCTURA BASE */
 body { margin: 0; background-color: #2f5577; font-family: 'Segoe UI', Arial, sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
 
-/* HEADER - 60px de altura inamovible */
-.header { 
+/* SECCIÓN: HEADER (Única con Calibri y Mayúsculas) */
+.header-satex { 
     background-color: #274a66; 
     display: flex; 
     align-items: center; 
     justify-content: space-between; 
-    padding: 0 10px; /* Reducido para dar más espacio al título */
+    padding: 0 15px; 
     height: 60px; 
     color: white; 
-    border-bottom: 2px solid #1e3a50; 
+    border-bottom: 2px solid #1e3a50;
 }
-
-.header img { height: 45px; flex-shrink: 0; }
-
-/* Título forzado a 30px con peso extra */
-.titulo { 
-    font-size: 30px !important; /* Forzamos el tamaño */
-    font-weight: 900; 
-    text-align: center; 
-    flex-grow: 1; 
-    text-transform: uppercase; 
-    letter-spacing: -1px; /* Unimos un poco las letras para que quepan mejor */
-    line-height: 1;
-    margin: 0 10px;
-} 
-
-.fecha-header { 
-    font-size: 13px; 
+.header-satex img { height: 45px; flex-shrink: 0; }
+.header-satex .titulo-principal { 
+    font-family: 'Calibri', sans-serif !important; 
+    font-size: 26px; /* Reducido ligeramente para balance */
     font-weight: bold; 
-    min-width: 130px; 
-    text-align: right; 
-    flex-shrink: 0; 
-    line-height: 1.2;
+    text-transform: uppercase; 
+    flex-grow: 1; 
+    text-align: center; 
+    margin: 0;
 }
+.header-satex .fecha-txt { font-size: 14px; min-width: 150px; text-align: right; }
 
-/* ESTATUS PLANTA (Tipo oración) */
-.seccion-estatus { padding: 10px 20px; display: flex; align-items: center; background: rgba(0,0,0,0.15); height: 85px; gap: 15px; }
-.etiqueta-planta { color: white; font-size: 15px; font-weight: bold; line-height: 1.2; text-transform: none; }
-.info-cardas-txt { font-size: 11px; font-weight: normal; opacity: 0.8; }
+/* SECCIÓN: ESTATUS (Tipo Oración) */
+.estatus-contenedor { padding: 10px 20px; display: flex; align-items: center; height: 85px; gap: 15px; background: rgba(0,0,0,0.1); }
+.estatus-label { color: white; font-size: 15px; font-weight: bold; line-height: 1.2; }
+.info-cardas-sub { font-size: 11px; font-weight: normal; opacity: 0.8; }
 
-.contenedor-bloques { display: flex; gap: 8px; }
-.bloque-dato { background: #3c546d; padding: 5px 12px; border-radius: 4px; border-left: 4px solid #f9b218; min-width: 135px; height: 55px; display: flex; flex-direction: column; justify-content: center; }
-.dato-etiqueta { font-size: 9px; color: #a1b1c1; font-weight: bold; text-transform: none; }
-.dato-valor { font-size: 26px; font-weight: bold; color: #f9b218; line-height: 1; }
+/* SECCIÓN: CARDAS (Tamaño Protegido) */
+#cardas-sitio { 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 15px; 
+    padding: 20px; 
+    flex-grow: 1; 
+    overflow-y: auto; 
+}
+.carda-mini { 
+    background: white; 
+    width: 140px; /* Tamaño original recuperado */
+    height: 185px; 
+    border-radius: 8px; 
+    padding: 10px; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+.carda-mini .canvas-box { width: 120px; height: 85px; }
+.carda-mini .titulo-carda { font-size: 12px; font-weight: bold; color: #333; margin-bottom: 5px; }
