@@ -1,33 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Satex Master</title>
-    <link rel="stylesheet" href="style_layout.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <div id="header-lib"></div>
-    <div id="estatus-lib"></div>
-    <div id="cardas-lib"></div>
-
-    <script src="lib_header_design.js"></script>
-    <script src="lib_estatus_design.js"></script>
-    <script src="lib_estatus_data.js"></script>
-    <script src="lib_cardas_design.js"></script>
-    <script src="lib_cardas_engine.js"></script>
-
-    <script>
+<script>
         window.onload = () => {
-            // Renderizamos las estructuras
             SatexHeaderDesign.render("header-lib");
             SatexEstatusDesign.render("estatus-lib");
             SatexCardasEngine.dibujar("cardas-lib");
 
-            // Insertamos los datos (puedes cambiar estos números según tu Excel)
-            // SatexEstatusData.actualizar(Continuas, OpenEnd, Coneras, MaquinasParadas)
+            // Pasamos los datos: Continuas, Open-End, Coneras, Máquinas Paradas
             SatexEstatusData.actualizar(14, 6, 4, 2);
         };
     </script>
-</body>
-</html>
