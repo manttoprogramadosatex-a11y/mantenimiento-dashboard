@@ -1,12 +1,31 @@
-body { margin: 0; background-color: #2f5577; font-family: 'Segoe UI', Arial, sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+/* CONFIGURACIÓN ESTRUCTURAL ÚNICAMENTE */
+body { 
+    margin: 0; 
+    background-color: #2f5577; 
+    font-family: 'Segoe UI', Arial, sans-serif; 
+    height: 100vh; 
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column; 
+}
 
-/* Solo estilos para los bloques de datos y cardas */
+/* El área de las cardas ahora es solo un contenedor de scroll */
+#cardas-container { 
+    flex-grow: 1; 
+    overflow-y: auto; 
+}
+
+/* BLOQUE DE ESTATUS (Protegido para no afectar a otros) */
 .bloque-dato { 
-    background: #3c546d; padding: 2px 12px; border-radius: 4px; border-left: 4px solid #f9b218; 
-    min-width: 120px; height: 36px; display: flex; flex-direction: column; justify-content: center; 
+    background: #3c546d; 
+    padding: 2px 12px; 
+    border-radius: 4px; 
+    border-left: 4px solid #f9b218; 
+    min-width: 130px; 
+    height: 38px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
 }
 .dato-etiqueta { font-size: 9px; color: #a1b1c1; font-weight: bold; }
 .dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; line-height: 1; }
-
-#cardas-sitio { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 15px; flex-grow: 1; overflow-y: auto; }
-.gauge-card { background: white; width: 140px; height: 185px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; padding: 10px; }
