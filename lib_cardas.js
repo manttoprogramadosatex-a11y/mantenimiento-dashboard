@@ -2,15 +2,16 @@ const SatexCardas = {
     charts: [],
     iniciar: function(id) {
         const contenedor = document.getElementById(id);
+        contenedor.innerHTML = ""; // Limpiar
         for (let i = 1; i <= 8; i++) {
             const card = document.createElement('div');
-            card.className = 'gauge-card';
+            card.className = 'carda-mini';
             card.innerHTML = `
-                <div class="gauge-title">Carda ${i}</div>
-                <div class="canvas-container"><canvas id="gauge-${i}"></canvas></div>
-                <div class="info-labels">
-                    <p class="valor-ac" id="val-${i}">Ac. 0</p>
-                    <p class="valor-max" id="max-${i}">Max. 0</p>
+                <div class="titulo-carda">Carda ${i}</div>
+                <div class="canvas-box"><canvas id="gauge-${i}"></canvas></div>
+                <div style="text-align:center">
+                    <p style="font-size:12px; font-weight:bold; margin:5px 0 0 0;" id="val-${i}">Ac. 0</p>
+                    <p style="font-size:10px; color:#666; margin:0;" id="max-${i}">Max. 1000</p>
                 </div>`;
             contenedor.appendChild(card);
             this.crearGrafico(i);
