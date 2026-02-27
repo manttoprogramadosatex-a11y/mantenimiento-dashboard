@@ -2,7 +2,10 @@ const SatexEstatus = {
     dibujar: function(id) {
         document.getElementById(id).innerHTML = `
             <div class="seccion-estatus">
-                <div class="etiqueta-planta">Estatus planta<br><span style="font-size:0.9em; opacity:0.8;">Info. Cardas</span> ▶</div>
+                <div class="etiqueta-planta">
+                    Estatus planta<br>
+                    <span class="info-cardas-txt">Info. Cardas ▶</span>
+                </div>
                 <div class="contenedor-bloques">
                     <div class="bloque-dato">
                         <span class="dato-etiqueta">Continuas (Inact.)</span>
@@ -17,9 +20,12 @@ const SatexEstatus = {
                         <span class="dato-valor" id="h-con">0</span>
                     </div>
                     <div class="bloque-dato box-paradas">
-                        <span class="dato-etiqueta">Máquinas Paradas</span>
+                        <span class="dato-etiqueta">Máquinas paradas</span>
                         <span class="dato-valor" id="total-p" style="color:#ff9999">0</span>
                     </div>
+                </div>
+                <div style="margin-left: auto; color: #00d4ff; font-size: 11px; font-weight: bold; text-align: right; padding-right: 15px;">
+                    Actualizado:<br><span id="last-sync">Simulando...</span>
                 </div>
                 <button class="btn-refresh" onclick="location.reload()">X</button>
             </div>`;
