@@ -3,6 +3,10 @@ const SatexCardas = {
         const ctx = document.getElementById(id);
         if (!ctx) return;
 
+        // Limpiar instancia previa si existe
+        const chartExistente = Chart.getChart(id);
+        if (chartExistente) { chartExistente.destroy(); }
+
         new Chart(ctx, {
             type: 'doughnut',
             data: {
@@ -17,8 +21,11 @@ const SatexCardas = {
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: '80%',
-                plugins: { legend: { display: false }, tooltip: { enabled: false } }
+                cutout: '75%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
             }
         });
     }
