@@ -1,30 +1,12 @@
-/* ESTRUCTURA */
 body { margin: 0; background-color: #2f5577; font-family: 'Segoe UI', Arial, sans-serif; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
 
-/* HEADER - Calibri 22px / Mayúsculas */
-.header-satex { 
-    background-color: #274a66; display: flex; align-items: center; justify-content: space-between; 
-    padding: 0 20px; height: 60px; color: white; border-bottom: 2px solid #1e3a50; flex-shrink: 0;
-}
-.header-satex .titulo-principal { 
-    font-family: 'Calibri', sans-serif !important; font-size: 22px !important; 
-    font-weight: bold; text-transform: uppercase; flex-grow: 1; text-align: center; margin: 0; 
-}
-
-/* ESTATUS - REDUCCIÓN MÁXIMA DE ESPACIO (50px de altura) */
-.seccion-estatus { 
-    padding: 0 20px; display: flex; align-items: center; height: 50px; 
-    background: rgba(0,0,0,0.15); flex-shrink: 0; gap: 10px;
-}
+/* Solo estilos para los bloques de datos y cardas */
 .bloque-dato { 
-    background: #3c546d; padding: 2px 12px; border-radius: 4px; border-left: 3px solid #f9b218; 
-    min-width: 120px; height: 38px; display: flex; flex-direction: column; justify-content: center; 
+    background: #3c546d; padding: 2px 12px; border-radius: 4px; border-left: 4px solid #f9b218; 
+    min-width: 120px; height: 36px; display: flex; flex-direction: column; justify-content: center; 
 }
-.dato-etiqueta { font-size: 9px; color: #a1b1c1; font-weight: bold; text-transform: none; }
-.dato-valor { font-size: 18px; font-weight: bold; color: #f9b218; line-height: 1; }
+.dato-etiqueta { font-size: 9px; color: #a1b1c1; font-weight: bold; }
+.dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; line-height: 1; }
 
-/* CARDAS - PROTEGIDAS */
-.gauge-card { 
-    background: white; width: 140px; height: 185px; border-radius: 8px; 
-    display: flex; flex-direction: column; align-items: center; padding: 10px;
-}
+#cardas-sitio { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 15px; flex-grow: 1; overflow-y: auto; }
+.gauge-card { background: white; width: 140px; height: 185px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; padding: 10px; }
