@@ -1,13 +1,13 @@
 const SatexCardas = {
     inicializarIndicador: function(id, actual, maximo) {
-        const ctx = document.getElementById(id);
-        if (!ctx) return;
+        const canvas = document.getElementById(id);
+        if (!canvas) return;
 
-        // Limpiar instancia previa si existe
-        const chartExistente = Chart.getChart(id);
-        if (chartExistente) { chartExistente.destroy(); }
+        // Destruir gráfico previo si existe para evitar errores
+        const chartStatus = Chart.getChart(id);
+        if (chartStatus) { chartStatus.destroy(); }
 
-        new Chart(ctx, {
+        new Chart(canvas, {
             type: 'doughnut',
             data: {
                 datasets: [{
