@@ -1,30 +1,30 @@
 const SatexCardasEngine = {
-    dibujar: function(contenedorId, datosSimulados = true) {
+    dibujar: function(contenedorId) {
         const grid = document.getElementById(contenedorId);
-        if (!grid) return;
+        if (!grid) {
+            console.error("No se encontró el contenedor: " + contenedorId);
+            return;
+        }
 
-        // Configuración de espacios solicitada
+        // Espacios de 2mm (8px) arriba y abajo
         grid.style.display = "flex";
         grid.style.flexWrap = "nowrap";
         grid.style.overflowX = "auto";
-        grid.style.marginTop = "8px";    // 2mm respecto a Husos
-        grid.style.paddingBottom = "8px"; // 2mm respecto a Scroll
+        grid.style.marginTop = "8px"; 
+        grid.style.paddingBottom = "8px"; 
         grid.style.gap = "8px";
         grid.style.width = "100%";
 
         grid.innerHTML = "";
         
-        // Generar 11 cardas
         for (let i = 1; i <= 11; i++) {
-            const val = datosSimulados ? Math.floor(Math.random() * 1100) : 0;
-            grid.innerHTML += SatexCardasDesign.crearEstructura(i, val, 1000);
+            const valAleatorio = Math.floor(Math.random() * 1200);
+            grid.innerHTML += SatexCardasDesign.crearEstructura(i, valAleatorio, 1000);
             
-            // Inicializar el gráfico después de insertar el HTML
+            // Retraso mínimo para asegurar que el canvas exista en el DOM
             setTimeout(() => {
-                if (typeof SatexCardas !== 'undefined') {
-                    SatexCardas.inicializarIndicador(`gauge-${i}`, val, 1000);
-                }
-            }, 100);
+                SatexCardas.inicializarIndicador(`gauge-${i}`, valAleatorio, 1000);
+            }, 50);
         }
     }
 };
