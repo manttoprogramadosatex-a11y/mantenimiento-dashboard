@@ -2,13 +2,12 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Satex Master Project 2026</title>
+    <title>Satex Master 2026</title>
     <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
     <div id="header-container"></div>
     <div id="estatus-container"></div>
 
@@ -31,10 +30,10 @@
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
 
-            // Datos de Husos (Letras más grandes aplicadas)
+            // Indicadores con fuentes aumentadas
             SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            // Información de paros con scroll y días (Letras más grandes aplicadas)
+            // Tabla de paros con fuentes aumentadas y scroll
             const paros = [
                 { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
                 { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
