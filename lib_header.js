@@ -5,7 +5,7 @@ const SatexHeader = {
         document.getElementById(id).innerHTML = `
             <div class="header">
                 <img src="logo.png.jpeg" alt="Logo">
-                <div class="titulo">Tablero Master Mantto. Satex Textil</div>
+                <div class="titulo">TABLERO MASTER MANTTO. SATEX TEXTIL</div>
                 <div class="fecha-header">${fecha}</div>
             </div>`;
     }
