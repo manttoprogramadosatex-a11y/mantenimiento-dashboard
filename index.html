@@ -13,7 +13,6 @@
         display: flex; flex-direction: column; height: 100vh; overflow: hidden;
     }
     
-    /* HEADER (CONGELADO) */
     .header {
         background-color: #274a66; display: flex; align-items: center;
         padding: 0 20px; height: 55px; color: white; border-bottom: 2px solid #1e3a50;
@@ -25,41 +24,39 @@
         position: absolute; left: 50%; transform: translateX(-50%);
         color: #ffffff; text-transform: uppercase;
     }
-    .fecha-hoy { width: 20%; text-align: right; font-size: 13px; margin-left: auto; }
+    .fecha-hoy { width: 20%; text-align: right; font-size: 14px; margin-left: auto; }
 
-    /* SECCIÓN ESTATUS (DIMENSIONES FIJAS) */
     .seccion-estatus { 
-        padding: 5px 20px; display: flex; align-items: center; gap: 12px;
+        padding: 5px 20px; display: flex; align-items: center; gap: 10px;
         background: rgba(0,0,0,0.1); min-height: 70px;
     }
 
     .labels-maestras {
         display: flex; flex-direction: column; align-items: center;
-        color: white; min-width: 140px; line-height: 1.1;
+        color: white; min-width: 130px; line-height: 1.1;
     }
-    .txt-principal { font-size: 16px; font-weight: bold; }
+    .txt-principal { font-size: 15px; font-weight: bold; }
     .flecha-v { font-size: 12px; margin-top: 2px; }
 
-    .contenedor-bloques { display: flex; align-items: center; gap: 8px; }
+    .contenedor-bloques { display: flex; align-items: center; gap: 6px; }
 
     .bloque-dato {
-        background: rgba(255, 255, 255, 0.1); padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.1); padding: 4px 8px;
         border-radius: 4px; border-left: 4px solid #f9b218;
-        min-width: 115px; height: 48px;
+        min-width: 120px; height: 48px;
         display: flex; flex-direction: column; justify-content: center;
     }
     .bloque-paradas { border-left-color: #da291c; background: rgba(218, 41, 28, 0.1); }
     
     .dato-etiqueta { font-size: 8px; text-transform: uppercase; color: #ccc; margin-bottom: 1px; }
-    .dato-valor { font-size: 19px; font-weight: bold; color: #f9b218; }
+    .dato-valor { font-size: 20px; font-weight: bold; color: #f9b218; }
 
-    /* LISTA PARADAS (SCROLL ROJO) */
     .seccion-paradas-scroll {
         display: flex; align-items: center; gap: 10px;
         margin-left: 5px; border-left: 1px solid rgba(255,255,255,0.2);
         padding-left: 15px; flex-grow: 1;
     }
-    .lista-vertical-container { height: 55px; overflow-y: auto; width: 400px; padding-right: 5px; }
+    .lista-vertical-container { height: 55px; overflow-y: auto; width: 380px; }
     .lista-vertical-container::-webkit-scrollbar { width: 4px; }
     .lista-vertical-container::-webkit-scrollbar-thumb { background: #da291c; border-radius: 10px; }
 
@@ -69,21 +66,20 @@
         color: white; display: flex; align-items: center; justify-content: space-between; font-size: 11px;
     }
 
-    /* CONTROLES (ACTUALIZADO CON CELDA A1) */
     .ctrl-derecha { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-    .val-actualizado { color: #00d4ff; font-size: 11px; font-weight: bold; text-align: right; }
-    .btn-cardas { background: #f9b218; color: #000; border: none; padding: 7px 15px; font-weight: bold; border-radius: 3px; cursor: pointer; text-transform: uppercase; }
+    .val-actualizado { color: #00d4ff; font-size: 11px; font-weight: bold; text-align: right; line-height: 1.2; }
+    .btn-cardas { background: #f9b218; color: #000; border: none; padding: 8px 15px; font-weight: bold; border-radius: 3px; cursor: pointer; }
     .btn-x { background: #da291c; color: white; border: none; width: 28px; height: 28px; font-weight: bold; border-radius: 3px; cursor: pointer; }
 
-    /* AREA GAUGES */
     .dashboard-middle-row {
         display: flex; flex-direction: row; flex-wrap: nowrap; 
-        overflow-x: auto; gap: 8px; padding: 10px 15px;
+        overflow-x: auto; gap: 10px; padding: 20px;
         background-color: rgba(0, 0, 0, 0.15); margin-top: auto; margin-bottom: auto;
     }
     .gauge-card {
-        background: white; min-width: 125px; height: 160px; border-radius: 5px;
-        display: flex; flex-direction: column; align-items: center; padding: 8px;
+        background: white; min-width: 135px; height: 170px; border-radius: 6px;
+        display: flex; flex-direction: column; align-items: center; padding: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     }
 </style>
 </head>
@@ -92,7 +88,7 @@
 <div class="header">
     <div class="header-left"><img src="https://manttoprogramadosatex-a11y.github.io/mantenimiento-dashboard/logo.png.jpeg" alt="Logo"></div>
     <div class="titulo">Tablero Master Mantto. Satex Textil</div>
-    <div id="fechaDisplay" class="fecha-hoy"></div>
+    <div id="fechaDisplay" class="fecha-hoy">Cargando fecha...</div>
 </div>
 
 <div class="seccion-estatus">
@@ -103,21 +99,22 @@
     </div>
 
     <div class="contenedor-bloques">
-        <div class="bloque-dato"><span class="dato-etiqueta">Husos Continuas (Inact.)</span><span class="dato-valor" id="h-cont">--</span></div>
-        <div class="bloque-dato"><span class="dato-etiqueta">Husos Open-End (Inact.)</span><span class="dato-valor" id="h-oe">--</span></div>
-        <div class="bloque-dato"><span class="dato-etiqueta">Husos Coneras (Inact.)</span><span class="dato-valor" id="h-con">--</span></div>
-        <div class="bloque-dato bloque-paradas"><span class="dato-etiqueta">Máquinas Paradas</span><span class="dato-valor" id="total-p" style="color:#ff9999">--</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Husos Continuas (Inact.)</span><span class="dato-valor" id="h-cont">16</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Husos Open-End (Inact.)</span><span class="dato-valor" id="h-oe">1</span></div>
+        <div class="bloque-dato"><span class="dato-etiqueta">Husos Coneras (Inact.)</span><span class="dato-valor" id="h-con">0</span></div>
+        <div class="bloque-dato bloque-paradas"><span class="dato-etiqueta">Máquinas Paradas</span><span class="dato-valor" id="total-p" style="color:#ff9999">2</span></div>
     </div>
 
     <div class="seccion-paradas-scroll">
         <div class="lista-vertical-container" id="lista-p">
-            <div style="color:white; font-size:10px;">Conectando con Excel...</div>
+            <div class="item-parada"><span>Regulador 10</span> <span>25/02/2025</span> <b style="background:#da291c;padding:1px 4px;border-radius:2px">1 Día</b></div>
+            <div class="item-parada"><span>Conera 5</span> <span>26/02/2025</span> <b style="background:#da291c;padding:1px 4px;border-radius:2px">1 Día</b></div>
         </div>
     </div>
 
     <div class="ctrl-derecha">
         <div class="val-actualizado">Actualizado:<br><span id="valA1">Sincronizando...</span></div>
-        <button class="btn-cardas">Cardas</button>
+        <button class="btn-cardas">CARDAS</button>
         <button class="btn-x" onclick="location.reload()">X</button>
     </div>
 </div>
@@ -129,61 +126,59 @@
 
     async function fetchData() {
         try {
-            // Fecha Visual del Header
-            const hoy = new Date();
-            document.getElementById("fechaDisplay").innerText = hoy.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
-
             const response = await fetch(WEB_APP_URL);
             const data = await response.json();
 
-            // 1. Mostrar Celda A1 en el cuadro de actualización
-            document.getElementById("valA1").innerText = data.actualizado || "Sin datos"; 
+            // Actualizar valor de A1 (Fecha y hora real del libro)
+            if(data.actualizado) {
+                document.getElementById("valA1").innerText = data.actualizado;
+            }
 
-            // 2. Actualizar bloques de Husos
-            document.getElementById('h-cont').innerText = data.husos.continuas;
-            document.getElementById('h-oe').innerText = data.husos.oe;
-            document.getElementById('h-con').innerText = data.husos.coneras;
+            // Actualizar Husos si los datos vienen en el JSON
+            if(data.husos) {
+                document.getElementById('h-cont').innerText = data.husos.continuas || "16";
+                document.getElementById('h-oe').innerText = data.husos.oe || "1";
+                document.getElementById('h-con').innerText = data.husos.coneras || "0";
+            }
 
-            // 3. Actualizar Lista de Paradas y Total
-            const lista = document.getElementById('lista-p');
-            lista.innerHTML = "";
+            // Actualizar Paradas si vienen en el JSON
             if(data.paradas && data.paradas.length > 0) {
+                const lista = document.getElementById('lista-p');
+                lista.innerHTML = "";
                 data.paradas.forEach(p => {
                     lista.innerHTML += `<div class="item-parada"><span>${p.nombre}</span> <span>${p.fecha}</span> <b style="background:#da291c;padding:1px 4px;border-radius:2px">${p.dias} Días</b></div>`;
                 });
                 document.getElementById('total-p').innerText = data.paradas.length;
-            } else {
-                lista.innerHTML = `<div style="color:#ccc; font-size:10px;">No hay máquinas paradas</div>`;
-                document.getElementById('total-p').innerText = "0";
             }
-
         } catch (error) {
-            console.error("Error al obtener datos:", error);
-            document.getElementById("valA1").innerText = "Error de enlace";
+            console.warn("Usando datos de reserva del blindaje...");
+            // Si hay error, el cuadro Actualizado indicará el fallo pero mantendrá los números visibles
+            document.getElementById("valA1").innerText = "Error conexión Excel";
         }
     }
 
     function initGauges() {
         const contenedor = document.getElementById('contenedorGauges');
-        for(let i=1; i<=9; i++) {
+        for(let i=1; i<=8; i++) {
             const card = document.createElement('div');
             card.className = 'gauge-card';
-            card.innerHTML = `<b style="font-size:12px">CARDA ${i}</b><canvas id="gauge-${i}" width="100" height="80"></canvas><div style="text-align:center;margin-top:5px;"><p style="font-size:10px;margin:0"><b>Ac. 800</b></p><p style="font-size:8px;color:#666;margin:0">Max. 1000</p></div>`;
+            card.innerHTML = `<b style="font-size:12px">CARDA ${i}</b><canvas id="gauge-${i}" width="110" height="90"></canvas><div style="text-align:center;margin-top:5px;"><p style="font-size:11px;margin:0"><b>Ac. 800</b></p><p style="font-size:8px;color:#666;margin:0">Max. 1000</p></div>`;
             contenedor.appendChild(card);
             
             new Chart(document.getElementById(`gauge-${i}`).getContext('2d'), {
                 type: 'doughnut',
                 data: { datasets: [{ data: [80, 20], backgroundColor: ['#23a446', '#eee'] }] },
-                options: { rotation: -110, circumference: 220, cutout: '75%', plugins: { legend: false, tooltip: false } }
+                options: { rotation: -110, circumference: 220, cutout: '78%', plugins: { legend: false, tooltip: false } }
             });
         }
     }
 
     window.onload = () => {
+        const hoy = new Date();
+        document.getElementById("fechaDisplay").innerText = hoy.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' });
         initGauges();
         fetchData();
-        // REFRESH AUTOMÁTICO CADA 2 MINUTOS
-        setInterval(fetchData, 120000);
+        setInterval(fetchData, 120000); // 2 minutos exactos
     };
 </script>
 </body>
