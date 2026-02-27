@@ -5,17 +5,12 @@ const SatexCardas = {
         const chartExistente = Chart.getChart(id);
         if (chartExistente) chartExistente.destroy();
 
-        const porcentaje = (actual / maximo) * 100;
-        let color = '#28a745';
-        if (porcentaje > 100) color = '#da291c';
-        else if (porcentaje > 80) color = '#f9b218';
-
         new Chart(ctx, {
             type: 'doughnut',
             data: {
                 datasets: [{
                     data: [actual, (maximo * 1.4) - actual],
-                    backgroundColor: [color, '#eee'],
+                    backgroundColor: ['#28a745', '#eee'],
                     borderWidth: 0,
                     circumference: 180,
                     rotation: 270
