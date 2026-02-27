@@ -3,19 +3,30 @@ const SatexCardasEngine = {
         const grid = document.getElementById(contenedorId);
         if (!grid) return;
         
-        grid.innerHTML = ""; // Limpieza total
+        // Aplicamos estilos de scroll lateral directamente al contenedor
+        grid.style.display = "flex";
+        grid.style.flexWrap = "nowrap";
+        grid.style.overflowX = "auto";
+        grid.style.overflowY = "hidden";
+        grid.style.width = "100%";
+        grid.style.padding = "10px";
+        grid.style.gap = "10px";
+        grid.style.boxSizing = "border-box";
+
+        grid.innerHTML = ""; // Limpiar
         
-        // Bucle forzado a 11 unidades
+        // Generar exactamente las 11 cardas
         for (let i = 1; i <= 11; i++) {
-            const cardaHtml = SatexCardasDesign.crearEstructura(i);
-            grid.innerHTML += cardaHtml;
+            grid.innerHTML += SatexCardasDesign.crearEstructura(i);
         }
 
-        // Inicialización de las 11 agujas
-        for (let i = 1; i <= 11; i++) {
-            if (window.SatexCardas) {
-                SatexCardas.inicializarIndicador(`gauge-${i}`, 0, 1000);
+        // Inicializar los indicadores (esperamos un momento a que el DOM cargue)
+        setTimeout(() => {
+            for (let i = 1; i <= 11; i++) {
+                if (window.SatexCardas && typeof SatexCardas.inicializarIndicador === 'function') {
+                    SatexCardas.inicializarIndicador(`gauge-${i}`, 0, 1000);
+                }
             }
-        }
+        }, 150);
     }
 };
