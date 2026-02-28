@@ -3,11 +3,11 @@ const SatexPreventivoDesign = {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Estructura optimizada para textos largos
+        // Estructura optimizada para 5 botones funcionales
         container.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 5px; box-sizing: border-box;">
             
-            <div style="width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 4px;">
+            <div style="width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 4px;">
                 <div style="position: relative; width: 140px; height: 140px;">
                     <canvas id="canvas-preventivo" width="140" height="140"></canvas>
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 22px; font-family: 'Segoe UI', sans-serif;">
@@ -19,26 +19,35 @@ const SatexPreventivoDesign = {
                 </div>
             </div>
 
-            <div style="width: 58%; height: 95%; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
+            <div style="width: 63%; height: 98%; display: flex; flex-direction: column; justify-content: space-between; padding: 5px 0 5px 10px; border-left: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
                 
-                <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.1); padding: 5px; border-radius: 4px;">
-                    <button style="width: 70%; background: #2f5577; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 4px 2px; font-size: 10px; font-weight: bold; text-transform: uppercase; min-height: 35px; cursor: default;">
-                        Preventivos Hoy
-                    </button>
-                    <div style="width: 25%; color: #f9b218; font-size: 28px; font-weight: bold; text-align: right;">55</div>
-                </div>
-
-                <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.1); padding: 5px; border-radius: 4px;">
-                    <button style="width: 70%; background: #2f5577; color: white; border: 1px solid #ff9999; border-radius: 4px; padding: 4px 2px; font-size: 9px; font-weight: bold; text-transform: uppercase; min-height: 35px; cursor: default; line-height: 1;">
-                        Preventivos pendientes antes de hoy
-                    </button>
-                    <div style="width: 25%; color: #ff9999; font-size: 28px; font-weight: bold; text-align: right;">20</div>
-                </div>
+                ${this.crearBotonHtml("Preventivos Hoy", "55", "#f9b218")}
+                ${this.crearBotonHtml("Prev. pendientes antes hoy", "20", "#ff9999")}
+                ${this.crearBotonHtml("Mantto. Diciembre", "12", "#4caf50")}
+                ${this.crearBotonHtml("Mantto. Abril", "8", "#00bcd4")}
+                ${this.crearBotonHtml("Mantto. D. Festivos", "5", "#e91e63")}
 
             </div>
         </div>`;
 
         this.dibujarCirculo(porcentaje);
+    },
+
+    // Función auxiliar para crear botones con efecto de clic real
+    crearBotonHtml: function(texto, valor, color) {
+        return `
+        <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 3px 6px; border-radius: 4px; height: 18%;">
+            <button onclick="console.log('Click en: ${texto}')" 
+                style="width: 75%; height: 100%; background: #2f5577; color: white; border: 1px solid ${color}; border-radius: 4px; padding: 2px; font-size: 9px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: all 0.2s;"
+                onmousedown="this.style.transform='scale(0.95)'; this.style.backgroundColor='#1a3a5a'"
+                onmouseup="this.style.transform='scale(1)'; this.style.backgroundColor='#2f5577'"
+                onmouseleave="this.style.transform='scale(1)'; this.style.backgroundColor='#2f5577'">
+                ${texto}
+            </button>
+            <div style="width: 20%; color: ${color}; font-size: 18px; font-weight: bold; text-align: right; font-family: 'Segoe UI', sans-serif;">
+                ${valor}
+            </div>
+        </div>`;
     },
 
     dibujarCirculo: function(porcentaje) {
