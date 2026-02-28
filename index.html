@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Blindaje estructural */
+        /* Bloqueo total de estructura */
         html, body {
             margin: 0; padding: 0; height: 100vh;
             background-color: #2f5577; overflow: hidden;
@@ -16,24 +16,27 @@
         
         #main-content {
             display: flex; flex-direction: column;
-            height: calc(100vh - 125px);
+            height: calc(100vh - 125px); /* Header + Estatus */
             overflow: hidden;
         }
 
-        /* CARDAS: Altura fija para evitar deformación rosa */
+        /* ELIMINACIÓN DE ESPACIO EN CARATULAS */
         #cardas-grid {
-            height: 230px !important; 
+            height: 205px !important; /* Altura ajustada al borde de la carátula */
+            max-height: 205px !important;
             flex-shrink: 0;
-            margin-top: 2px !important;
+            margin-top: 0px !important; /* Pegado a los indicadores de arriba */
             display: flex;
             overflow-x: auto;
             overflow-y: hidden;
+            align-items: flex-start; /* Alinea al techo */
         }
 
         #mantenimiento-container {
-            flex-grow: 1;
+            flex-grow: 1; /* Absorbe todo el espacio azul sobrante */
             position: relative;
             overflow: hidden;
+            margin-top: 5px; /* Pequeña separación del área de cardas */
         }
     </style>
 </head>
@@ -59,14 +62,10 @@
 
     <script>
         window.onload = () => {
-            // 1. Renderizar base
             if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
             if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
-            
-            // 2. Datos de Husos e Indicador de Máquinas Paradas
             if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            // 3. Renderizar Tabla de Máquinas Inactivas
             const parosActuales = [
                 { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
                 { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
@@ -78,7 +77,6 @@
                 SatexMaquinasInactivas.render(idTabla, parosActuales);
             }
 
-            // 4. Renderizar Cardas y Mantenimiento
             if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
             if(typeof SatexMantenimiento !== 'undefined') SatexMantenimiento.render("mantenimiento-container");
         };
