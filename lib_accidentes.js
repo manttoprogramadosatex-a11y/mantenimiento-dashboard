@@ -1,4 +1,3 @@
-/* lib_accidentes.js */
 const SatexAccidentes = {
     render: function(id, datos) {
         const container = document.getElementById(id);
@@ -13,9 +12,6 @@ const SatexAccidentes = {
                 <span style="text-align: center; color: #ff9999; font-weight: bold;">${a.dias}d</span>
             </div>`).join('');
 
-        container.innerHTML = `
-            <div style="width: 100%; height: 100%; overflow-y: auto;">
-                ${filas}
-            </div>`;
+        container.innerHTML = `<div style="width: 100%; height: 100%; overflow-y: auto;">${filas}</div>`;
     }
 };
