@@ -2,18 +2,31 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Satex Master Project 2026</title>
     <script>
         const v = new Date().getTime(); 
-        document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
-        document.write(`<link rel="stylesheet" href="style_layout.css?v=${v}">`);
+        // Carga de estilos compatible
+        const link1 = document.createElement('link');
+        link1.rel = 'stylesheet'; link1.href = `estilos.css?v=${v}`;
+        document.head.appendChild(link1);
+        
+        const link2 = document.createElement('link');
+        link2.rel = 'stylesheet'; link2.href = `style_layout.css?v=${v}`;
+        document.head.appendChild(link2);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 125px); }
-        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; overflow-y: hidden; padding: 1px 10px 1px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
+        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; overflow-y: hidden; padding: 1px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
         #mantenimiento-container { flex-grow: 1; position: relative; margin-top: 1px; }
+        
+        /* Ajuste rápido para pantallas pequeñas */
+        @media (max-width: 600px) {
+            #main-content { height: auto; overflow-y: auto; }
+            #cardas-grid { height: 160px !important; }
+        }
     </style>
 </head>
 <body>
@@ -28,13 +41,25 @@
             "lib_header.js", "lib_header_design.js", "lib_estatus.js", "lib_estatus_design.js", 
             "lib_estatus_data.js", "lib_maquinas_paradas.js", "lib_maquinas_inactivas.js", 
             "lib_mantenimiento.js", "lib_accidentes.js", "lib_cardas.js", 
-            "lib_cardas_design.js", "lib_cardas_engine.js", "lib_preventivo_design.js",
+            "lib_cardas_design.js", "lib_cardas_engine.js", "lib_preventive_design.js",
             "lib_personal_mantto_design.js", "lib_compras_pendientes_design.js"
         ];
-        libs.forEach(lib => { document.write(`<script src="${lib}?v=${v}"><\/script>`); });
-    </script>
-    <script>
-        window.onload = () => {
+
+        // Carga secuencial de scripts más robusta para móviles
+        let loadedCount = 0;
+        libs.forEach(lib => {
+            const script = document.createElement('script');
+            script.src = `${lib}?v=${v}`;
+            script.onload = () => {
+                loadedCount++;
+                if(loadedCount === libs.length) {
+                    inicializarTablero();
+                }
+            };
+            document.body.appendChild(script);
+        });
+
+        function inicializarTablero() {
             if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
             if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
             if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
@@ -42,26 +67,17 @@
             
             if(typeof SatexMantenimiento !== 'undefined') {
                 SatexMantenimiento.render("mantenimiento-container");
-                
                 if(typeof SatexPreventivoDesign !== 'undefined') SatexPreventivoDesign.render("preventivos-grafico-container", 90);
                 
-                // Simulación de datos para nuevas secciones
                 if(typeof SatexPersonalManttoDesign !== 'undefined') {
-                    const datosPersonal = [{id: 1, nombre: "Juan Perez", estatus: "ACT"}, {id: 2, nombre: "Luis Garcia", estatus: "DET"}];
-                    SatexPersonalManttoDesign.render("personal-mantto-scroll", datosPersonal);
+                    SatexPersonalManttoDesign.render("personal-mantto-scroll", [{id:1, nombre:"Juan Perez", estatus:"ACT"}]);
                 }
                 
                 if(typeof SatexComprasPendientesDesign !== 'undefined') {
-                    const datosCompras = [{articulo: "Rodamientos Carda 5", dias: 15}, {articulo: "Bandas Transm.", dias: 3}];
-                    SatexComprasPendientesDesign.render("compras-pendientes-scroll", datosCompras);
+                    SatexComprasPendientesDesign.render("compras-pendientes-scroll", []);
                 }
-
-                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 }];
-                const accs = [{ item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 }];
-                if(document.getElementById("maquinas-paradas-scroll")) SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
-                if(document.getElementById("accidentes-scroll")) SatexAccidentes.render("accidentes-scroll", accs);
             }
-        };
+        }
     </script>
 </body>
 </html>
