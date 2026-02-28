@@ -13,28 +13,29 @@ const SatexHeaderDesign = {
         const mes = meses[hoy.getMonth()];
         const anio = hoy.getFullYear();
         
+        // Ajuste de formato: Sábado 28-Febrero-2026
         const fechaFormateada = `${diaSemana} ${diaMes}-${mes}-${anio}`;
 
         container.innerHTML = `
-        <div style="background-color: #1a2a3a; color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 3px solid #f9b218; height: 60px; font-family: 'Segoe UI', sans-serif;">
+        <div style="background-color: #1a2a3a; color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 3px solid #f9b218; height: 50px; font-family: 'Segoe UI', sans-serif;">
             
             <div style="width: 20%; display: flex; align-items: center;">
-                <div style="background-color: white; padding: 5px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
-                    <img src="logo.png.jpeg" alt="SATEX" style="height: 35px; width: auto;">
+                <div style="background-color: white; padding: 3px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <img src="logo.png.jpeg" alt="SATEX" style="height: 32px; width: auto;">
                 </div>
             </div>
 
             <div style="width: 60%; text-align: center;">
-                <div style="font-size: 22px; font-weight: 800; letter-spacing: 0.5px; color: #ffffff; text-transform: uppercase;">
+                <div style="font-size: 22px; font-weight: 800; letter-spacing: 0.5px; color: #ffffff; text-transform: uppercase; line-height: 1;">
                     TABLERO MASTER MANTTO. SATEX TEXTIL HILATURA
                 </div>
             </div>
 
-            <div style="width: 20%; text-align: right;">
+            <div style="width: 20%; text-align: right; line-height: 1.1;">
                 <div style="font-size: 16px; font-weight: bold; color: #f9b218;">
                     ${fechaFormateada}
                 </div>
-                <div style="font-size: 11px; color: #a1b1c1; text-transform: uppercase; letter-spacing: 1px;">
+                <div style="font-size: 10px; color: #a1b1c1; text-transform: uppercase; letter-spacing: 1px;">
                     Monitoreo en Tiempo Real
                 </div>
             </div>
