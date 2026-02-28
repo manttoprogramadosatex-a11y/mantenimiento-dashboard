@@ -10,8 +10,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; }
+        /* Ajuste de altura del grid para acompañar el cambio en las carátulas */
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
-        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 5px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
+        #cardas-grid { height: 180px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 5px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
         #mantenimiento-container { flex-grow: 1; position: relative; }
     </style>
 </head>
@@ -43,7 +44,7 @@
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
             
-            // Datos de Máquinas Paradas con 5 registros para probar scroll y cálculo automático
+            // Datos de Máquinas Paradas con cálculo automático de días
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", [
                 {tipo:"CARDA", num:"02", desde:"2025/02/26", dias:""},
                 {tipo:"CARDA", num:"08", desde:"2026/02/20", dias:""},
