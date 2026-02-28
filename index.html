@@ -12,19 +12,7 @@
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 125px); }
-        
-        /* Se ajustó la altura de 205px a 190px para acompañar la reducción de las cardas */
-        #cardas-grid { 
-            height: 190px !important; 
-            flex-shrink: 0; 
-            display: flex; 
-            overflow-x: auto; 
-            overflow-y: hidden; 
-            padding: 1px 10px 5px 10px; 
-            background: rgba(0,0,0,0.1); 
-            gap: 10px;
-        }
-        
+        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; overflow-y: hidden; padding: 1px 10px 5px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
         #mantenimiento-container { flex-grow: 1; position: relative; margin-top: 5px; }
     </style>
 </head>
@@ -40,7 +28,7 @@
             "lib_header.js", "lib_header_design.js", "lib_estatus.js", "lib_estatus_design.js", 
             "lib_estatus_data.js", "lib_maquinas_paradas.js", "lib_maquinas_inactivas.js", 
             "lib_mantenimiento.js", "lib_accidentes.js", "lib_cardas.js", 
-            "lib_cardas_design.js", "lib_cardas_engine.js"
+            "lib_cardas_design.js", "lib_cardas_engine.js", "lib_preventivo_design.js"
         ];
         libs.forEach(lib => { document.write(`<script src="${lib}?v=${v}"><\/script>`); });
     </script>
@@ -52,20 +40,12 @@
             if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
             if(typeof SatexMantenimiento !== 'undefined') {
                 SatexMantenimiento.render("mantenimiento-container");
-                
-                const paros = [
-                    { tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 },
-                    { tipo: "OpenE.", num: "OE-02", fecha: "15/02/2026", dias: 13 },
-                    { tipo: "Coner.", num: "CN-05", fecha: "20/02/2026", dias: 8 },
-                    { tipo: "Carda", num: "CA-03", fecha: "25/02/2026", dias: 3 },
-                    { tipo: "Cont.", num: "C-12", fecha: "27/02/2026", dias: 1 }
-                ];
-                
-                const accs = [
-                    { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
-                    { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
-                ];
-
+                if(typeof SatexPreventivoDesign !== 'undefined') {
+                    // Se renderiza el 90% en el contenedor de preventivos
+                    SatexPreventivoDesign.render("preventivos-grafico-container", 90);
+                }
+                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 }];
+                const accs = [{ item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 }];
                 if(document.getElementById("maquinas-paradas-scroll")) SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
                 if(document.getElementById("accidentes-scroll")) SatexAccidentes.render("accidentes-scroll", accs);
             }
