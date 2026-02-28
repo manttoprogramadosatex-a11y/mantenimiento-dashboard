@@ -14,30 +14,31 @@
         }
         
         #main-content { 
-            display: flex; flex-direction: column; 
+            width: 100%;
             height: calc(100vh - 125px); 
             overflow: hidden; 
         }
 
-        /* CARDAS: Altura reducida para quitar espacio muerto inferior */
+        /* CARDAS: Altura fija de 180px */
         #cardas-grid { 
+            width: 100%;
             height: 180px !important; 
-            flex-shrink: 0; 
             display: flex; 
             overflow-x: auto; 
             overflow-y: hidden; 
-            align-items: flex-start;
+            background-color: rgba(255,255,255,0.02);
+            align-items: center;
         }
 
-        /* ESPACIO DE 1MM SOLICITADO */
+        /* PANEL INFERIOR: Pegado a 1mm de las cardas */
         #mantenimiento-container { 
-            flex-grow: 1; 
+            width: 100%;
+            height: calc(100% - 181px); /* Resto del espacio menos 1mm */
             position: relative; 
-            overflow: hidden; 
             margin-top: 1px !important; 
         }
 
-        /* Estilos de Scrollbar */
+        /* Scrollbars */
         #maquinas-paradas-scroll::-webkit-scrollbar, #accidentes-scroll::-webkit-scrollbar { width: 4px; }
         #maquinas-paradas-scroll::-webkit-scrollbar-thumb { background: #f9b218; border-radius: 10px; }
         #accidentes-scroll::-webkit-scrollbar-thumb { background: #ff9999; border-radius: 10px; }
@@ -68,24 +69,28 @@
             if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
             if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
 
+            // Datos de prueba para verificar visibilidad
             const parosPrueba = [
                 { tipo: "Cont.", num: "C-08", fecha: "01/01/2025" },
                 { tipo: "O.E.", num: "OE-03", fecha: "20/02/2026" }
             ];
-
-            if(document.getElementById("maquinas-paradas-scroll")) {
-                SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosPrueba);
-            }
 
             const datosAccidentes = [
                 { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
                 { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
             ];
 
+            // Renderizado de motores
             if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
+            
             if(typeof SatexMantenimiento !== 'undefined') {
                 SatexMantenimiento.render("mantenimiento-container");
-                if(typeof SatexAccidentes !== 'undefined') {
+                
+                // Renderizado de tablas internas
+                if(typeof SatexMaquinasInactivas !== 'undefined' && document.getElementById("maquinas-paradas-scroll")) {
+                    SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosPrueba);
+                }
+                if(typeof SatexAccidentes !== 'undefined' && document.getElementById("accidentes-scroll")) {
                     SatexAccidentes.render("accidentes-scroll", datosAccidentes);
                 }
             }
