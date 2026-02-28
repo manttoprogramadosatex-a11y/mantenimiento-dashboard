@@ -7,45 +7,29 @@
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Bloqueo total de estructura */
         html, body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            background-color: #2f5577;
-            overflow: hidden;
+            margin: 0; padding: 0; height: 100vh;
+            background-color: #2f5577; overflow: hidden;
             font-family: 'Segoe UI', sans-serif;
         }
-        
         #main-content {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 125px); /* Header + Estatus */
-            overflow: hidden;
+            display: flex; flex-direction: column;
+            height: calc(100vh - 125px); overflow: hidden;
         }
-
-        /* BLINDAJE DE CARDAS: Se fuerza a que no crezcan más de 180px */
+        /* BLINDAJE DE CARDAS */
         #cardas-grid {
             height: 180px !important; 
             max-height: 180px !important;
             flex-shrink: 0;
             margin-top: 4px !important;
-            display: flex;
-            overflow-x: auto;
-            overflow-y: hidden;
-            background-color: transparent;
+            overflow-x: auto; overflow-y: hidden;
         }
-
         #mantenimiento-container {
-            flex-grow: 1; /* Todo el espacio sobrante se queda aquí */
-            position: relative;
-            overflow: hidden;
-            margin-top: 2px;
+            flex-grow: 1; position: relative; overflow: hidden;
         }
     </style>
 </head>
 <body>
-    
     <div id="header-container"></div>
     <div id="estatus-container"></div>
     
@@ -57,17 +41,33 @@
     <script src="lib_header_design.js"></script>
     <script src="lib_estatus_design.js"></script>
     <script src="lib_estatus_data.js"></script>
-    <script src="lib_maquinas_inactivas.js"></script>
-    <script src="lib_mantenimiento.js"></script>
+    <script src="lib_maquinas_paradas.js"></script> <script src="lib_mantenimiento.js"></script>
     <script src="lib_cardas.js"></script>
     <script src="lib_cardas_design.js"></script>
     <script src="lib_cardas_engine.js"></script>
 
     <script>
         window.onload = () => {
+            // 1. Renderizar Estructuras
             if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
             if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
+            
+            // 2. Cargar Datos de Estatus (Los cuadros de arriba)
             if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
+
+            // 3. RECUPERAR MÁQUINAS PARADAS (Lo que se había borrado)
+            const datosParos = [
+                { tipo: "Cont.", num: "C-08", fecha: "20/02/2026", dias: "8d" },
+                { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026", dias: "3d" },
+                { tipo: "Con.", num: "CON-1", fecha: "26/02/2026", dias: "2d" }
+            ];
+            // Buscamos el ID del scroll de la tabla en el diseño de estatus
+            const tablaScroll = document.getElementById("maquinas-paradas-scroll");
+            if(typeof SatexMaquinasParadas !== 'undefined' && tablaScroll) {
+                SatexMaquinasParadas.render("maquinas-paradas-scroll", datosParos);
+            }
+
+            // 4. Renderizar Cardas y Mantenimiento
             if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
             if(typeof SatexMantenimiento !== 'undefined') SatexMantenimiento.render("mantenimiento-container");
         };
