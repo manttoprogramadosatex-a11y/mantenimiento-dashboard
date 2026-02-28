@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Satex Master Project 2026</title>
     <script>
-        const v = new Date().getTime(); 
+        const v = new Date().getTime();
         document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -41,12 +41,15 @@
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
             
-            // Datos Máquinas Paradas
-            SatexMaquinasInactivas.render("maquinas-paradas-scroll", [{nombre:"Carda 02", estatus:"DET"},{nombre:"Carda 08", estatus:"DET"}]);
-            
+            // Datos Máquinas Paradas (Corregido para evitar undefined)
+            SatexMaquinasInactivas.render("maquinas-paradas-scroll", [
+                {tipo:"CARDA", num:"02", desde:"10:15 AM", dias:"2"},
+                {tipo:"CARDA", num:"08", desde:"08:30 AM", dias:"1"}
+            ]);
+
             // Datos Estatus
             SatexEstatusData.actualizar(14, 6, 4, 3);
-            
+
             // Cardas
             SatexCardasEngine.dibujar("cardas-grid");
 
