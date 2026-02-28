@@ -6,8 +6,27 @@
     <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Blindaje para evitar que el mantenimiento tape las carátulas */
+        #main-content {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 125px); /* Resta Header + Estatus */
+            overflow: hidden;
+        }
+        #cardas-grid {
+            height: 240px; 
+            flex-shrink: 0; /* Prohibido hacerse más pequeño */
+            margin-top: 4px !important;
+        }
+        #mantenimiento-container {
+            flex-grow: 1; /* Ocupa todo lo que sobre abajo */
+            overflow-y: auto; /* Si el contenido es mucho, crea su propio scroll interno */
+        }
+    </style>
 </head>
-<body>
+<body style="margin: 0; background-color: #2f5577; height: 100vh; overflow: hidden;">
+    
     <div id="header-container"></div>
     <div id="estatus-container"></div>
     
@@ -20,7 +39,6 @@
     <script src="lib_estatus_design.js"></script>
     <script src="lib_estatus_data.js"></script>
     <script src="lib_maquinas_inactivas.js"></script>
-    
     <script src="lib_mantenimiento.js"></script>
     <script src="lib_cardas.js"></script>
     <script src="lib_cardas_design.js"></script>
@@ -28,19 +46,19 @@
 
     <script>
         window.onload = () => {
-            SatexHeaderDesign.render("header-container");
-            SatexEstatusDesign.render("estatus-container");
-            SatexEstatusData.actualizar(14, 6, 4, 3);
+            if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
+            if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
+            if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
 
             const parosActuales = [
                 { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
                 { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
                 { tipo: "Con.", num: "CON-1", fecha: "26/02/2026" }
             ];
-            SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosActuales);
+            if(typeof SatexMaquinasInactivas !== 'undefined') SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosActuales);
 
-            SatexCardasEngine.dibujar("cardas-grid");
-            SatexMantenimiento.render("mantenimiento-container");
+            if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
+            if(typeof SatexMantenimiento !== 'undefined') SatexMantenimiento.render("mantenimiento-container");
         };
     </script>
 </body>
