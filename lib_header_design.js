@@ -2,27 +2,20 @@ const SatexHeaderDesign = {
     render: function(id) {
         const container = document.getElementById(id);
         if (!container) return;
-        
-        // Formato de fecha dinámico: "28 de febrero de 2026"
-        const hoy = new Date();
-        const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
-        const fechaFormateada = hoy.toLocaleDateString('es-ES', opciones);
-        
+
         container.innerHTML = `
-        <div style="background-color: #1a3a5a; color: white; padding: 0 20px; border-bottom: 2px solid #f9b218; display: flex; align-items: center; justify-content: space-between; font-family: Calibri, sans-serif; height: 60px;">
-            
-            <div style="flex: 0 0 220px; display: flex; align-items: center;">
-                <img src="logo.png.jpeg" alt="SATEXTEXTIL" style="height: 45px; width: auto;">
-            </div>
-
-            <div style="flex-grow: 1; text-align: center;">
-                <h1 style="margin: 0; font-size: 28px; font-weight: bold; letter-spacing: 0.5px; text-transform: uppercase;">
+        <div style="background-color: #1a2a3a; color: white; display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; border-bottom: 3px solid #f9b218; height: 60px; font-family: 'Segoe UI', sans-serif;">
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="background-color: white; padding: 5px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <img src="logo.png.jpeg" alt="SATEX" style="height: 40px; width: auto;">
+                </div>
+                <div style="font-size: 30px; font-weight: 900; letter-spacing: 1px; color: #ffffff;">
                     TABLERO MASTER MANTTO. SATEX TEXTIL HILATURA
-                </h1>
+                </div>
             </div>
-
-            <div style="flex: 0 0 220px; text-align: right; color: white; font-size: 20px; font-weight: bold; text-transform: uppercase;">
-                ${fechaFormateada}
+            <div style="text-align: right;">
+                <div style="font-size: 20px; font-weight: bold; color: #f9b218;">28 FEB 2026</div>
+                <div style="font-size: 13px; color: #a1b1c1; text-transform: uppercase;">Sistema de Monitoreo Real-Time</div>
             </div>
         </div>`;
     }
