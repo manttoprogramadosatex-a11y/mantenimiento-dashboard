@@ -8,34 +8,39 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { 
-            margin: 0; padding: 0; height: 100vh; 
+            margin: 0; padding: 0; height: 100vh; width: 100vw;
             background-color: #2f5577; overflow: hidden; 
             font-family: 'Segoe UI', sans-serif; 
         }
         
+        #header-container { height: 100px; width: 100%; }
+        #estatus-container { height: 25px; width: 100%; }
+
         #main-content { 
             width: 100%;
             height: calc(100vh - 125px); 
-            overflow: hidden; 
+            display: flex;
+            flex-direction: column;
         }
 
-        /* CARDAS: Altura fija de 180px */
         #cardas-grid { 
             width: 100%;
             height: 180px !important; 
             display: flex; 
             overflow-x: auto; 
-            overflow-y: hidden; 
-            background-color: rgba(255,255,255,0.02);
+            overflow-y: hidden;
+            background: rgba(0,0,0,0.1);
             align-items: center;
+            flex-shrink: 0;
         }
 
-        /* PANEL INFERIOR: Pegado a 1mm de las cardas */
+        /* ESPACIO DE 1MM EXACTO */
         #mantenimiento-container { 
             width: 100%;
-            height: calc(100% - 181px); /* Resto del espacio menos 1mm */
-            position: relative; 
+            flex-grow: 1;
             margin-top: 1px !important; 
+            position: relative;
+            background-color: #2f5577;
         }
 
         /* Scrollbars */
@@ -65,36 +70,18 @@
 
     <script>
         window.onload = () => {
+            // 1. Renderizar Header y Estatus
             if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
             if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
             if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            // Datos de prueba para verificar visibilidad
-            const parosPrueba = [
-                { tipo: "Cont.", num: "C-08", fecha: "01/01/2025" },
-                { tipo: "O.E.", num: "OE-03", fecha: "20/02/2026" }
-            ];
-
-            const datosAccidentes = [
-                { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
-                { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
-            ];
-
-            // Renderizado de motores
+            // 2. Renderizar Cardas
             if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
-            
+
+            // 3. Renderizar Contenedor de Mantenimiento
             if(typeof SatexMantenimiento !== 'undefined') {
                 SatexMantenimiento.render("mantenimiento-container");
                 
-                // Renderizado de tablas internas
-                if(typeof SatexMaquinasInactivas !== 'undefined' && document.getElementById("maquinas-paradas-scroll")) {
-                    SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosPrueba);
-                }
-                if(typeof SatexAccidentes !== 'undefined' && document.getElementById("accidentes-scroll")) {
-                    SatexAccidentes.render("accidentes-scroll", datosAccidentes);
-                }
-            }
-        };
-    </script>
-</body>
-</html>
+                // 4. Poblar tablas con datos ficticios
+                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025" }];
+                const accs
