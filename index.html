@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Blindaje total: nada se mueve de su lugar */
+        /* Blindaje de espacios: Asegura que nada se mueva */
         html, body {
             margin: 0;
             padding: 0;
@@ -22,23 +22,23 @@
         #main-content {
             display: flex;
             flex-direction: column;
-            height: calc(100vh - 125px);
+            height: calc(100vh - 125px); /* Resta Header + Estatus */
             overflow: hidden;
         }
 
-        /* CARDAS RESTAURADAS: Altura fija para que no se deformen */
+        /* LAS CARDAS SE QUEDAN FIJAS AQUÍ, BLINDADAS */
         #cardas-grid {
-            height: 255px !important; 
-            flex-shrink: 0;
+            height: 255px !important; /* Altura fija blindada */
+            flex-shrink: 0; /* Prohibido hacerse más pequeño */
             margin-top: 4px !important;
             overflow-x: auto;
             overflow-y: hidden;
         }
 
         #mantenimiento-container {
-            flex-grow: 1;
-            position: relative; 
-            overflow: hidden;
+            flex-grow: 1; /* Ocupa todo lo que sobre abajo */
+            position: relative; /* Permite que el enunciado de Accidentes flote */
+            overflow: hidden; /* Blindaje contra descuadres */
         }
     </style>
 </head>
