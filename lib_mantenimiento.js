@@ -20,12 +20,12 @@ const SatexMantenimiento = {
                         Mantto. Preventivo
                     </div>
                     
-                    <div id="titulo-accidentes" style="position: absolute; top: 175px; left: 50%; transform: translateX(-50%); color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; padding-bottom: 2px; width: 70%; text-align: center; text-transform: uppercase; white-space: nowrap;">
+                    <div id="titulo-accidentes" style="position: absolute; top: 165px; left: 50%; transform: translateX(-50%); color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; padding-bottom: 2px; width: 70%; text-align: center; text-transform: uppercase;">
                         Accidentes
                     </div>
 
-                    <div id="accidentes-scroll" style="position: absolute; top: 200px; left: 5%; width: 90%; height: 65px; background: rgba(0,0,0,0.2); border-radius: 4px; padding: 5px; box-sizing: border-box; overflow: hidden;">
-                        </div>
+                    <div id="accidentes-scroll" style="position: absolute; top: 190px; left: 5%; width: 90%; height: 65px; background: rgba(0,0,0,0.2); border-radius: 4px; padding: 5px; box-sizing: border-box; overflow: hidden;">
+                    </div>
                 </div>
             </div>`;
     }
