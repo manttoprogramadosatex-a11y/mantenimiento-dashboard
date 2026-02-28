@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Bloqueo Estructural */
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 125px); overflow: hidden; }
-        #cardas-grid { height: 205px !important; flex-shrink: 0; display: flex; overflow-x: auto; overflow-y: hidden; align-items: flex-start; }
+        #cardas-grid { height: 205px !important; flex-shrink: 0; display: flex; overflow-x: auto; overflow-y: hidden; }
         #mantenimiento-container { flex-grow: 1; position: relative; overflow: hidden; }
 
-        /* Scrollbar Personalizado para Máquinas Inactivas (Naranja) */
-        #maquinas-paradas-scroll::-webkit-scrollbar { width: 4px; }
+        /* Estilos de Scrollbar */
+        #maquinas-paradas-scroll::-webkit-scrollbar, #accidentes-scroll::-webkit-scrollbar { width: 4px; }
         #maquinas-paradas-scroll::-webkit-scrollbar-thumb { background: #f9b218; border-radius: 10px; }
+        #accidentes-scroll::-webkit-scrollbar-thumb { background: #ff9999; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -43,33 +43,30 @@
             if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
             if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            // --- 8 DATOS FICTICIOS PARA PROBAR EL SCROLL DE MÁQUINAS ---
+            // PRUEBA DE 3 DÍGITOS (2025 genera > 250 días)
             const parosPrueba = [
-                { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
-                { tipo: "O.E.", num: "OE-03", fecha: "22/02/2026" },
+                { tipo: "Cont.", num: "C-08", fecha: "10/05/2025" }, // +250 días
+                { tipo: "O.E.", num: "OE-03", fecha: "20/06/2025" }, // +240 días
                 { tipo: "Con.", num: "CON-1", fecha: "24/02/2026" },
-                { tipo: "Cont.", num: "C-05", fecha: "25/02/2026" },
-                { tipo: "O.E.", num: "OE-01", fecha: "26/02/2026" },
-                { tipo: "Con.", num: "CON-4", fecha: "26/02/2026" },
-                { tipo: "Cont.", num: "C-12", fecha: "27/02/2026" },
-                { tipo: "O.E.", num: "OE-07", fecha: "27/02/2026" }
+                { tipo: "Cont.", num: "C-05", fecha: "25/02/2026" }
             ];
 
-            const idTabla = "maquinas-paradas-scroll";
-            if(typeof SatexMaquinasInactivas !== 'undefined' && document.getElementById(idTabla)) {
-                SatexMaquinasInactivas.render(idTabla, parosPrueba);
+            if(document.getElementById("maquinas-paradas-scroll")) {
+                SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosPrueba);
             }
 
-            // Datos de Accidentes
             const datosAccidentes = [
                 { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
-                { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
+                { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 },
+                { item: 3, nombre: "Ramirez Juan Pablo", puesto: "Operador", fecha: "15-ene-2026", dias: 43 }
             ];
 
             if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
             if(typeof SatexMantenimiento !== 'undefined') {
                 SatexMantenimiento.render("mantenimiento-container");
-                if(typeof SatexAccidentes !== 'undefined') SatexAccidentes.render("accidentes-scroll", datosAccidentes);
+                if(typeof SatexAccidentes !== 'undefined') {
+                    SatexAccidentes.render("accidentes-scroll", datosAccidentes);
+                }
             }
         };
     </script>
