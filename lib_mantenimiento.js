@@ -21,7 +21,7 @@ const SatexMantenimiento = {
                         Mantto. Preventivo
                     </div>
                     
-                    <div style="position: absolute; top: 283px; left: 50%; transform: translateX(-50%); color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; padding-bottom: 2px; width: 70%; text-align: center; text-transform: uppercase; white-space: nowrap;">
+                    <div style="position: absolute; top: 226px; left: 50%; transform: translateX(-50%); color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; padding-bottom: 2px; width: 70%; text-align: center; text-transform: uppercase; white-space: nowrap;">
                         Accidentes
                     </div>
                     
