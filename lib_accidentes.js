@@ -11,11 +11,10 @@ const SatexAccidentes = {
                 <span style="text-align: center; opacity: 0.8;">${a.puesto}</span>
                 <span style="text-align: center;">${a.fecha}</span>
                 <span style="text-align: center; color: #ff9999; font-weight: bold;">${a.dias}d</span>
-            </div>
-        `).join('');
+            </div>`).join('');
 
         container.innerHTML = `
-            <div style="width: 100%; height: 100%; overflow-y: auto; scroll-behavior: smooth;">
+            <div style="width: 100%; height: 100%; overflow-y: auto;">
                 ${filas}
             </div>`;
     }
