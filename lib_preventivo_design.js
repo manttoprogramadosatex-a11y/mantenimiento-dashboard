@@ -6,9 +6,9 @@ const SatexPreventivoDesign = {
         container.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 5px; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;">
             
-            <div style="width: 30%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <div style="position: relative; width: 110px; height: 110px;">
-                    <canvas id="canvas-preventivo" width="110" height="110"></canvas>
+            <div style="width: 28%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div style="position: relative; width: 105px; height: 105px;">
+                    <canvas id="canvas-preventivo" width="105" height="105"></canvas>
                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 18px;">
                         ${porcentaje}%
                     </div>
@@ -18,7 +18,7 @@ const SatexPreventivoDesign = {
                 </div>
             </div>
 
-            <div style="width: 68%; height: 95%; display: flex; flex-direction: column; justify-content: space-between; padding-left: 8px; border-left: 1px solid rgba(255,255,255,0.1);">
+            <div style="width: 70%; height: 95%; display: flex; flex-direction: column; justify-content: space-between; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.1);">
                 ${this.btn("Preventivos Hoy", "55", "#f9b218")}
                 ${this.btn("Prev. pendientes antes hoy", "20", "#ff9999")}
                 ${this.btn("Preventivos Extraordinarios", "03", "#ffffff")} 
@@ -31,16 +31,16 @@ const SatexPreventivoDesign = {
         this.dibujarCirculo(porcentaje);
     },
 
-    // Función con altura de botón reducida (14%)
+    // Función con tamaño de letra a 10px y ancho optimizado
     btn: function(t, v, c) {
         return `
         <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.15); padding: 1px 5px; border-radius: 3px; height: 14%;">
-            <button style="width: 80%; height: 85%; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 3px; font-size: 8.5px; font-weight: bold; text-transform: uppercase; cursor: pointer; line-height: 1; padding: 0 3px;"
+            <button style="width: 82%; height: 90%; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 3px; font-size: 10px; font-weight: bold; text-transform: uppercase; cursor: pointer; line-height: 1; padding: 0 4px; display: flex; align-items: center; justify-content: center; text-align: center;"
                 onmousedown="this.style.transform='scale(0.96)'"
                 onmouseup="this.style.transform='scale(1)'">
                 ${t}
             </button>
-            <div style="width: 18%; color: ${c}; font-size: 15px; font-weight: bold; font-family: 'Segoe UI', sans-serif; text-align: right;">
+            <div style="width: 15%; color: ${c}; font-size: 16px; font-weight: bold; font-family: 'Segoe UI', sans-serif; text-align: right;">
                 ${v}
             </div>
         </div>`;
@@ -50,9 +50,9 @@ const SatexPreventivoDesign = {
         const canvas = document.getElementById('canvas-preventivo');
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
-        const x = 55, y = 55, radio = 45;
+        const x = 52, y = 52, radio = 42;
 
-        ctx.clearRect(0, 0, 110, 110);
+        ctx.clearRect(0, 0, 105, 105);
         ctx.beginPath();
         ctx.arc(x, y, radio, 0, 2 * Math.PI);
         ctx.lineWidth = 10;
