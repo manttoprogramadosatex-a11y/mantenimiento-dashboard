@@ -1,4 +1,3 @@
-/* lib_mantenimiento.js */
 const SatexMantenimiento = {
     render: function(id) {
         const container = document.getElementById(id);
