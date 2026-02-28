@@ -3,7 +3,7 @@ const SatexPreventivoDesign = {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Estructura dividida: Izquierda (Dona) | Derecha (Botones e Info de Excel)
+        // Estructura: Izquierda (Dona) | Derecha (Botones actualizados)
         container.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; box-sizing: border-box;">
             
@@ -29,8 +29,8 @@ const SatexPreventivoDesign = {
                 </div>
 
                 <div style="display: flex; flex-direction: column; align-items: center;">
-                    <button style="width: 100%; background: #2f5577; color: white; border: 1px solid #ff9999; border-radius: 4px; padding: 6px; font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 5px;">
-                        Preventivos Pendientes
+                    <button style="width: 100%; background: #2f5577; color: white; border: 1px solid #ff9999; border-radius: 4px; padding: 6px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 5px;">
+                        Preventivos antes de hoy
                     </button>
                     <div style="color: #ff9999; font-size: 32px; font-weight: bold; font-family: 'Segoe UI', sans-serif;">20</div>
                 </div>
