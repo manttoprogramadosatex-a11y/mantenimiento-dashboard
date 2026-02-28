@@ -6,14 +6,13 @@
     <script>
         const v = new Date().getTime(); 
         document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
-        document.write(`<link rel="stylesheet" href="style_layout.css?v=${v}">`);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; }
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 125px); }
-        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; overflow-y: hidden; padding: 5px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
-        #mantenimiento-container { flex-grow: 1; position: relative; margin-top: 1px; }
+        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 5px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
+        #mantenimiento-container { flex-grow: 1; position: relative; }
     </style>
 </head>
 <body>
@@ -25,31 +24,41 @@
     </div>
 
     <script>
-        // Listado completo de las 15+ librerías según tus requerimientos
         const libs = [
-            "lib_header.js", "lib_header_design.js", 
-            "lib_estatus.js", "lib_estatus_design.js", "lib_estatus_data.js", 
-            "lib_maquinas_paradas.js", "lib_maquinas_inactivas.js", 
-            "lib_cardas.js", "lib_cardas_design.js", "lib_cardas_engine.js",
-            "lib_mantenimiento.js", "lib_preventivo_design.js",
-            "lib_personal_mantto_design.js", "lib_compras_pendientes_design.js",
-            "lib_pmc_donas_design.js", "lib_correctivo_kpi_design.js", "lib_accidentes.js"
+            "lib_header_design.js", "lib_estatus_design.js", "lib_estatus_data.js", 
+            "lib_maquinas_inactivas.js", "lib_cardas_design.js", "lib_cardas_engine.js",
+            "lib_mantenimiento.js", "lib_preventivo_design.js", "lib_personal_mantto_design.js", 
+            "lib_compras_pendientes_design.js", "lib_pmc_donas_design.js", 
+            "lib_correctivo_kpi_design.js", "lib_accidentes.js"
         ];
         libs.forEach(lib => { document.write(`<script src="${lib}?v=${v}"><\/script>`); });
     </script>
 
     <script>
         window.onload = () => {
-            // 1. Renderizar Estructuras Base
-            if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
-            if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
-            if(typeof SatexMantenimiento !== 'undefined') SatexMantenimiento.render("mantenimiento-container");
+            // Render Estructuras
+            SatexHeaderDesign.render("header-container");
+            SatexEstatusDesign.render("estatus-container");
+            SatexMantenimiento.render("mantenimiento-container");
             
-            // 2. Inyectar Datos en Header (Máquinas Paradas)
-            const maquinasSimuladas = [
-                { nombre: "Carda 02 - Motor Principal", estatus: "DET" },
-                { nombre: "Carda 05 - Banda Rota", estatus: "DET" },
-                { nombre: "Carda 11 - Limpieza Prof.", estatus: "DET" }
-            ];
-            if(typeof SatexMaquinasInactivas !== 'undefined') {
-                Sate
+            // Datos Máquinas Paradas
+            SatexMaquinasInactivas.render("maquinas-paradas-scroll", [{nombre:"Carda 02", estatus:"DET"},{nombre:"Carda 08", estatus:"DET"}]);
+            
+            // Datos Estatus
+            SatexEstatusData.actualizar(14, 6, 4, 3);
+            
+            // Cardas
+            SatexCardasEngine.dibujar("cardas-grid");
+
+            // Donas y KPIs
+            SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
+            SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
+
+            // Preventivos y Listas
+            SatexPreventivoDesign.render("preventivos-grafico-container", 90);
+            SatexPersonalManttoDesign.render("personal-mantto-scroll", []);
+            SatexComprasPendientesDesign.render("compras-pendientes-scroll", []);
+        };
+    </script>
+</body>
+</html>
