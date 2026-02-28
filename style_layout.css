@@ -1,10 +1,30 @@
+/* style_layout.css */
 body {
     margin: 0;
+    padding: 0;
     background-color: #2f5577;
     height: 100vh;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
-#header-container, #estatus-container { width: 100%; flex-shrink: 0; }
-#main-content { flex-grow: 1; }
+
+#header-container { 
+    height: 60px; 
+    flex-shrink: 0; 
+}
+
+#estatus-container { 
+    height: 65px; 
+    flex-shrink: 0; 
+    margin-bottom: 0px !important;
+}
+
+#main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
