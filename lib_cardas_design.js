@@ -1,4 +1,3 @@
-/* lib_cardas_design.js */
 const SatexCardasDesign = {
     crearCarda: function(id, titulo, actual, maximo) {
         return `
