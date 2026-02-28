@@ -23,6 +23,7 @@
             overflow-x: auto; 
             overflow-y: hidden; 
             padding: 5px 0;
+            background: rgba(0,0,0,0.1);
         }
         #mantenimiento-container { 
             flex-grow: 1; 
@@ -63,8 +64,7 @@
             if(typeof SatexMantenimiento !== 'undefined') {
                 SatexMantenimiento.render("mantenimiento-container");
                 
-                // Datos de prueba para verificar visualización
-                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "20/02/2026", dias: 8 }];
+                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 }];
                 const accs = [
                     { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
                     { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
