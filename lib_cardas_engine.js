@@ -1,7 +1,3 @@
-/**
- * Librería: lib_cardas_engine.js
- * Estado: Restaurado con margen de 8px (2mm)
- */
 const SatexCardasEngine = {
     grid: null,
     datosUnidades: [],
@@ -13,12 +9,10 @@ const SatexCardasEngine = {
         this.grid.style.flexWrap = "nowrap";
         this.grid.style.overflowX = "auto";
         
-        // Espacio de 2mm arriba
-        this.grid.style.marginTop = "8px"; 
+        // AJUSTE DE 1mm (4px) - Forzamos el pegado superior
+        this.grid.style.marginTop = "4px"; 
         this.grid.style.paddingTop = "0px";
-        
-        // Espacio de 2mm abajo (hacia la barra de scroll)
-        this.grid.style.paddingBottom = "8px"; 
+        this.grid.style.paddingBottom = "4px"; 
         
         this.grid.style.gap = "8px";
         this.grid.style.width = "100%";
