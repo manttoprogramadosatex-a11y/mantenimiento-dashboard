@@ -4,9 +4,9 @@ const SatexEstatusDesign = {
         if (!container) return;
 
         container.innerHTML = `
-        <div style="background-color: #243b55; padding: 0 15px; display: flex; align-items: center; border-bottom: 2px solid #f9b218; height: 55px; gap: 10px; font-family: Calibri, sans-serif;">
+        <div style="background-color: #243b55; padding: 0 10px; display: flex; align-items: center; border-bottom: 2px solid #f9b218; height: 55px; gap: 8px; font-family: Calibri, sans-serif;">
             
-            <div style="flex-shrink: 0; color: white; text-align: right; line-height: 1; padding-right: 15px; border-right: 1px solid #444;">
+            <div style="flex-shrink: 0; color: white; text-align: right; line-height: 1; padding-right: 10px; border-right: 1px solid #444;">
                 <div style="font-size: 20px; font-weight: bold;">Estatus planta ►</div>
                 <div style="font-size: 14px; color: #a1b1c1;">Info. Cardas ▼</div>
             </div>
@@ -15,7 +15,7 @@ const SatexEstatusDesign = {
             ${this.crearBloque("OPEN-END (INACT.)", "6", "Husos", "estatus-openend")}
             ${this.crearBloque("CONERAS (INACT.)", "4", "Husos", "estatus-coneras")}
 
-            <div style="width: 135px; background: rgba(0,0,0,0.2); border-left: 3px solid #ff4444; padding: 0 10px; height: 45px; display: flex; align-items: center; gap: 8px;">
+            <div style="width: 130px; background: rgba(0,0,0,0.2); border-left: 3px solid #ff4444; padding: 0 8px; height: 45px; display: flex; align-items: center; gap: 5px;">
                 <div style="color: #a1b1c1; font-size: 13px; font-weight: bold; line-height: 1;">MÁQUINAS PARADAS</div>
                 <div id="num-maquinas-paradas" style="color: #ff4444; font-size: 32px; font-weight: bold;">3</div>
             </div>
@@ -30,18 +30,18 @@ const SatexEstatusDesign = {
                 <div id="maquinas-paradas-scroll" style="flex-grow: 1; overflow-y: auto;"></div>
             </div>
 
-            <div style="text-align: right; width: 160px; line-height: 1.1;">
+            <div style="text-align: right; width: 155px; line-height: 1.1;">
                 <div style="color: #a1b1c1; font-size: 11px; margin-bottom: 2px;">(Fecha Act.: 27-feb-2026)</div>
-                <button style="background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 12px; font-weight: bold; cursor: pointer;">DETALLES CARDAS</button>
+                <button style="background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 8px; font-size: 12px; font-weight: bold; cursor: pointer;">DETALLES CARDAS</button>
             </div>
         </div>`;
     },
 
     crearBloque: function(titulo, valor, unidad, id) {
         return `
-        <div style="width: 145px; background: rgba(0,0,0,0.2); border-left: 3px solid #f9b218; padding: 0 8px; height: 45px; display: flex; flex-direction: column; justify-content: center;">
-            <div style="color: #a1b1c1; font-size: 12px; font-weight: bold; line-height: 1.1;">${titulo}</div>
-            <div style="display: flex; align-items: baseline; gap: 5px; line-height: 1;">
+        <div style="width: 125px; background: rgba(0,0,0,0.15); border-left: 3px solid #f9b218; padding: 0 6px; height: 45px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="color: #a1b1c1; font-size: 12px; font-weight: bold; line-height: 1; white-space: nowrap; overflow: hidden;">${titulo}</div>
+            <div style="display: flex; align-items: baseline; gap: 4px; line-height: 1;">
                 <span id="${id}" style="color: #f9b218; font-size: 26px; font-weight: bold;">${valor}</span>
                 <span style="color: #a1b1c1; font-size: 14px;">${unidad}</span>
             </div>
