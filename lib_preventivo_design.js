@@ -3,9 +3,9 @@ const SatexPreventivoDesign = {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Se ajustó el tamaño a 150px y se aplicó centrado flexible
+        // Se coloca en la mitad izquierda (float: left) como marcaste en la imagen
         container.innerHTML = `
-        <div style="width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto;">
+        <div style="width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; float: left; box-sizing: border-box;">
             <div style="position: relative; width: 150px; height: 150px;">
                 <canvas id="canvas-preventivo" width="150" height="150"></canvas>
                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 26px; font-family: 'Segoe UI', sans-serif;">
@@ -24,7 +24,6 @@ const SatexPreventivoDesign = {
         const ctx = canvas.getContext('2d');
         const x = canvas.width / 2;
         const y = canvas.height / 2;
-        // Radio aumentado para alcanzar los ~5.5cm totales
         const radio = 65; 
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
