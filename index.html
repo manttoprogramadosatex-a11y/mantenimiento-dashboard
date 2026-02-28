@@ -1,89 +1,30 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Satex Master Project 2026</title>
-    
-    <script>
-        const v = new Date().getTime(); // Crea un número único cada vez que abres la página
-        document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
-        document.write(`<link rel="stylesheet" href="style_layout.css?v=${v}">`);
-    </script>
+<script>
+    window.onload = () => {
+        if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
+        if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
+        if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
+        if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
+        if(typeof SatexMantenimiento !== 'undefined') {
+            SatexMantenimiento.render("mantenimiento-container");
+            
+            // DATOS CON PRUEBA DE SCROLL:
+            const paros = [
+                { tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 },
+                { tipo: "OpenE.", num: "OE-02", fecha: "15/02/2026", dias: 13 },
+                { tipo: "Coner.", num: "CN-05", fecha: "20/02/2026", dias: 8 }
+            ];
+            
+            const accs = [
+                { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
+                { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
+            ];
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        html, body { 
-            margin: 0; padding: 0; height: 100vh; 
-            background-color: #2f5577; overflow: hidden; 
-            font-family: 'Segoe UI', sans-serif; 
-        }
-        #main-content { 
-            display: flex; flex-direction: column; 
-            height: calc(100vh - 125px); 
-        }
-        #cardas-grid { 
-            height: 205px !important; 
-            flex-shrink: 0; 
-            display: flex; 
-            overflow-x: auto; 
-            overflow-y: hidden; 
-            padding: 5px 0;
-            background: rgba(0,0,0,0.1);
-        }
-        #mantenimiento-container { 
-            flex-grow: 1; 
-            position: relative; 
-            margin-top: 5px;
-        }
-    </style>
-</head>
-<body>
-    <div id="header-container"></div>
-    <div id="estatus-container"></div>
-    <div id="main-content">
-        <div id="cardas-grid"></div>
-        <div id="mantenimiento-container"></div>
-    </div>
-
-    <script>
-        const libs = [
-            "lib_header_design.js", "lib_estatus_design.js", "lib_estatus_data.js",
-            "lib_maquinas_paradas.js", "lib_maquinas_inactivas.js", "lib_mantenimiento.js",
-            "lib_accidentes.js", "lib_cardas.js", "lib_cardas_design.js", "lib_cardas_engine.js"
-        ];
-        libs.forEach(lib => {
-            document.write(`<script src="${lib}?v=${v}"><\/script>`);
-        });
-    </script>
-
-    <script>
-        window.onload = () => {
-            // Regresamos a tu lógica exacta de inicialización
-            if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
-            if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
-            if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
-
-            // Cargar Cardas
-            if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
-
-            // Cargar Mantenimiento
-            if(typeof SatexMantenimiento !== 'undefined') {
-                SatexMantenimiento.render("mantenimiento-container");
-                
-                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 }];
-                const accs = [
-                    { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
-                    { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
-                ];
-
-                if(document.getElementById("maquinas-paradas-scroll")) {
-                    SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
-                }
-                if(document.getElementById("accidentes-scroll")) {
-                    SatexAccidentes.render("accidentes-scroll", accs);
-                }
+            if(document.getElementById("maquinas-paradas-scroll")) {
+                SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
             }
-        };
-    </script>
-</body>
-</html>
+            if(document.getElementById("accidentes-scroll")) {
+                SatexAccidentes.render("accidentes-scroll", accs);
+            }
+        }
+    };
+</script>
