@@ -3,7 +3,7 @@ const SatexPreventivoDesign = {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Estructura: Izquierda (Dona) | Derecha (Botones actualizados)
+        // Estructura: Izquierda (Dona) | Derecha (Botones e Info de Excel)
         container.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; box-sizing: border-box;">
             
@@ -29,8 +29,8 @@ const SatexPreventivoDesign = {
                 </div>
 
                 <div style="display: flex; flex-direction: column; align-items: center;">
-                    <button style="width: 100%; background: #2f5577; color: white; border: 1px solid #ff9999; border-radius: 4px; padding: 6px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 5px;">
-                        Preventivos antes de hoy
+                    <button style="width: 100%; background: #2f5577; color: white; border: 1px solid #ff9999; border-radius: 4px; padding: 6px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 5px;">
+                        Preventivos pendientes antes de hoy
                     </button>
                     <div style="color: #ff9999; font-size: 32px; font-weight: bold; font-family: 'Segoe UI', sans-serif;">20</div>
                 </div>
@@ -49,19 +49,4 @@ const SatexPreventivoDesign = {
         const y = canvas.height / 2;
         const radio = 60; 
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.beginPath();
-        ctx.arc(x, y, radio, 0, 2 * Math.PI);
-        ctx.lineWidth = 14; 
-        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-        ctx.stroke();
-
-        const finAngulo = (porcentaje / 100) * (2 * Math.PI) - Math.PI / 2;
-        ctx.beginPath();
-        ctx.arc(x, y, radio, -Math.PI / 2, finAngulo);
-        ctx.lineWidth = 14;
-        ctx.strokeStyle = '#4caf50';
-        ctx.lineCap = 'round';
-        ctx.stroke();
-    }
-};
+        ctx
