@@ -12,7 +12,6 @@ const SatexMaquinasInactivas = {
 
         const tabla = datos.map(m => {
             const dias = this.calcularDias(m.fecha);
-            // Se usa 1.2fr para los días para asegurar espacio de 3 dígitos (ej. 250d)
             return `
             <div style="display: grid; grid-template-columns: 1fr 1fr 1.5fr 1.2fr; color: white; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 5px 0; align-items: center;">
                 <span style="font-weight: 500;">${m.tipo}</span>
