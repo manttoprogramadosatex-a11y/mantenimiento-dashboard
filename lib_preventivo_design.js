@@ -3,7 +3,8 @@ const SatexPreventivoDesign = {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Se aumentó margin-top a 4px para bajar la dona otros 0.5mm (1mm total)
+        // Se actualizó el texto a "CUMPLIMIENTO ACUMULADO"
+        // Se mantiene el margin-top de 4px para la posición de 1mm abajo
         container.innerHTML = `
         <div style="width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; float: left; box-sizing: border-box; margin-top: 4px;">
             <div style="position: relative; width: 140px; height: 140px;">
@@ -12,7 +13,9 @@ const SatexPreventivoDesign = {
                     ${porcentaje}%
                 </div>
             </div>
-            <div style="color: #a1b1c1; font-size: 11px; font-weight: bold; margin-top: 5px; text-transform: uppercase; letter-spacing: 1.2px;">Cumplimiento</div>
+            <div style="color: #a1b1c1; font-size: 11px; font-weight: bold; margin-top: 5px; text-transform: uppercase; letter-spacing: 1.2px; text-align: center;">
+                Cumplimiento Acumulado
+            </div>
         </div>`;
 
         this.dibujarCirculo(porcentaje);
