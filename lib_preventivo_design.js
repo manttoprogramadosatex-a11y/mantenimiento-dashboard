@@ -3,11 +3,11 @@ const SatexPreventivoDesign = {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Se coloca en la mitad izquierda (float: left) como marcaste en la imagen
+        // Se redujo el tamaño de 150px a 145px para cumplir con la reducción de 0.5 cm
         container.innerHTML = `
         <div style="width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; float: left; box-sizing: border-box;">
-            <div style="position: relative; width: 150px; height: 150px;">
-                <canvas id="canvas-preventivo" width="150" height="150"></canvas>
+            <div style="position: relative; width: 145px; height: 145px;">
+                <canvas id="canvas-preventivo" width="145" height="145"></canvas>
                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 26px; font-family: 'Segoe UI', sans-serif;">
                     ${porcentaje}%
                 </div>
@@ -24,14 +24,15 @@ const SatexPreventivoDesign = {
         const ctx = canvas.getContext('2d');
         const x = canvas.width / 2;
         const y = canvas.height / 2;
-        const radio = 65; 
+        // Radio ajustado a 62.5px para el nuevo tamaño de 145px
+        const radio = 62.5; 
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         // Fondo del anillo
         ctx.beginPath();
         ctx.arc(x, y, radio, 0, 2 * Math.PI);
-        ctx.lineWidth = 15; 
+        ctx.lineWidth = 15; // Se mantiene el grosor de línea para consistencia visual
         ctx.strokeStyle = 'rgba(255,255,255,0.1)';
         ctx.stroke();
 
