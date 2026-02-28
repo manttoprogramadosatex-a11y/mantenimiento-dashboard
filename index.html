@@ -4,33 +4,42 @@
     <meta charset="UTF-8">
     <title>Satex Master Project 2026</title>
     <link rel="stylesheet" href="estilos.css">
-    <link rel="stylesheet" href="style_layout.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { 
             margin: 0; padding: 0; height: 100vh; 
             background-color: #2f5577; overflow: hidden; 
             font-family: 'Segoe UI', sans-serif; 
         }
+        #header-container { height: 100px; width: 100%; }
+        #estatus-container { height: 30px; width: 100%; }
+        
+        /* Contenedor principal que asegura visibilidad */
         #main-content { 
-            display: flex; flex-direction: column; 
-            height: calc(100vh - 125px); 
+            display: block; 
+            width: 100%; 
+            height: calc(100vh - 130px);
         }
+
         #cardas-grid { 
-            height: 205px !important; 
-            flex-shrink: 0; 
+            height: 200px; 
+            width: 100%;
             display: flex; 
             overflow-x: auto; 
             overflow-y: hidden; 
+            background: rgba(0,0,0,0.1);
             padding: 5px 0;
         }
+
+        /* Espacio de 1mm - 2mm de seguridad */
         #mantenimiento-container { 
-            flex-grow: 1; 
-            position: relative; 
-            margin-top: 5px;
+            height: calc(100% - 205px);
+            width: 100%;
+            margin-top: 2px; 
+            position: relative;
         }
-        /* Scrollbars Personalizados */
-        #maquinas-paradas-scroll::-webkit-scrollbar, #accidentes-scroll::-webkit-scrollbar { width: 4px; }
+
+        /* Scrollbars */
+        #maquinas-paradas-scroll::-webkit-scrollbar, #accidentes-scroll::-webkit-scrollbar { width: 5px; }
         #maquinas-paradas-scroll::-webkit-scrollbar-thumb { background: #f9b218; border-radius: 10px; }
         #accidentes-scroll::-webkit-scrollbar-thumb { background: #ff9999; border-radius: 10px; }
     </style>
@@ -56,27 +65,29 @@
 
     <script>
         window.onload = () => {
+            // Renderizado por orden de jerarquía
             if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
             if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
             if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
-
-            // Prueba de 3 dígitos (423d)
-            const parosPrueba = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025" }];
-            if(document.getElementById("maquinas-paradas-scroll")) {
-                SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosPrueba);
-            }
-
-            // Datos Accidentes
-            const datosAccidentes = [
-                { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
-                { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
-            ];
-
+            
+            // Dibujar Cardas
             if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
+
+            // Renderizar Mantenimiento y sus hijos
             if(typeof SatexMantenimiento !== 'undefined') {
                 SatexMantenimiento.render("mantenimiento-container");
-                if(typeof SatexAccidentes !== 'undefined') {
-                    SatexAccidentes.render("accidentes-scroll", datosAccidentes);
+                
+                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025" }];
+                const accs = [
+                    { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
+                    { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
+                ];
+
+                if(document.getElementById("maquinas-paradas-scroll")) {
+                    SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
+                }
+                if(document.getElementById("accidentes-scroll")) {
+                    SatexAccidentes.render("accidentes-scroll", accs);
                 }
             }
         };
