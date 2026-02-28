@@ -1,7 +1,6 @@
 const SatexCardasDesign = {
     crearCarda: function(id, titulo, actual, maximo) {
-        // Se redujeron las dimensiones generales (130x165) y los paddings
-        // para compactar la carátula sin alterar el canvas ni los tamaños de fuente.
+        // Reducción de altura a 165px y ajuste de paddings para compactar
         return `
         <div id="carda-${id}" style="min-width: 130px; height: 165px; background: white; border-radius: 8px; margin: 5px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 2px 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 2px solid #2f5577; box-sizing: border-box;">
             
