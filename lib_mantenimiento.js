@@ -25,7 +25,7 @@ const SatexMantenimiento = {
                         Accidentes
                     </div>
 
-                    <div id="accidentes-scroll" style="position: absolute; top: 215px; left: 5%; width: 90%; height: 120px; background: rgba(0,0,0,0.2); border-radius: 4px; padding: 8px; box-sizing: border-box;">
+                    <div id="accidentes-scroll" style="position: absolute; top: 215px; left: 5%; width: 90%; height: 65px; background: rgba(0,0,0,0.2); border-radius: 4px; padding: 5px; box-sizing: border-box; overflow: hidden;">
                         </div>
                     
                 </div>
