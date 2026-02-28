@@ -3,36 +3,36 @@ const SatexPreventivoDesign = {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Estructura: Izquierda (Dona) | Derecha (Botones e Info de Excel)
+        // Estructura optimizada para textos largos
         container.innerHTML = `
-        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; box-sizing: border-box;">
+        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 5px; box-sizing: border-box;">
             
-            <div style="width: 45%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 4px;">
+            <div style="width: 40%; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 4px;">
                 <div style="position: relative; width: 140px; height: 140px;">
                     <canvas id="canvas-preventivo" width="140" height="140"></canvas>
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 24px; font-family: 'Segoe UI', sans-serif;">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 22px; font-family: 'Segoe UI', sans-serif;">
                         ${porcentaje}%
                     </div>
                 </div>
-                <div style="color: #a1b1c1; font-size: 11px; font-weight: bold; margin-top: 5px; text-transform: uppercase; letter-spacing: 1.2px; text-align: center;">
+                <div style="color: #a1b1c1; font-size: 10px; font-weight: bold; margin-top: 4px; text-transform: uppercase; text-align: center; line-height: 1.1;">
                     Cumplimiento Acumulado
                 </div>
             </div>
 
-            <div style="width: 50%; height: 90%; display: flex; flex-direction: column; justify-content: space-around; padding-left: 15px; border-left: 1px solid rgba(255,255,255,0.1);">
+            <div style="width: 58%; height: 95%; display: flex; flex-direction: column; justify-content: center; gap: 10px; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
                 
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                    <button style="width: 100%; background: #2f5577; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 6px; font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 5px;">
+                <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.1); padding: 5px; border-radius: 4px;">
+                    <button style="width: 70%; background: #2f5577; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 4px 2px; font-size: 10px; font-weight: bold; text-transform: uppercase; min-height: 35px; cursor: default;">
                         Preventivos Hoy
                     </button>
-                    <div style="color: #f9b218; font-size: 32px; font-weight: bold; font-family: 'Segoe UI', sans-serif;">55</div>
+                    <div style="width: 25%; color: #f9b218; font-size: 28px; font-weight: bold; text-align: right;">55</div>
                 </div>
 
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                    <button style="width: 100%; background: #2f5577; color: white; border: 1px solid #ff9999; border-radius: 4px; padding: 6px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 5px;">
+                <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.1); padding: 5px; border-radius: 4px;">
+                    <button style="width: 70%; background: #2f5577; color: white; border: 1px solid #ff9999; border-radius: 4px; padding: 4px 2px; font-size: 9px; font-weight: bold; text-transform: uppercase; min-height: 35px; cursor: default; line-height: 1;">
                         Preventivos pendientes antes de hoy
                     </button>
-                    <div style="color: #ff9999; font-size: 32px; font-weight: bold; font-family: 'Segoe UI', sans-serif;">20</div>
+                    <div style="width: 25%; color: #ff9999; font-size: 28px; font-weight: bold; text-align: right;">20</div>
                 </div>
 
             </div>
@@ -49,4 +49,19 @@ const SatexPreventivoDesign = {
         const y = canvas.height / 2;
         const radio = 60; 
 
-        ctx
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.arc(x, y, radio, 0, 2 * Math.PI);
+        ctx.lineWidth = 14; 
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.stroke();
+
+        const finAngulo = (porcentaje / 100) * (2 * Math.PI) - Math.PI / 2;
+        ctx.beginPath();
+        ctx.arc(x, y, radio, -Math.PI / 2, finAngulo);
+        ctx.lineWidth = 14;
+        ctx.strokeStyle = '#4caf50';
+        ctx.lineCap = 'round';
+        ctx.stroke();
+    }
+};
