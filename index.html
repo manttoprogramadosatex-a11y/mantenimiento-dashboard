@@ -6,6 +6,17 @@
     <link rel="stylesheet" href="estilos.css">
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Blindaje de espacios: Asegura que nada se mueva */
+        #estatus-container {
+            height: 65px; /* Altura fija para que no crezca */
+            margin-bottom: 0px !important;
+        }
+        #cardas-grid {
+            margin-top: 4px !important; /* El 1mm de separación solicitado */
+            padding-top: 0px !important;
+        }
+    </style>
 </head>
 <body style="margin: 0; background-color: #2f5577; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
     
