@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style_layout.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Bloqueo estructural para estabilidad total */
+        /* Blindaje estructural */
         html, body {
             margin: 0; padding: 0; height: 100vh;
             background-color: #2f5577; overflow: hidden;
@@ -16,11 +16,11 @@
         
         #main-content {
             display: flex; flex-direction: column;
-            height: calc(100vh - 125px); /* Header(60px) + Estatus(65px) */
+            height: calc(100vh - 125px);
             overflow: hidden;
         }
 
-        /* CARDAS: Altura fija blindada para que no haya espacios vacíos */
+        /* CARDAS: Altura fija para evitar deformación rosa */
         #cardas-grid {
             height: 230px !important; 
             flex-shrink: 0;
@@ -59,29 +59,27 @@
 
     <script>
         window.onload = () => {
-            // 1. Renderizar base visual
+            // 1. Renderizar base
             if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
             if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
             
-            // 2. Datos de Husos e Indicador Rojo
+            // 2. Datos de Husos e Indicador de Máquinas Paradas
             if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            // 3. RECUPERAR TABLA DE MÁQUINAS (Inactivas)
+            // 3. Renderizar Tabla de Máquinas Inactivas
             const parosActuales = [
                 { tipo: "Cont.", num: "C-08", fecha: "20/02/2026" },
                 { tipo: "O.E.", num: "OE-03", fecha: "25/02/2026" },
                 { tipo: "Con.", num: "CON-1", fecha: "26/02/2026" }
             ];
             
-            const idTablaScroll = "maquinas-paradas-scroll";
-            if(typeof SatexMaquinasInactivas !== 'undefined' && document.getElementById(idTablaScroll)) {
-                SatexMaquinasInactivas.render(idTablaScroll, parosActuales);
+            const idTabla = "maquinas-paradas-scroll";
+            if(typeof SatexMaquinasInactivas !== 'undefined' && document.getElementById(idTabla)) {
+                SatexMaquinasInactivas.render(idTabla, parosActuales);
             }
 
-            // 4. Renderizar Cardas
+            // 4. Renderizar Cardas y Mantenimiento
             if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
-
-            // 5. Renderizar Mantenimiento
             if(typeof SatexMantenimiento !== 'undefined') SatexMantenimiento.render("mantenimiento-container");
         };
     </script>
