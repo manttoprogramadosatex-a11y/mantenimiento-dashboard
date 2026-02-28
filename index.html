@@ -19,25 +19,25 @@
             overflow: hidden; 
         }
 
-        /* CARDAS: Altura fija para evitar que se separen de la base */
+        /* CARDAS: Altura reducida para quitar espacio muerto inferior */
         #cardas-grid { 
-            height: 205px !important; 
+            height: 180px !important; 
             flex-shrink: 0; 
             display: flex; 
             overflow-x: auto; 
             overflow-y: hidden; 
-            background-color: rgba(255,255,255,0.05);
+            align-items: flex-start;
         }
 
-        /* ESPACIO DE 2MM SOLICITADO */
+        /* ESPACIO DE 1MM SOLICITADO */
         #mantenimiento-container { 
             flex-grow: 1; 
             position: relative; 
             overflow: hidden; 
-            margin-top: 2px !important; /* Aquí están tus 2mm de separación */
+            margin-top: 1px !important; 
         }
 
-        /* Estilos de Scrollbar Personalizados */
+        /* Estilos de Scrollbar */
         #maquinas-paradas-scroll::-webkit-scrollbar, #accidentes-scroll::-webkit-scrollbar { width: 4px; }
         #maquinas-paradas-scroll::-webkit-scrollbar-thumb { background: #f9b218; border-radius: 10px; }
         #accidentes-scroll::-webkit-scrollbar-thumb { background: #ff9999; border-radius: 10px; }
@@ -68,23 +68,18 @@
             if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
             if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
 
-            // Datos Ficticios Máquinas (3 dígitos)
             const parosPrueba = [
                 { tipo: "Cont.", num: "C-08", fecha: "01/01/2025" },
-                { tipo: "O.E.", num: "OE-03", fecha: "15/05/2025" },
-                { tipo: "Con.", num: "CON-1", fecha: "24/02/2026" },
-                { tipo: "Cont.", num: "C-05", fecha: "25/02/2026" }
+                { tipo: "O.E.", num: "OE-03", fecha: "20/02/2026" }
             ];
 
             if(document.getElementById("maquinas-paradas-scroll")) {
                 SatexMaquinasInactivas.render("maquinas-paradas-scroll", parosPrueba);
             }
 
-            // Datos Ficticios Accidentes (Scroll 1 fila)
             const datosAccidentes = [
                 { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
-                { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 },
-                { item: 3, nombre: "Ramirez Juan Pablo", puesto: "Operador", fecha: "15-ene-2026", dias: 43 }
+                { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
             ];
 
             if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
