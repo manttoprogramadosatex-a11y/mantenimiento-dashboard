@@ -10,7 +10,6 @@ const SatexHeaderDesign = {
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 5px 10px; border-radius: 4px;">
-                
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <div style="color: #a1b1c1; font-size: 12px; font-weight: bold; text-transform: uppercase;">Máquinas Paradas</div>
                     <div style="color: #ff4444; font-size: 28px; font-weight: bold; line-height: 1;">3</div>
