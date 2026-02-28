@@ -6,21 +6,21 @@ const SatexEstatusDesign = {
         container.innerHTML = `
         <div style="background-color: #243b55; padding: 5px 15px; display: flex; align-items: center; border-bottom: 2px solid #f9b218; height: 60px; gap: 10px; font-family: Calibri, sans-serif;">
             <div style="flex-shrink: 0; color: white; text-align: right; line-height: 1.1; padding-right: 15px; border-right: 1px solid #444;">
-                <div style="font-size: 14px; font-weight: bold;">Estatus planta ►</div>
-                <div style="font-size: 11px; color: #a1b1c1;">Info. Cardas ▼</div>
+                <div style="font-size: 17px; font-weight: bold;">Estatus planta ►</div>
+                <div style="font-size: 13px; color: #a1b1c1;">Info. Cardas ▼</div>
             </div>
 
             ${this.crearBloque("CONTINUAS (INACT.)", "14", "Husos", "estatus-continuas")}
             ${this.crearBloque("OPEN-END (INACT.)", "6", "Husos", "estatus-openend")}
             ${this.crearBloque("CONERAS (INACT.)", "4", "Husos", "estatus-coneras")}
 
-            <div style="width: 110px; background: rgba(0,0,0,0.2); border-left: 3px solid #ff4444; padding: 2px 10px; height: 45px; display: flex; align-items: center; gap: 8px;">
-                <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; line-height: 1;">MÁQUINAS PARADAS</div>
+            <div style="width: 125px; background: rgba(0,0,0,0.2); border-left: 3px solid #ff4444; padding: 2px 10px; height: 45px; display: flex; align-items: center; gap: 8px;">
+                <div style="color: #a1b1c1; font-size: 11px; font-weight: bold; line-height: 1;">MÁQUINAS PARADAS</div>
                 <div id="num-maquinas-paradas" style="color: #ff4444; font-size: 30px; font-weight: bold;">3</div>
             </div>
 
             <div style="flex-grow: 1; height: 45px; border: 1px solid #ff4444; border-radius: 4px; background: rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column;">
-                <div style="display: flex; background: rgba(0,0,0,0.5); color: #ff8c69; font-size: 9px; font-weight: bold; border-bottom: 1px solid #ff4444; padding: 1px 0;">
+                <div style="display: flex; background: rgba(0,0,0,0.5); color: #ff8c69; font-size: 11px; font-weight: bold; border-bottom: 1px solid #ff4444; padding: 1px 0;">
                     <div style="width: 25%; text-align: center;">TIPO</div>
                     <div style="width: 20%; text-align: center;">NÚM</div>
                     <div style="width: 35%; text-align: center;">DESDE</div>
@@ -30,7 +30,7 @@ const SatexEstatusDesign = {
             </div>
 
             <div style="text-align: right; width: 150px;">
-                <div style="color: #a1b1c1; font-size: 9px; margin-bottom: 2px;">(Fecha Act.: 27-feb-2026)</div>
+                <div style="color: #a1b1c1; font-size: 10px; margin-bottom: 2px;">(Fecha Act.: 27-feb-2026)</div>
                 <button style="background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 11px; font-weight: bold; cursor: pointer;">DETALLES CARDAS</button>
             </div>
         </div>`;
@@ -38,11 +38,11 @@ const SatexEstatusDesign = {
 
     crearBloque: function(titulo, valor, unidad, id) {
         return `
-        <div style="width: 135px; background: rgba(0,0,0,0.2); border-left: 3px solid #f9b218; padding: 2px 8px; height: 45px; display: flex; flex-direction: column; justify-content: center;">
-            <div style="color: #a1b1c1; font-size: 9px; font-weight: bold;">${titulo}</div>
+        <div style="width: 140px; background: rgba(0,0,0,0.2); border-left: 3px solid #f9b218; padding: 2px 8px; height: 45px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="color: #a1b1c1; font-size: 11px; font-weight: bold;">${titulo}</div>
             <div style="display: flex; align-items: baseline; gap: 5px;">
-                <span id="${id}" style="color: #f9b218; font-size: 22px; font-weight: bold;">${valor}</span>
-                <span style="color: #a1b1c1; font-size: 10px;">${unidad}</span>
+                <span id="${id}" style="color: #f9b218; font-size: 24px; font-weight: bold;">${valor}</span>
+                <span style="color: #a1b1c1; font-size: 12px;">${unidad}</span>
             </div>
         </div>`;
     }
