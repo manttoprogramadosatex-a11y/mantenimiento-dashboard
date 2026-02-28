@@ -16,7 +16,6 @@ const SatexMantenimiento = {
                 </div>
                 
                 <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; padding-top: 5px;">
-                    
                     <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 85%; text-align: center; text-transform: uppercase;">
                         Mantto. Preventivo
                     </div>
@@ -27,7 +26,6 @@ const SatexMantenimiento = {
 
                     <div id="accidentes-scroll" style="position: absolute; top: 215px; left: 5%; width: 90%; height: 65px; background: rgba(0,0,0,0.2); border-radius: 4px; padding: 5px; box-sizing: border-box; overflow: hidden;">
                         </div>
-                    
                 </div>
             </div>`;
     }
