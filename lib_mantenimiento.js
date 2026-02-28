@@ -8,20 +8,27 @@ const SatexMantenimiento = {
             
             <div style="flex: 1; display: flex; flex-direction: column; align-items: center; padding-top: 2px; position: relative;">
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 85%; text-align: center; text-transform: uppercase;">Mantto. Correctivo</div>
+                
                 <div id="maquinas-paradas-scroll" style="width: 90%; height: 180px; overflow-y: auto; margin-top: 5px;"></div>
 
                 <div style="position: absolute; bottom: 85px; width: 90%; display: flex; justify-content: space-between; padding: 0 10px; box-sizing: border-box;">
-                    <div style="color: #f9b218; font-size: 13px; font-weight: bold; border-bottom: 1px solid #f9b218; padding-bottom: 2px; width: 48%; text-align: center; text-transform: uppercase;">Dets. Personal Mantto.</div>
-                    <div style="color: #f9b218; font-size: 13px; font-weight: bold; border-bottom: 1px solid #f9b218; padding-bottom: 2px; width: 48%; text-align: center; text-transform: uppercase;">Pendientes Compras</div>
+                    <div style="color: #f9b218; font-size: 13px; font-weight: bold; border-bottom: 1px solid #f9b218; padding-bottom: 2px; width: 48%; text-align: center; text-transform: uppercase;">
+                        Dets. Personal Mantto.
+                    </div>
+                    <div style="color: #f9b218; font-size: 13px; font-weight: bold; border-bottom: 1px solid #f9b218; padding-bottom: 2px; width: 48%; text-align: center; text-transform: uppercase;">
+                        Pendientes Compras
+                    </div>
                 </div>
 
                 <div id="personal-mantto-scroll" style="position: absolute; bottom: 10px; left: 2%; width: 46%; height: 65px; background: rgba(0,0,0,0.2); border-radius: 4px; overflow: hidden;"></div>
-                <div id="compras-pendientes-scroll" style="position: absolute; bottom: 10px; right: 2%; width: 46%; height: 65px; background: rgba(0,0,0,0.2); border-radius: 4px; overflow: hidden;"></div>
+                <div id="compras-pendientes-scroll" style="position: absolute; bottom: 10px; right: 2%; width: 46%; height: 65px; background: transparent; border-radius: 4px; overflow: hidden;"></div>
             </div>
 
             <div style="flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; padding-top: 2px;">
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 85%; text-align: center; text-transform: uppercase;">Mantto. Preventivo</div>
+                
                 <div id="preventivos-grafico-container" style="width: 100%; height: calc(100% - 150px); margin-top: 5px; overflow: hidden;"></div>
+
                 <div id="titulo-accidentes" style="position: absolute; bottom: 85px; left: 50%; transform: translateX(-50%); color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; padding-bottom: 2px; width: 70%; text-align: center; text-transform: uppercase;">Accidentes</div>
                 <div id="accidentes-scroll" style="position: absolute; bottom: 10px; left: 5%; width: 90%; height: 65px; background: rgba(0,0,0,0.2); border-radius: 4px; padding: 5px; box-sizing: border-box; overflow: hidden;"></div>
             </div>
