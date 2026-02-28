@@ -13,14 +13,14 @@
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 125px); }
         
-        /* Contenedor con scroll horizontal para las 11 cardas */
+        /* Se ajustó el padding-top a 1px (aprox 1mm) para reducir la distancia con el encabezado */
         #cardas-grid { 
             height: 205px !important; 
             flex-shrink: 0; 
             display: flex; 
             overflow-x: auto; 
             overflow-y: hidden; 
-            padding: 5px 10px; 
+            padding: 1px 10px 5px 10px; 
             background: rgba(0,0,0,0.1); 
             gap: 10px;
         }
@@ -56,7 +56,9 @@
                 const paros = [
                     { tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 },
                     { tipo: "OpenE.", num: "OE-02", fecha: "15/02/2026", dias: 13 },
-                    { tipo: "Coner.", num: "CN-05", fecha: "20/02/2026", dias: 8 }
+                    { tipo: "Coner.", num: "CN-05", fecha: "20/02/2026", dias: 8 },
+                    { tipo: "Carda", num: "CA-03", fecha: "25/02/2026", dias: 3 },
+                    { tipo: "Cont.", num: "C-12", fecha: "27/02/2026", dias: 1 }
                 ];
                 
                 const accs = [
