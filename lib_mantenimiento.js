@@ -4,14 +4,14 @@ const SatexMantenimiento = {
         const container = document.getElementById(id);
         if (!container) return;
         
-        // Mantenemos el pegado de 1mm solicitado
+        // Mantenemos el pegado estricto de 1mm
         container.style.marginTop = "0px";
         container.style.paddingTop = "0px";
 
         container.innerHTML = `
             <div style="display: flex; width: 100%; position: relative; font-family: 'Segoe UI', sans-serif; margin-top: 4px;">
                 
-                <div style="position: absolute; left: 50%; top: 0px; height: 225px; width: 2px; background-color: #f9b218; transform: translateX(-50%); z-index: 5;"></div>
+                <div style="position: absolute; left: 50%; top: 0px; height: 300px; width: 2px; background-color: #f9b218; transform: translateX(-50%); z-index: 5;"></div>
                 
                 <div style="flex: 1; display: flex; flex-direction: column; align-items: center;">
                     <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 85%; text-align: center; text-transform: uppercase;">
