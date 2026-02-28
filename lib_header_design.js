@@ -3,7 +3,7 @@ const SatexHeaderDesign = {
         const container = document.getElementById(id);
         if (!container) return;
         
-        // Se genera la fecha actual con el formato correcto (día de mes de año) 
+        // Formato de fecha dinámico: "28 de febrero de 2026"
         const hoy = new Date();
         const opciones = { day: 'numeric', month: 'long', year: 'numeric' };
         const fechaFormateada = hoy.toLocaleDateString('es-ES', opciones);
@@ -21,7 +21,7 @@ const SatexHeaderDesign = {
                 </h1>
             </div>
 
-            <div style="flex: 0 0 220px; text-align: right; color: white; font-size: 18px; font-weight: bold; text-transform: uppercase;">
+            <div style="flex: 0 0 220px; text-align: right; color: white; font-size: 20px; font-weight: bold; text-transform: uppercase;">
                 ${fechaFormateada}
             </div>
         </div>`;
