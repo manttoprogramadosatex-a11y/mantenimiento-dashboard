@@ -9,11 +9,11 @@ const SatexCardasEngine = {
         this.grid.style.flexWrap = "nowrap";
         this.grid.style.overflowX = "auto";
         
-        [cite_start]// Reducción a 1mm arriba [cite: 485, 486]
+        // Espacio de 1mm (4px) arriba [cite: 485]
         this.grid.style.marginTop = "4px"; 
         this.grid.style.paddingTop = "0px";
         
-        [cite_start]// Reducción a 1mm abajo (espacio con la barra amarilla) [cite: 487, 488]
+        // Espacio de 1mm (4px) abajo entre carátulas y barra amarilla [cite: 488]
         this.grid.style.paddingBottom = "4px"; 
         
         this.grid.style.gap = "8px";
@@ -23,9 +23,9 @@ const SatexCardasEngine = {
         
         for (let i = 1; i <= 11; i++) {
             const maxVal = 1000;
-            const acVal = Math.floor(Math.random() * 1250);
+            const acVal = Math.floor(Math.random() * 1150);
             this.datosUnidades.push({ ac: acVal, max: maxVal });
-            this.grid.innerHTML += SatexCardasDesign.crearEstructura(i, acVal, maxVal);
+            this.grid.innerHTML += SatexCardasDesign.crearEstructura(i, acVal, maxVal); [cite: 501]
         }
         this.actualizarGraficos();
     },
@@ -33,7 +33,7 @@ const SatexCardasEngine = {
         setTimeout(() => {
             this.datosUnidades.forEach((dato, index) => {
                 if (typeof SatexCardas !== 'undefined') {
-                    SatexCardas.inicializarIndicador(`gauge-${index + 1}`, dato.ac, dato.max);
+                    SatexCardas.inicializarIndicador(`gauge-${index + 1}`, dato.ac, dato.max); [cite: 509]
                 }
             });
         }, 300);
