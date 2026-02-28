@@ -1,103 +1,88 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Satex Master Project 2026 - Versión Estable</title>
+    <title>Satex Master Project 2026</title>
     
     <script>
-        const v = new Date().getTime(); // Versión basada en milisegundos
+        const v = new Date().getTime(); // Crea un número único cada vez que abres la página
         document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
         document.write(`<link rel="stylesheet" href="style_layout.css?v=${v}">`);
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
         html, body { 
             margin: 0; padding: 0; height: 100vh; 
             background-color: #2f5577; overflow: hidden; 
             font-family: 'Segoe UI', sans-serif; 
         }
-        /* Contenedor Maestro con Rejilla Fija para que NADA se mueva */
-        #main-layout {
-            display: grid;
-            grid-template-rows: 60px 65px 205px 1fr;
-            height: 100vh;
-            width: 100vw;
+        #main-content { 
+            display: flex; flex-direction: column; 
+            height: calc(100vh - 125px); 
         }
         #cardas-grid { 
+            height: 205px !important; 
+            flex-shrink: 0; 
+            display: flex; 
+            overflow-x: auto; 
+            overflow-y: hidden; 
+            padding: 5px 0;
             background: rgba(0,0,0,0.1);
-            overflow-x: auto;
-            overflow-y: hidden;
-            display: flex;
-            align-items: center;
         }
-        #mantenimiento-container { position: relative; overflow: hidden; }
+        #mantenimiento-container { 
+            flex-grow: 1; 
+            position: relative; 
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
-
-    <div id="main-layout">
-        <div id="header-container"></div>
-        <div id="estatus-container"></div>
+    <div id="header-container"></div>
+    <div id="estatus-container"></div>
+    <div id="main-content">
         <div id="cardas-grid"></div>
         <div id="mantenimiento-container"></div>
     </div>
 
     <script>
-        const scripts = [
+        const libs = [
             "lib_header_design.js", "lib_estatus_design.js", "lib_estatus_data.js",
             "lib_maquinas_paradas.js", "lib_maquinas_inactivas.js", "lib_mantenimiento.js",
             "lib_accidentes.js", "lib_cardas.js", "lib_cardas_design.js", "lib_cardas_engine.js"
         ];
-        scripts.forEach(src => {
-            document.write(`<script src="${src}?v=${v}"><\/script>`);
+        libs.forEach(lib => {
+            document.write(`<script src="${lib}?v=${v}"><\/script>`);
         });
     </script>
 
     <script>
-        // Función de Renderizado Seguro para que una falla no detenga el tablero
-        function safeExecute(fnName, ...args) {
-            try {
-                const fn = fnName.split('.').reduce((obj, prop) => obj[prop], window);
-                if (typeof fn === 'function') {
-                    fn(...args);
-                } else {
-                    console.warn(`Módulo no cargado: ${fnName}`);
-                }
-            } catch (error) {
-                console.error(`Error crítico en ${fnName}:`, error);
-            }
-        }
-
         window.onload = () => {
-            // Ejecutamos cada parte de forma independiente
-            safeExecute("SatexHeaderDesign.render", "header-container");
-            safeExecute("SatexEstatusDesign.render", "estatus-container");
-            safeExecute("SatexEstatusData.actualizar", 14, 6, 4, 3);
-            safeExecute("SatexCardasEngine.dibujar", "cardas-grid");
-            
-            // Mantenimiento y sub-módulos
-            try {
-                if (typeof SatexMantenimiento !== 'undefined') {
-                    SatexMantenimiento.render("mantenimiento-container");
-                    
-                    const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 }];
-                    const accs = [
-                        { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
-                        { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
-                    ];
+            // Regresamos a tu lógica exacta de inicialización
+            if(typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
+            if(typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
+            if(typeof SatexEstatusData !== 'undefined') SatexEstatusData.actualizar(14, 6, 4, 3);
 
-                    if (document.getElementById("maquinas-paradas-scroll")) {
-                        safeExecute("SatexMaquinasInactivas.render", "maquinas-paradas-scroll", paros);
-                    }
-                    if (document.getElementById("accidentes-scroll")) {
-                        safeExecute("SatexAccidentes.render", "accidentes-scroll", accs);
-                    }
+            // Cargar Cardas
+            if(typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
+
+            // Cargar Mantenimiento
+            if(typeof SatexMantenimiento !== 'undefined') {
+                SatexMantenimiento.render("mantenimiento-container");
+                
+                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 }];
+                const accs = [
+                    { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 },
+                    { item: 2, nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "02-feb-2025", dias: 390 }
+                ];
+
+                if(document.getElementById("maquinas-paradas-scroll")) {
+                    SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
                 }
-            } catch (e) { console.error("Error en bloque de mantenimiento", e); }
+                if(document.getElementById("accidentes-scroll")) {
+                    SatexAccidentes.render("accidentes-scroll", accs);
+                }
+            }
         };
     </script>
 </body>
