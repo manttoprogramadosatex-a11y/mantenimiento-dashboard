@@ -13,10 +13,12 @@ const SatexMaquinasInactivas = {
 
         container.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden;">
-            <div style="color: #ff9999; font-size: 11px; font-weight: bold; margin-bottom: 4px; display: grid; grid-template-columns: 1fr 1fr 1.5fr 1.2fr; border-bottom: 1px solid #ff9999; padding-bottom: 2px;">
+            <div style="color: #ff9999; font-size: 11px; font-weight: bold; margin-bottom: 4px; display: grid; grid-template-columns: 1fr 1fr 1.5fr 1.2fr; border-bottom: 1px solid #ff9999; padding-bottom: 2px; flex-shrink: 0;">
                 <span>TIPO</span> <span style="text-align: center;">NÚM</span> <span style="text-align: center;">DESDE</span> <span style="text-align: right; padding-right: 5px;">DÍAS</span>
             </div>
-            <div style="flex-grow: 1; overflow-y: auto;">${tabla}</div>
+            <div style="flex-grow: 1; overflow-y: auto;">
+                ${tabla}
+            </div>
         </div>`;
     }
 };
