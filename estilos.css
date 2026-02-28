@@ -4,13 +4,13 @@
     overflow-x: scroll !important;
     overflow-y: hidden;
     gap: 8px;
-    padding: 0px 10px;
+    padding: 0px 10px; [cite_start]/* Eliminado padding vertical extra [cite: 342, 369] */
     width: 100%;
     box-sizing: border-box;
 }
 
 #cardas-grid::-webkit-scrollbar {
-    height: 8px;
+    height: 6px; [cite_start]/* Scroll más fino para ganar espacio [cite: 348, 375] */
 }
 
 #cardas-grid::-webkit-scrollbar-thumb {
