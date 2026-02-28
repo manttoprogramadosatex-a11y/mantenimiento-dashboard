@@ -1,3 +1,4 @@
+/* lib_cardas_engine.js */
 const SatexCardasEngine = {
     grid: null,
     datosUnidades: [],
@@ -8,11 +9,12 @@ const SatexCardasEngine = {
         this.grid.style.display = "flex";
         this.grid.style.flexWrap = "nowrap";
         this.grid.style.overflowX = "auto";
+        this.grid.style.overflowY = "hidden";
         
-        // AJUSTE DE 1mm (4px) - Forzamos el pegado superior
-        this.grid.style.marginTop = "4px"; 
+        // Blindaje de 1mm (4px)
+        this.grid.style.setProperty("margin-top", "4px", "important");
         this.grid.style.paddingTop = "0px";
-        this.grid.style.paddingBottom = "4px"; 
+        this.grid.style.paddingBottom = "0px"; 
         
         this.grid.style.gap = "8px";
         this.grid.style.width = "100%";
