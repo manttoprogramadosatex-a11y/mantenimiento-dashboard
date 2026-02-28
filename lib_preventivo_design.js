@@ -3,9 +3,9 @@ const SatexPreventivoDesign = {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Se agregó margin-top: 2px para bajar la dona 0.5mm
+        // Se aumentó margin-top a 4px para bajar la dona otros 0.5mm (1mm total)
         container.innerHTML = `
-        <div style="width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; float: left; box-sizing: border-box; margin-top: 2px;">
+        <div style="width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; float: left; box-sizing: border-box; margin-top: 4px;">
             <div style="position: relative; width: 140px; height: 140px;">
                 <canvas id="canvas-preventivo" width="140" height="140"></canvas>
                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 24px; font-family: 'Segoe UI', sans-serif;">
