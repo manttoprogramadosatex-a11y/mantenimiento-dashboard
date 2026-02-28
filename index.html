@@ -12,8 +12,25 @@
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 125px); }
-        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; overflow-y: hidden; padding: 1px 10px 5px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
-        #mantenimiento-container { flex-grow: 1; position: relative; margin-top: 5px; }
+        
+        /* Se ajustó el padding-bottom a 1px para acercar el scroll a la sección inferior */
+        #cardas-grid { 
+            height: 190px !important; 
+            flex-shrink: 0; 
+            display: flex; 
+            overflow-x: auto; 
+            overflow-y: hidden; 
+            padding: 1px 10px 1px 10px; 
+            background: rgba(0,0,0,0.1); 
+            gap: 10px;
+        }
+        
+        /* Se redujo el margin-top a 1px para dejar la distancia de 1mm con las cardas */
+        #mantenimiento-container { 
+            flex-grow: 1; 
+            position: relative; 
+            margin-top: 1px; 
+        }
     </style>
 </head>
 <body>
@@ -41,11 +58,18 @@
             if(typeof SatexMantenimiento !== 'undefined') {
                 SatexMantenimiento.render("mantenimiento-container");
                 if(typeof SatexPreventivoDesign !== 'undefined') {
-                    // Se renderiza el 90% en el contenedor de preventivos
                     SatexPreventivoDesign.render("preventivos-grafico-container", 90);
                 }
-                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 }];
-                const accs = [{ item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 }];
+                
+                const paros = [
+                    { tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 },
+                    { tipo: "OpenE.", num: "OE-02", fecha: "15/02/2026", dias: 13 }
+                ];
+                
+                const accs = [
+                    { item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 }
+                ];
+
                 if(document.getElementById("maquinas-paradas-scroll")) SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
                 if(document.getElementById("accidentes-scroll")) SatexAccidentes.render("accidentes-scroll", accs);
             }
