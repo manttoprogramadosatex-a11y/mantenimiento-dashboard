@@ -2,30 +2,30 @@ const SatexHeaderDesign = {
     render: function(id) {
         const container = document.getElementById(id);
         if (!container) return;
-
-        // Se añadió "HILATURA" al final y se aseguró el centrado del texto
+        
         container.innerHTML = `
-        <div style="background-color: #002147; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 2px solid #f9b218; box-sizing: border-box;">
-            
-            <div style="width: 200px;">
-                <img src="logo.png.jpeg" alt="Satex Logo" style="height: 45px; display: block;">
+        <div style="background-color: #1a3a5a; color: white; padding: 5px 20px; border-bottom: 2px solid #f9b218; display: flex; flex-direction: column; gap: 5px;">
+            <div style="display: flex; justify-content: center; align-items: center; position: relative;">
+                <h1 style="margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px;">Satex Master Project - Hilatura</h1>
             </div>
 
-            <div style="flex-grow: 1; text-align: center;">
-                <h1 style="color: white; margin: 0; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; font-family: 'Segoe UI', sans-serif;">
-                    TABLERO MASTER MANTTO. SATEX TEXTIL HILATURA
-                </h1>
-            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 5px 10px; border-radius: 4px;">
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="color: #a1b1c1; font-size: 12px; font-weight: bold; text-transform: uppercase;">Máquinas Paradas</div>
+                    <div style="color: #ff4444; font-size: 28px; font-weight: bold; line-height: 1;">3</div>
+                </div>
 
-            <div id="header-reloj" style="width: 200px; color: #f9b218; text-align: right; font-weight: bold; font-size: 16px; font-family: 'Segoe UI', sans-serif;">
-                ${this.obtenerFecha()}
+                <div id="maquinas-paradas-scroll" style="flex-grow: 1; margin: 0 20px; height: 40px; border: 1px solid #ff4444; border-radius: 4px; background: rgba(0,0,0,0.4); overflow-y: auto;">
+                </div>
+
+                <div style="text-align: right;">
+                    <div style="color: #a1b1c1; font-size: 10px; margin-bottom: 2px;">(Fecha Act.: 27-feb-2026)</div>
+                    <button style="background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 2px 10px; font-size: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase;">
+                        Detalles Cardas
+                    </button>
+                </div>
             </div>
         </div>`;
-    },
-
-    obtenerFecha: function() {
-        const ahora = new Date();
-        const opciones = { day: '2-digit', month: 'short', year: 'numeric' };
-        return ahora.toLocaleDateString('es-ES', opciones).replace('.', '').toUpperCase();
     }
 };
