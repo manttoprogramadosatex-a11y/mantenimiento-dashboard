@@ -1,3 +1,7 @@
+/**
+ * Librería: lib_header_design.js
+ * Estado: Restaurado a 26px
+ */
 const SatexHeaderDesign = {
     render: function(id) {
         const hoy = new Date();
