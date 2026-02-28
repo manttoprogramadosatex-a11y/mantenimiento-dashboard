@@ -3,9 +3,9 @@ const SatexPreventivoDesign = {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Se redujo el tamaño de 145px a 140px para la nueva reducción de 0.5 cm
+        // Se agregó margin-top: 2px para bajar la dona 0.5mm
         container.innerHTML = `
-        <div style="width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; float: left; box-sizing: border-box;">
+        <div style="width: 50%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; float: left; box-sizing: border-box; margin-top: 2px;">
             <div style="position: relative; width: 140px; height: 140px;">
                 <canvas id="canvas-preventivo" width="140" height="140"></canvas>
                 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 24px; font-family: 'Segoe UI', sans-serif;">
@@ -24,12 +24,11 @@ const SatexPreventivoDesign = {
         const ctx = canvas.getContext('2d');
         const x = canvas.width / 2;
         const y = canvas.height / 2;
-        // Radio ajustado a 60px para el nuevo tamaño de 140px
         const radio = 60; 
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Fondo del anillo (Sutil)
+        // Fondo del anillo
         ctx.beginPath();
         ctx.arc(x, y, radio, 0, 2 * Math.PI);
         ctx.lineWidth = 14; 
