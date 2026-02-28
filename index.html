@@ -12,7 +12,7 @@
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 125px); }
-        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; overflow-y: hidden; padding: 1px 10px 1px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
+        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; overflow-y: hidden; padding: 1px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
         #mantenimiento-container { flex-grow: 1; position: relative; margin-top: 1px; }
     </style>
 </head>
@@ -29,7 +29,8 @@
             "lib_estatus_data.js", "lib_maquinas_paradas.js", "lib_maquinas_inactivas.js", 
             "lib_mantenimiento.js", "lib_accidentes.js", "lib_cardas.js", 
             "lib_cardas_design.js", "lib_cardas_engine.js", "lib_preventivo_design.js",
-            "lib_personal_mantto_design.js", "lib_compras_pendientes_design.js"
+            "lib_personal_mantto_design.js", "lib_compras_pendientes_design.js",
+            "lib_pmc_donas_design.js", "lib_correctivo_kpi_design.js"
         ];
         libs.forEach(lib => { document.write(`<script src="${lib}?v=${v}"><\/script>`); });
     </script>
@@ -43,22 +44,22 @@
             if(typeof SatexMantenimiento !== 'undefined') {
                 SatexMantenimiento.render("mantenimiento-container");
                 
-                if(typeof SatexPreventivoDesign !== 'undefined') SatexPreventivoDesign.render("preventivos-grafico-container", 90);
-                
-                // Simulación de datos para nuevas secciones
-                if(typeof SatexPersonalManttoDesign !== 'undefined') {
-                    const datosPersonal = [{id: 1, nombre: "Juan Perez", estatus: "ACT"}, {id: 2, nombre: "Luis Garcia", estatus: "DET"}];
-                    SatexPersonalManttoDesign.render("personal-mantto-scroll", datosPersonal);
+                // --- NUEVAS SECCIONES CORRECTIVO ---
+                // PMC Donas (idD, idM, valD, maxD, valM, maxM)
+                if(typeof SatexPMCDonasDesign !== 'undefined') {
+                    SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
                 }
-                
-                if(typeof SatexComprasPendientesDesign !== 'undefined') {
-                    const datosCompras = [{articulo: "Rodamientos Carda 5", dias: 15}, {articulo: "Bandas Transm.", dias: 3}];
-                    SatexComprasPendientesDesign.render("compras-pendientes-scroll", datosCompras);
+                // KPIs (id, mtbf, mttr, os)
+                if(typeof SatexCorrectivoKPIDesign !== 'undefined') {
+                    SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
                 }
 
-                const paros = [{ tipo: "Cont.", num: "C-08", fecha: "01/01/2025", dias: 423 }];
+                // --- SECCIONES EXISTENTES ---
+                if(typeof SatexPreventivoDesign !== 'undefined') SatexPreventivoDesign.render("preventivos-grafico-container", 90);
+                if(typeof SatexPersonalManttoDesign !== 'undefined') SatexPersonalManttoDesign.render("personal-mantto-scroll", []);
+                if(typeof SatexComprasPendientesDesign !== 'undefined') SatexComprasPendientesDesign.render("compras-pendientes-scroll", []);
+                
                 const accs = [{ item: 1, nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: 140 }];
-                if(document.getElementById("maquinas-paradas-scroll")) SatexMaquinasInactivas.render("maquinas-paradas-scroll", paros);
                 if(document.getElementById("accidentes-scroll")) SatexAccidentes.render("accidentes-scroll", accs);
             }
         };
