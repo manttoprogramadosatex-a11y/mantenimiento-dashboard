@@ -1,16 +1,17 @@
+/* estilos.css */
 #cardas-grid {
     display: flex !important;
     flex-wrap: nowrap !important;
     overflow-x: scroll !important;
     overflow-y: hidden;
     gap: 8px;
-    padding: 0px 10px;
+    padding: 0px 10px !important;
     width: 100%;
     box-sizing: border-box;
 }
 
 #cardas-grid::-webkit-scrollbar {
-    height: 6px; /* Scroll más delgado (1mm aprox) */
+    height: 6px;
 }
 
 #cardas-grid::-webkit-scrollbar-thumb {
