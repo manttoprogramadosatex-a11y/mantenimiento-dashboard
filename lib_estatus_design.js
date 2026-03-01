@@ -1,6 +1,7 @@
 // lib_estatus_design.js
-// VERSION 1.1.0
+// VERSION 1.2.0
 // Ajuste de anchos de columnas en bloque Máquinas Paradas
+// Se agrega ID a Fecha Act. para actualización dinámica
 
 const SatexEstatusDesign = {
     render: function(id) {
@@ -21,10 +22,10 @@ const SatexEstatusDesign = {
 
             <div style="width: 130px; background: rgba(0,0,0,0.2); border-left: 3px solid #ff4444; padding: 0 8px; height: 45px; display: flex; align-items: center; gap: 5px;">
                 <div style="color: #a1b1c1; font-size: 13px; font-weight: bold; line-height: 1;">MÁQUINAS PARADAS</div>
-                <div id="num-maquinas-paradas" style="color: #ff4444; font-size: 32px; font-weight: bold;">3</div>
+                <div id="num-maquinas-paradas" style="color: #ff4444; font-size: 32px; font-weight: bold;">0</div>
             </div>
 
-            <!-- TABLA AJUSTADA -->
+            <!-- TABLA -->
             <div style="flex-grow: 1; height: 45px; border: 1px solid #ff4444; border-radius: 4px; background: rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column;">
                 
                 <div style="display: flex; background: rgba(0,0,0,0.5); color: #ff8c69; font-size: 12px; font-weight: bold; border-bottom: 1px solid #ff4444; padding: 1px 0;">
@@ -38,19 +39,30 @@ const SatexEstatusDesign = {
             </div>
 
             <div style="text-align: right; width: 155px; line-height: 1.1;">
-                <div style="color: #a1b1c1; font-size: 11px; margin-bottom: 2px;">(Fecha Act.: 27-feb-2026)</div>
-                <button style="background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 8px; font-size: 12px; font-weight: bold; cursor: pointer;">DETALLES CARDAS</button>
+                <div id="fecha-actualizacion" style="color: #a1b1c1; font-size: 11px; margin-bottom: 2px;">
+                    (Fecha Act.: --)
+                </div>
+                <button style="background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 8px; font-size: 12px; font-weight: bold; cursor: pointer;">
+                    DETALLES CARDAS
+                </button>
             </div>
+
         </div>`;
     },
 
     crearBloque: function(titulo, valor, unidad, id) {
         return `
         <div style="width: 125px; background: rgba(0,0,0,0.15); border-left: 3px solid #f9b218; padding: 0 6px; height: 45px; display: flex; flex-direction: column; justify-content: center;">
-            <div style="color: #a1b1c1; font-size: 12px; font-weight: bold; line-height: 1; white-space: nowrap; overflow: hidden;">${titulo}</div>
+            <div style="color: #a1b1c1; font-size: 12px; font-weight: bold; line-height: 1; white-space: nowrap; overflow: hidden;">
+                ${titulo}
+            </div>
             <div style="display: flex; align-items: baseline; gap: 4px; line-height: 1;">
-                <span id="${id}" style="color: #f9b218; font-size: 26px; font-weight: bold;">${valor}</span>
-                <span style="color: #a1b1c1; font-size: 14px;">${unidad}</span>
+                <span id="${id}" style="color: #f9b218; font-size: 26px; font-weight: bold;">
+                    ${valor}
+                </span>
+                <span style="color: #a1b1c1; font-size: 14px;">
+                    ${unidad}
+                </span>
             </div>
         </div>`;
     }
