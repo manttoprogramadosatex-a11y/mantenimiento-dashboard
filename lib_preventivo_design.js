@@ -1,3 +1,7 @@
+// lib_preventivo_design.js
+// VERSION 1.1.0
+// Ajuste de separación vertical para alineación con bloque correctivo
+
 const SatexPreventivoDesign = {
     render: function(id, porcentaje) {
         const container = document.getElementById(id);
@@ -14,13 +18,23 @@ const SatexPreventivoDesign = {
                         ${porcentaje}%
                     </div>
                 </div>
-                <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-transform: uppercase; text-align: center; line-height: 1;">
+                <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 6px; text-transform: uppercase; text-align: center; line-height: 1;">
                     Cumplimiento Acumulado
                 </div>
             </div>
 
             <!-- COLUMNA BOTONES -->
-            <div style="width: 70%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
+            <div style="
+                width: 70%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                gap: 8px;  /* ← AQUÍ aumentamos el espacio */
+                padding-left: 10px;
+                border-left: 1px solid rgba(255,255,255,0.1);
+                box-sizing: border-box;
+            ">
                 ${this.btn("Preventivos Hoy", "55", "#f9b218")}
                 ${this.btn("Prev. pendientes antes hoy", "20", "#ff9999")}
                 ${this.btn("Preventivos Extraordinarios", "03", "#ffffff")} 
@@ -35,15 +49,31 @@ const SatexPreventivoDesign = {
 
     btn: function(t, v, c) {
         return `
-        <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.15); padding: 2px 6px; border-radius: 4px; height: calc(100% / 6 - 4px); box-sizing: border-box;">
+        <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.15); padding: 4px 6px; border-radius: 4px; flex: 1;">
             
-            <button style="width: 82%; height: 100%; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; cursor: pointer; line-height: 1; padding: 0 6px; display: flex; align-items: center; justify-content: center; text-align: center;"
-                onmousedown="this.style.transform='scale(0.96)'"
-                onmouseup="this.style.transform='scale(1)'">
+            <button style="
+                width: 82%;
+                height: 100%;
+                background: #2f5577;
+                color: white;
+                border: 1px solid ${c};
+                border-radius: 4px;
+                font-size: 11px;
+                font-weight: bold;
+                text-transform: uppercase;
+                cursor: pointer;
+                padding: 0 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            "
+            onmousedown="this.style.transform='scale(0.96)'"
+            onmouseup="this.style.transform='scale(1)'">
                 ${t}
             </button>
 
-            <div style="width: 15%; color: ${c}; font-size: 17px; font-weight: bold; font-family: 'Segoe UI', sans-serif; text-align: right;">
+            <div style="width: 15%; color: ${c}; font-size: 17px; font-weight: bold; text-align: right;">
                 ${v}
             </div>
         </div>`;
