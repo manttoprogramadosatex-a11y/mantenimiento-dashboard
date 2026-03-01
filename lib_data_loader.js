@@ -1,6 +1,8 @@
 /* lib_data_loader.js */
-/* VERSION 1.0
+/* VERSION 1.1
    - Carga datos reales desde Google Sheets
+   - Anti-cache agregado
+   - Actualización estable cada 15s
    - Solo datos, no toca diseño
 */
 
@@ -10,10 +12,17 @@ const SatexDataLoader = {
 
         try {
 
-            const url =
-            "https://docs.google.com/spreadsheets/d/1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok/gviz/tq?tqx=out:json&sheet=Husos%20inactivos";
+            // 🔥 Timestamp dinámico para evitar cache
+            const timestamp = new Date().getTime();
 
-            const respuesta = await fetch(url);
+            const url =
+            "https://docs.google.com/spreadsheets/d/1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok/gviz/tq?tqx=out:json&sheet=Husos%20inactivos&t=" + timestamp;
+
+            const respuesta = await fetch(url, {
+                method: "GET",
+                cache: "no-store"
+            });
+
             const texto = await respuesta.text();
 
             const json = JSON.parse(
