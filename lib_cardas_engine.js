@@ -1,6 +1,6 @@
 /* lib_cardas_engine.js */
-/* VERSION 1.5
-   - Estabilidad de renderizado para 10 cardas
+/* VERSION 1.6
+   - Sincronización con índices corregidos
 */
 
 const SatexCardasEngine = {
