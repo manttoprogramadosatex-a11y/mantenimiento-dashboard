@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <title>Satex Master Project 2026</title>
     <script>
-        // Forzar recarga de archivos para evitar cache
         const v = new Date().getTime(); 
         document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
     </script>
     <style>
-        html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; }
+        html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
-        #cardas-grid { height: 160px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 5px; background: rgba(0,0,0,0.2); gap: 8px; }
+        #cardas-grid { height: 165px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 5px; background: rgba(0,0,0,0.15); gap: 10px; }
         #mantenimiento-container { flex-grow: 1; position: relative; }
     </style>
 </head>
@@ -37,35 +36,35 @@
     </script>
 
     <script>
-        // Función para actualizar TODO lo que venga de Google Sheets
-        async function actualizarDatosEnTiempoReal() {
+        async function sincronizarTodo() {
             try {
-                console.log("Sincronizando con Excel...");
-                // 1. Husos y Maquinas Paradas (gid=0 y Maquinas Paradas)
+                // Actualiza Husos y Paros
                 await SatexEstatusData.actualizarDesdeSheet();
-                // 2. Cardas (D5:M7 de Info Cardas)
+                // Actualiza Cardas con el nuevo ajuste de filas
                 await SatexCardasEngine.dibujar("cardas-grid");
-            } catch (e) {
-                console.error("Fallo en la actualización:", e);
+            } catch (err) {
+                console.error("Error en sincronización:", err);
             }
         }
 
         window.onload = async () => {
-            // Renderizado de estructuras estáticas
+            // Dibujar estructura visual fija
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
 
-            // Datos de accidentes (estáticos por ahora)
-            const datosAccidentes = [
+            // Accidentes (Carga manual inicial)
+            const datosAcc = [
                 {item: "1", nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: "141"},
                 {item: "2", nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "2-feb-2025", dias: "391"}
             ];
-            SatexAccidentes.render("accidentes-scroll", datosAccidentes);
+            SatexAccidentes.render("accidentes-scroll", datosAcc);
 
-            // Carga inicial y bucle de 15 segundos
-            await actualizarDatosEnTiempoReal();
-            setInterval(actualizarDatosEnTiempoReal, 15000);
+            // Primera carga de datos reales
+            await sincronizarTodo();
+
+            // Ciclo infinito cada 15 segundos
+            setInterval(sincronizarTodo, 15000);
         };
     </script>
 </body>
