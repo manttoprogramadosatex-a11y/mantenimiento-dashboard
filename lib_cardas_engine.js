@@ -1,51 +1,23 @@
 /* lib_cardas_engine.js */
-const SatexCardasEngine = {
-    dibujar: function(idContenedor, datos) {
-        const grid = document.getElementById(idContenedor);
-        if (!grid || !datos) return;
+const CardasEngine = {
+    async actualizarCardas() {
+        const datos = await SatexDataLoader.obtenerDatosCardas();
+        if (!datos) return;
 
-        // Limpiar contenido previo
-        grid.innerHTML = "";
+        const contenedor = document.getElementById('cardas-container');
+        if (!contenedor) return;
 
-        // Crear nuevas tarjetas
-        grid.innerHTML = datos.map(c => SatexCardasDesign.crearCarda(c.id, c.t, c.ac, c.max)).join('');
-
-        // Pintar Gauges
-        datos.forEach(c => {
-            const canvas = document.getElementById(`canvas-${c.id}`);
-            if (canvas) {
-                this.pintarGauje(canvas, c.ac, c.max);
-            }
+        contenedor.innerHTML = '';
+        datos.forEach(carda => {
+            const cardElement = CardasDesign.crearCarda(carda);
+            contenedor.appendChild(cardElement);
         });
-    },
-
-    pintarGauje: function(canvas, ac, max) {
-        const ctx = canvas.getContext('2d');
-        const x = canvas.width / 2;
-        const y = canvas.height - 5;
-        const radio = 60;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        ctx.beginPath();
-        ctx.arc(x, y, radio, Math.PI, 0);
-        ctx.lineWidth = 12;
-        ctx.strokeStyle = '#eeeeee';
-        ctx.stroke();
-
-        const porcentaje = Math.min(ac / (max || 1), 1);
-        let color = porcentaje > 0.9 ? '#f44336' : (porcentaje > 0.7 ? '#ff9800' : '#4caf50');
-
-        ctx.beginPath();
-        ctx.arc(x, y, radio, Math.PI, Math.PI + (Math.PI * porcentaje));
-        ctx.strokeStyle = color;
-        ctx.stroke();
-
-        const angulo = Math.PI + (Math.PI * porcentaje);
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + Math.cos(angulo) * 50, y + Math.sin(angulo) * 50);
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = '#333';
-        ctx.stroke();
     }
 };
+
+// Ejecución inicial
+document.addEventListener('DOMContentLoaded', () => {
+    CardasEngine.actualizarCardas();
+    // Actualizar cada 5 minutos
+    setInterval(() => CardasEngine.actualizarCardas(), 300000);
+});
