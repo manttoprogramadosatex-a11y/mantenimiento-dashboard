@@ -1,8 +1,9 @@
 /* lib_mantenimiento.js */
-/* VERSION 1.3
-   - Reducción leve de texto en botones correctivos
-   - No modifica altura
-   - No altera layout
+/* VERSION 1.4
+   - Aumento proporcional altura botones preventivos
+   - Ajuste leve de espaciado
+   - Se alinea visualmente con botones correctivos
+   - No altera layout global
 */
 
 const SatexMantenimiento = {
@@ -15,6 +16,9 @@ const SatexMantenimiento = {
             
             <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background-color: #f9b218; transform: translateX(-50%); z-index: 5;"></div>
             
+            <!-- ===================== -->
+            <!-- LADO IZQUIERDO -->
+            <!-- ===================== -->
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
                 
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 6px;">
@@ -54,20 +58,28 @@ const SatexMantenimiento = {
                 </div>
             </div>
 
+            <!-- ===================== -->
+            <!-- LADO DERECHO -->
+            <!-- ===================== -->
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
                 
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 6px;">
                     Mantto. Preventivo
                 </div>
                 
-                <div id="preventivos-grafico-container" style="width: 100%; height: 180px;"></div>
+                <!-- 🔥 Ajuste altura gráfico -->
+                <div id="preventivos-grafico-container" style="width: 100%; height: 170px; margin-bottom: 8px;"></div>
                 
-                <div style="margin-top: auto; padding-bottom: 10px;">
-                    <div style="color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; text-align: center; margin-bottom: 5px; text-transform: uppercase;">
-                        Accidentes
-                    </div>
-                    <div id="accidentes-scroll" style="height: 75px; background: rgba(0,0,0,0.2); border-radius: 4px; overflow-y: auto;"></div>
+                <!-- 🔥 Botones preventivos aumentados -->
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    ${this.btnPrev("PREVENTIVOS HOY", "55", "#f9b218")}
+                    ${this.btnPrev("PREV. PENDIENTES ANTES HOY", "20", "#ff6f61")}
+                    ${this.btnPrev("PREVENTIVOS EXTRAORDINARIOS", "03", "#ffffff")}
+                    ${this.btnPrev("MANTTO. DICIEMBRE", "12", "#4caf50")}
+                    ${this.btnPrev("MANTTO. ABRIL", "8", "#00bcd4")}
+                    ${this.btnPrev("MANTTO. D. FESTIVOS", "5", "#e91e63")}
                 </div>
+
             </div>
 
         </div>`;
@@ -82,15 +94,31 @@ const SatexMantenimiento = {
             color: white;
             border: 1px solid ${c};
             border-radius: 4px;
-            font-size: 12px; /* 🔥 antes 13px */
+            font-size: 12px;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
-            transition: 0.1s;
-        "
-        onmousedown="this.style.transform='scale(0.97)'"
-        onmouseup="this.style.transform='scale(1)'">
+        ">
             ${t}
         </button>`;
+    },
+
+    btnPrev: function(texto, valor, color) {
+        return `
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            height:30px; /* 🔥 antes ~24px */
+            padding:0 10px;
+            border:1px solid ${color};
+            border-radius:4px;
+            font-size:13px;
+            font-weight:bold;
+            color:white;
+        ">
+            <span>${texto}</span>
+            <span style="color:${color};">${valor}</span>
+        </div>`;
     }
 };
