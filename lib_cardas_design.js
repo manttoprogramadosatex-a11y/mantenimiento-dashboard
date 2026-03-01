@@ -1,3 +1,4 @@
+/* lib_cardas_design.js */
 const SatexCardasDesign = {
     crearCarda: function(id, titulo, actual, maximo) {
         // Reducción extrema a 142px de alto (espacios de ~1mm)
