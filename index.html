@@ -64,6 +64,9 @@
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
 
+            // 🔥 Cardas primero (ANTES de cualquier Sheet)
+            SatexCardasEngine.dibujar("cardas-grid");
+
             // Accidentes
             const datosAccidentes = [
                 {item: "1", nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: "141"},
@@ -89,9 +92,6 @@
             setInterval(async () => {
                 await SatexEstatusData.actualizarDesdeSheet();
             }, 15000);
-
-            // Cardas
-            SatexCardasEngine.dibujar("cardas-grid");
 
             // Mantenimiento
             SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
