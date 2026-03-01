@@ -1,8 +1,8 @@
 /* lib_mantenimiento.js */
-/* VERSION 1.2 
-   - Botones correctivos en una sola fila horizontal
-   - Tipografía aumentada
-   - Sin alterar layout general
+/* VERSION 1.3
+   - Reducción leve de texto en botones correctivos
+   - No modifica altura
+   - No altera layout
 */
 
 const SatexMantenimiento = {
@@ -13,19 +13,14 @@ const SatexMantenimiento = {
         container.innerHTML = `
         <div style="display: flex; width: 100%; height: 100%; position: relative; font-family: 'Segoe UI', sans-serif;">
             
-            <!-- Línea divisoria central -->
             <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background-color: #f9b218; transform: translateX(-50%); z-index: 5;"></div>
             
-            <!-- ===================== -->
-            <!-- LADO IZQUIERDO -->
-            <!-- ===================== -->
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
                 
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 6px;">
                     Mantto. Correctivo
                 </div>
                 
-                <!-- DONAS + KPIs -->
                 <div style="display: flex; width: 100%; height: 160px; gap: 10px; margin-bottom: 8px;">
                     <div style="width: 50%; display: flex; gap: 5px;">
                         <div id="pmc-diario-container" style="flex: 1;"></div>
@@ -34,14 +29,12 @@ const SatexMantenimiento = {
                     <div id="kpis-correctivo-container" style="width: 50%;"></div>
                 </div>
 
-                <!-- BOTONES EN UNA SOLA FILA -->
                 <div style="display: flex; width: 100%; gap: 8px; margin-bottom: 8px;">
                     ${this.btn("CORRECTIVOS PROGRAMADOS", "#f9b218")}
                     ${this.btn("CORRECTIVOS A EDIFICIOS", "#00bcd4")}
                     ${this.btn("BITÁCORA DE OS", "#ffffff")}
                 </div>
 
-                <!-- BLOQUES INFERIORES -->
                 <div style="margin-top: auto; padding-bottom: 5px;">
                     
                     <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
@@ -61,9 +54,6 @@ const SatexMantenimiento = {
                 </div>
             </div>
 
-            <!-- ===================== -->
-            <!-- LADO DERECHO -->
-            <!-- ===================== -->
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
                 
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 6px;">
@@ -83,7 +73,6 @@ const SatexMantenimiento = {
         </div>`;
     },
 
-    /* BOTONES CORRECTIVOS */
     btn: function(t, c) {
         return `
         <button style="
@@ -93,7 +82,7 @@ const SatexMantenimiento = {
             color: white;
             border: 1px solid ${c};
             border-radius: 4px;
-            font-size: 13px;
+            font-size: 12px; /* 🔥 antes 13px */
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
