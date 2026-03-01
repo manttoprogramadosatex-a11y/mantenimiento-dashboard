@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <title>Satex Master Project 2026</title>
     <script>
-        const v = new Date().getTime(); 
+        const v = new Date().getTime();
         document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; }
-        /* Ajuste de altura del grid para acompañar el cambio en las carátulas */
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
-        #cardas-grid { height: 180px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 5px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
+        #cardas-grid { height: 190px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 5px 10px; background: rgba(0,0,0,0.1); gap: 10px; }
         #mantenimiento-container { flex-grow: 1; position: relative; }
     </style>
 </head>
@@ -32,19 +31,17 @@
             "lib_compras_pendientes_design.js", "lib_pmc_donas_design.js", 
             "lib_correctivo_kpi_design.js", "lib_accidentes.js"
         ];
-        libs.forEach(lib => {
-            document.write(`<script src="${lib}?v=${v}"><\/script>`);
-        });
+        libs.forEach(lib => { document.write(`<script src="${lib}?v=${v}"><\/script>`); });
     </script>
 
     <script>
         window.onload = () => {
-            // Render de estructuras base
+            // Render Estructuras
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
             
-            // Datos de Máquinas Paradas con cálculo automático de días
+            // Datos Máquinas Paradas con 5 ejemplos para Scroll y cálculo automático
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", [
                 {tipo:"CARDA", num:"02", desde:"2025/02/26", dias:""},
                 {tipo:"CARDA", num:"08", desde:"2026/02/20", dias:""},
@@ -53,17 +50,17 @@
                 {tipo:"CARDA", num:"05", desde:"2026/02/15", dias:""}
             ]);
 
-            // Actualización de indicadores de estatus
+            // Datos Estatus
             SatexEstatusData.actualizar(14, 6, 4, 5);
 
-            // Dibujado de Cardas
+            // Cardas
             SatexCardasEngine.dibujar("cardas-grid");
 
-            // Donas y KPIs de Mantenimiento
+            // Donas y KPIs
             SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
 
-            // Preventivo y Listas
+            // Preventivos y Listas
             SatexPreventivoDesign.render("preventivos-grafico-container", 90);
             SatexPersonalManttoDesign.render("personal-mantto-scroll", []);
             SatexComprasPendientesDesign.render("compras-pendientes-scroll", []);
