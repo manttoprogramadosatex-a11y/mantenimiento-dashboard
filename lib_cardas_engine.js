@@ -1,6 +1,6 @@
 /* lib_cardas_engine.js */
-/* VERSION 1.6
-   - Sincronización con índices corregidos
+/* VERSION 1.7
+   - Renderizado limpio de Gauges con datos de Cardas
 */
 
 const SatexCardasEngine = {
