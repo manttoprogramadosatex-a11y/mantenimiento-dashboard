@@ -1,8 +1,9 @@
 /* lib_estatus_data.js */
-/* VERSION 2.2
+/* VERSION 2.4
    - Conectado a Google Sheets
-   - Datos reales en tiempo real
-   - Controla render de Maquinas Paradas
+   - Actualiza Husos
+   - Actualiza Tabla Maquinas Paradas
+   - Actualiza Indicador num-maquinas-paradas
    - No modifica diseño
 */
 
@@ -10,7 +11,7 @@ const SatexEstatusData = {
 
     async actualizarDesdeSheet() {
 
-        // 🔹 Husos
+        // 🔹 1. HUSOS INACTIVOS
         const datosHusos = await SatexDataLoader.obtenerHusosInactivos();
 
         const cont = document.getElementById("estatus-continuas");
@@ -22,15 +23,21 @@ const SatexEstatusData = {
         if (con)  con.textContent  = datosHusos.coneras;
 
 
-        // 🔹 Maquinas Paradas
-        const contenedorMaquinas = document.getElementById("maquinas-paradas-scroll");
+        // 🔹 2. MAQUINAS PARADAS
+        const maquinas = await SatexDataLoader.obtenerMaquinasParadas();
 
-        if (contenedorMaquinas) {
+        const contenedorTabla = document.getElementById("maquinas-paradas-scroll");
 
-            const maquinas = await SatexDataLoader.obtenerMaquinasParadas();
-
+        if (contenedorTabla) {
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", maquinas);
+        }
 
+
+        // 🔹 3. INDICADOR DE CANTIDAD
+        const indicador = document.getElementById("num-maquinas-paradas");
+
+        if (indicador) {
+            indicador.textContent = maquinas.length;
         }
 
     }
