@@ -1,7 +1,7 @@
 /* lib_mantenimiento.js */
-/* VERSION 1.3.3
-   - Ajuste real vertical del título "ACCIDENTES"
-   - No modifica alturas generales
+/* VERSION 1.3.1
+   - Ajuste leve vertical del título "Accidentes"
+   - No modifica alturas
    - No altera layout
 */
 
@@ -15,7 +15,6 @@ const SatexMantenimiento = {
             
             <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background-color: #f9b218; transform: translateX(-50%); z-index: 5;"></div>
             
-            <!-- COLUMNA IZQUIERDA -->
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
                 
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 6px;">
@@ -55,7 +54,6 @@ const SatexMantenimiento = {
                 </div>
             </div>
 
-            <!-- COLUMNA DERECHA -->
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
                 
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 6px;">
@@ -64,8 +62,7 @@ const SatexMantenimiento = {
                 
                 <div id="preventivos-grafico-container" style="width: 100%; height: 180px;"></div>
                 
-                <!-- BLOQUE INFERIOR -->
-                <div style="margin-top: auto; padding-top: 8px; padding-bottom: 10px;">
+                <div style="margin-top: auto; padding-bottom: 10px;">
                     
                     <div style="
                         color: #ff9999;
@@ -73,6 +70,7 @@ const SatexMantenimiento = {
                         font-weight: bold;
                         border-bottom: 1px solid #ff9999;
                         text-align: center;
+                        margin-top: 4px; /* ← BAJAMOS LIGERAMENTE */
                         margin-bottom: 5px;
                         text-transform: uppercase;
                     ">
