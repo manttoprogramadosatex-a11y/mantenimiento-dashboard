@@ -10,34 +10,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; }
-        
+        /* Ajuste a 155px para maximizar espacio de mantenimiento */
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
-        
-        /* Regreso a altura original de 190px */
-        #cardas-grid { 
-            height: 190px !important; 
-            flex-shrink: 0; 
-            display: flex; 
-            overflow-x: auto; 
-            padding: 5px 10px; 
-            background: rgba(0,0,0,0.1); 
-            gap: 10px; 
-        }
-
-        /* Scrollbar original */
-        #cardas-grid::-webkit-scrollbar { 
-            height: 10px; 
-        }
-        #cardas-grid::-webkit-scrollbar-track { 
-            background: rgba(0,0,0,0.2); 
-            border-radius: 5px;
-        }
-        #cardas-grid::-webkit-scrollbar-thumb { 
-            background: #f9b218; 
-            border-radius: 5px;
-            border: 2px solid #2f5577;
-        }
-        
+        #cardas-grid { height: 155px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 2px 10px; background: rgba(0,0,0,0.1); gap: 5px; }
         #mantenimiento-container { flex-grow: 1; position: relative; }
     </style>
 </head>
