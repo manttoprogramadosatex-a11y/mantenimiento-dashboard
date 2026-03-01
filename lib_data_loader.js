@@ -1,9 +1,9 @@
 /* lib_data_loader.js */
-/* VERSION 4.5
-   - Ajuste final de índices basado en estructura real de la captura
-   - Fila 5 (Nombres) -> filas[1]
-   - Fila 6 (Toneladas Act.) -> filas[2]
-   - Fila 7 (Toneladas Max.) -> filas[3]
+/* VERSION 4.6
+   - Ajuste de índices: Desplazamiento +2 filas hacia abajo
+   - Fila 5 (Nombres) -> filas[3]
+   - Fila 6 (Toneladas Act.) -> filas[4]
+   - Fila 7 (Toneladas Max.) -> filas[5]
 */
 
 const SHEET_ID = "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok";
@@ -55,14 +55,14 @@ const SatexDataLoader = {
             const json = JSON.parse(texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1));
             const filas = json.table.rows;
 
-            // Ajuste según interpretación de Google Sheets de tu captura:
-            const titulos  = filas[1].c; // Corresponde a Fila 5 del Excel (Carda X)
-            const actuales = filas[2].c; // Corresponde a Fila 6 del Excel (794, 1016...)
-            const maximos  = filas[3].c; // Corresponde a Fila 7 del Excel (1100, 950...)
+            // Ajuste de puntería basado en tu reporte de desfase (+2 filas):
+            const titulos  = filas[3].c; // Antes filas[1]
+            const actuales = filas[4].c; // Antes filas[2]
+            const maximos  = filas[5].c; // Antes filas[3]
 
             const resultado = [];
-            // Columnas D(3) a M(12) para las 10 cardas
-            for (let i = 3; i <= 12; i++) {
+            // Columnas D(3) a N(13)
+            for (let i = 3; i <= 13; i++) {
                 resultado.push({
                     id: i - 2,
                     t: titulos[i]?.v || `CARDA ${i-2}`,
