@@ -1,11 +1,8 @@
 /* lib_cardas_engine.js */
-/* VERSION 3.0.0
+/* VERSION 3.1.0
+   - NO borra layout
+   - Solo actualiza tarjetas internas
    - Conectado a Google Sheets
-   - Pestaña: Informacion Cardas
-   - GID: 1547200035
-   - AC: D6-N6
-   - MAX: D7-N7
-   - No modifica diseño
 */
 
 const SatexCardasEngine = {
@@ -29,15 +26,11 @@ const SatexCardasEngine = {
 
         if (!rows || rows.length < 7) return [];
 
-        // Fila 6 → índice 5
         const filaAC  = rows[5].c;
-
-        // Fila 7 → índice 6
         const filaMAX = rows[6].c;
 
         const cardas = [];
 
-        // Columnas D a N → índices 3 a 13
         for (let i = 3; i <= 13; i++) {
 
             const ac  = filaAC[i]  ? filaAC[i].v  : 0;
@@ -62,7 +55,17 @@ const SatexCardasEngine = {
         const datos = await this.cargarDatos();
         if (!datos.length) return;
 
-        container.innerHTML = "";
+        // 🔥 SOLO buscamos o creamos un sub-contenedor interno
+        let grid = container.querySelector(".cardas-grid");
+
+        if (!grid) {
+            grid = document.createElement("div");
+            grid.className = "cardas-grid";
+            container.appendChild(grid);
+        }
+
+        // 🔥 Solo limpiamos el grid interno
+        grid.innerHTML = "";
 
         datos.forEach(carda => {
 
@@ -70,25 +73,23 @@ const SatexCardasEngine = {
                 ? (carda.ac / carda.max) * 100
                 : 0;
 
-            let color = "#2ecc71"; // verde
-
+            let color = "#2ecc71";
             if (porcentaje >= 90) color = "#e74c3c";
             else if (porcentaje >= 70) color = "#f39c12";
 
-            const tarjeta = `
-            <div class="carda-box">
+            const tarjeta = document.createElement("div");
+            tarjeta.className = "carda-box";
+
+            tarjeta.innerHTML = `
                 <div class="carda-titulo">${carda.nombre}</div>
-
                 <canvas id="gauge-${carda.id}" width="160" height="100"></canvas>
-
                 <div class="carda-datos">
                     <div>Ac. ${carda.ac}</div>
                     <div>Max. ${carda.max}</div>
                 </div>
-            </div>
             `;
 
-            container.innerHTML += tarjeta;
+            grid.appendChild(tarjeta);
 
             setTimeout(() => {
                 this.dibujarGauge(
@@ -113,14 +114,12 @@ const SatexCardasEngine = {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Arco gris fondo
         ctx.beginPath();
         ctx.lineWidth = 12;
         ctx.strokeStyle = "#ddd";
         ctx.arc(80, 90, 60, Math.PI, 0);
         ctx.stroke();
 
-        // Arco valor
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.arc(80, 90, 60, Math.PI, Math.PI + angulo);
