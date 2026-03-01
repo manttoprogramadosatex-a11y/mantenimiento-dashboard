@@ -1,8 +1,8 @@
 /* lib_maquinas_inactivas.js */
-/* VERSION 2.2.0
-   - Compatible con formato Date(YYYY,MM,DD)
+/* VERSION 2.3.0
+   - Corrige inicio desde fila 2 real
+   - Compatible con Date(YYYY,MM,DD)
    - Pestaña Maquinas Paradas gid=217931005
-   - A=DESDE | B=TIPO | C=NUM
    - No modifica diseño
 */
 
@@ -30,7 +30,7 @@ const SatexMaquinasInactivas = {
 
             const rows = json.table.rows;
 
-            if (!rows || rows.length <= 1) {
+            if (!rows || rows.length === 0) {
                 container.innerHTML = `
                     <div style="color: #666; text-align: center; padding: 5px; font-size: 14px;">
                         Sin máquinas paradas
@@ -38,9 +38,9 @@ const SatexMaquinasInactivas = {
                 return;
             }
 
-            const data = rows.slice(1);
+            // 🔥 YA NO hacemos slice(1)
+            const data = rows;
 
-            // 🔥 Interpretar formato Date(YYYY,MM,DD)
             const parseGoogleDate = (value) => {
 
                 if (!value) return null;
@@ -53,7 +53,7 @@ const SatexMaquinasInactivas = {
                         .split(",");
 
                     const year  = parseInt(partes[0]);
-                    const month = parseInt(partes[1]); // OJO: ya viene 0-indexado
+                    const month = parseInt(partes[1]);
                     const day   = parseInt(partes[2]);
 
                     return new Date(year, month, day);
@@ -85,13 +85,12 @@ const SatexMaquinasInactivas = {
                 if (!row.c[0] || !row.c[1] || !row.c[2]) return;
 
                 const fechaObj = parseGoogleDate(row.c[0].v);
-                const tipo     = row.c[1].v;
-                const numero   = row.c[2].v;
-
                 if (!fechaObj) return;
 
-                const diasCalculados = calcularDias(fechaObj);
+                const tipo   = row.c[1].v;
+                const numero = row.c[2].v;
 
+                const diasCalculados = calcularDias(fechaObj);
                 const fechaFormateada =
                     fechaObj.toISOString().split("T")[0];
 
