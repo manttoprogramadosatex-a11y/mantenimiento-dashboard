@@ -1,15 +1,17 @@
-// lib_maquinas_inactivas.js
-// VERSION 2.0.0
-// Conexion directa a Google Sheets
-// Pestaña: Maquinas Paradas
-// Columnas: A=DESDE | B=TIPO | C=NUM
-// Ignora fila 1 (titulos)
-// No modifica diseño, solo origen de datos
+/* lib_maquinas_inactivas.js */
+/* VERSION 2.1.0
+   - Conexión directa a Google Sheets
+   - Pestaña: Maquinas Paradas (gid=217931005)
+   - Columnas: A=DESDE | B=TIPO | C=NUM
+   - Ignora fila 1 (títulos)
+   - Calcula días automáticamente
+   - No modifica diseño visual
+*/
 
 const SatexMaquinasInactivas = {
 
     SHEET_ID: "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok",
-    GID: "0", // ⚠️ Cambiar si la pestaña tiene otro gid
+    GID: "217931005",
 
     async render(id) {
 
@@ -18,17 +20,21 @@ const SatexMaquinasInactivas = {
 
         try {
 
-            const url = `https://docs.google.com/spreadsheets/d/${this.SHEET_ID}/gviz/tq?gid=${this.GID}&tqx=out:json`;
-            const response = await fetch(url);
+            const url = 
+                `https://docs.google.com/spreadsheets/d/${this.SHEET_ID}/gviz/tq?gid=${this.GID}&tqx=out:json`;
+
+            const response = await fetch(url, { cache: "no-store" });
             const text = await response.text();
 
-            const json = JSON.parse(text.substring(47).slice(0, -2));
+            // Extrae JSON sin wrapper
+            const json = JSON.parse(
+                text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1)
+            );
+
             const rows = json.table.rows;
 
-            // Quitar encabezado
-            const data = rows.slice(1);
-
-            if (!data || data.length === 0) {
+            // Si no hay datos
+            if (!rows || rows.length <= 1) {
                 container.innerHTML = `
                     <div style="color: #666; text-align: center; padding: 5px; font-size: 14px;">
                         Sin máquinas paradas
@@ -36,6 +42,10 @@ const SatexMaquinasInactivas = {
                 return;
             }
 
+            // Ignora encabezado (fila 1)
+            const data = rows.slice(1);
+
+            // Función para calcular días
             const calcularDias = (fechaDesde) => {
 
                 if (!fechaDesde) return 0;
@@ -53,15 +63,17 @@ const SatexMaquinasInactivas = {
                 return dias < 0 ? 0 : dias;
             };
 
+            // Construir HTML
             let html = "";
 
             data.forEach(row => {
 
+                // Validar existencia
                 if (!row.c[0] || !row.c[1] || !row.c[2]) return;
 
                 const fechaDesde = row.c[0].v;
-                const tipo = row.c[1].v;
-                const numero = row.c[2].v;
+                const tipo       = row.c[1].v;
+                const numero     = row.c[2].v;
 
                 const diasCalculados = calcularDias(fechaDesde);
 
@@ -93,16 +105,17 @@ const SatexMaquinasInactivas = {
                 </div>`;
             });
 
+            // Pintar en pantalla
             container.innerHTML = html;
 
         } catch (error) {
 
+            console.error("Error cargando maquinas paradas:", error);
+
             container.innerHTML = `
-                <div style="color: red; text-align: center; padding: 5px;">
+                <div style="color: #ff4444; text-align: center; padding: 5px; font-size: 14px;">
                     Error cargando datos
                 </div>`;
-
-            console.error("Error cargando maquinas paradas:", error);
         }
     }
 };
