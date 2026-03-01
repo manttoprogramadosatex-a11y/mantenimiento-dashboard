@@ -1,4 +1,6 @@
 /* estilos.css */
+
+/* SCROLL HORIZONTAL DE CARDAS (Se mantiene igual según tu instrucción) */
 #cardas-grid::-webkit-scrollbar { 
     height: 10px; 
 }
@@ -8,14 +10,31 @@
 }
 #cardas-grid::-webkit-scrollbar-thumb { 
     background: #f9b218; 
-    border-radius: 5px;
+    border-radius: 5px; 
     border: 2px solid #2f5577;
 }
 
-#maquinas-paradas-scroll::-webkit-scrollbar, #accidentes-scroll::-webkit-scrollbar { 
+/* SCROLL VERTICAL DE CARDAS (Adelgazado a 4px) */
+#cardas-grid::-webkit-scrollbar:vertical {
+    width: 4px;
+}
+
+/* OTROS SCROLLS VERTICALES (Máquinas paradas y Accidentes) */
+#maquinas-paradas-scroll::-webkit-scrollbar, 
+#accidentes-scroll::-webkit-scrollbar { 
     width: 6px; 
 }
-#maquinas-paradas-scroll::-webkit-scrollbar-thumb, #accidentes-scroll::-webkit-scrollbar-thumb { 
+#maquinas-paradas-scroll::-webkit-scrollbar-thumb, 
+#accidentes-scroll::-webkit-scrollbar-thumb { 
     background: rgba(255,255,255,0.2); 
-    border-radius: 3px; 
+    border-radius: 3px;
+}
+
+/* Scrollbar específico para Accidentes (mantiene su color rosado) */
+#accidentes-scroll::-webkit-scrollbar { 
+    width: 5px; 
+}
+#accidentes-scroll::-webkit-scrollbar-thumb { 
+    background: #ff9999; 
+    border-radius: 3px;
 }
