@@ -1,8 +1,7 @@
 /* lib_data_loader.js */
-/* VERSION 4.1 
-   - Mantiene Husos (gid=0) y Máquinas Paradas
-   - NUEVO: Carga de Cardas (pestaña: "Informacion Cardas")
-   - Extrae: D5:N5 (Títulos), D6:N6 (Actual), D7:N7 (Máximo)
+/* VERSION 4.2 
+   - Ajuste de índices de filas para Cardas (Fila 5=4, 6=5, 7=6)
+   - Pestaña: "Informacion Cardas"
 */
 
 const SHEET_ID = "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok";
@@ -17,7 +16,6 @@ const SatexDataLoader = {
             const texto = await respuesta.text();
             const json = JSON.parse(texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1));
             const filas = json.table.rows;
-
             if (!filas || filas.length === 0) return { fecha: "", continuas: 0, openEnd: 0, coneras: 0 };
             const fila = filas[0].c;
             return {
@@ -27,7 +25,7 @@ const SatexDataLoader = {
                 coneras: fila[3]?.v || 0
             };
         } catch (error) {
-            console.error("Error cargando datos principales:", error);
+            console.error("Error principales:", error);
             return { fecha: "", continuas: 0, openEnd: 0, coneras: 0 };
         }
     },
@@ -41,37 +39,34 @@ const SatexDataLoader = {
             const json = JSON.parse(texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1));
             const filas = json.table.rows;
             if (!filas || filas.length === 0) return [];
-            return filas.map(f => {
-                const c = f.c;
-                return {
-                    desde: c[0]?.f || c[0]?.v || "",
-                    tipo:  c[1]?.v || "",
-                    num:   c[2]?.v || ""
-                };
-            }).filter(m => m.tipo !== "" && m.num !== "");
+            return filas.map(f => ({
+                desde: f.c[0]?.f || f.c[0]?.v || "",
+                tipo:  f.c[1]?.v || "",
+                num:   f.c[2]?.v || ""
+            })).filter(m => m.tipo !== "" && m.num !== "");
         } catch (error) {
-            console.error("Error cargando Maquinas Paradas:", error);
+            console.error("Error paradas:", error);
             return [];
         }
     },
 
-    // NUEVA FUNCIÓN PARA CARDAS
     async obtenerDatosCardas() {
         try {
             const timestamp = new Date().getTime();
+            // Acceso directo a la pestaña de Cardas
             const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Informacion%20Cardas&t=${timestamp}`;
             const respuesta = await fetch(url, { cache: "no-store" });
             const texto = await respuesta.text();
             const json = JSON.parse(texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1));
             const filas = json.table.rows;
 
-            // Fila 4=D5:N5, Fila 5=D6:N6, Fila 6=D7:N7
-            const titulos = filas[4].c;
-            const actuales = filas[5].c;
-            const maximos = filas[6].c;
+            // Mapeo estricto: D5(f4), D6(f5), D7(f6)
+            const titulos  = filas[4].c; 
+            const actuales = filas[5].c; 
+            const maximos  = filas[6].c; 
 
             const resultado = [];
-            // Columnas D a N (índice 3 a 13)
+            // Columnas D(3) a N(13)
             for (let i = 3; i <= 13; i++) {
                 resultado.push({
                     id: i - 2,
@@ -82,7 +77,7 @@ const SatexDataLoader = {
             }
             return resultado;
         } catch (error) {
-            console.error("Error cargando datos de Cardas:", error);
+            console.error("Error en lectura de Cardas:", error);
             return null;
         }
     }
