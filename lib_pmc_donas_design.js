@@ -1,5 +1,8 @@
 /* lib_pmc_donas_design.js */
-/* VERSION 1.1 - Aumento tipografía indicadores PMC sin afectar layout */
+/* VERSION 1.2 
+   - Ajuste leve tamaño texto "Max. H."
+   - Sin modificar proporciones generales
+*/
 
 const SatexPMCDonasDesign = {
     render: function(idDiario, idMensual, valD, maxD, valM, maxM) {
@@ -35,11 +38,24 @@ const SatexPMCDonasDesign = {
                 </div>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); padding: 3px 10px; border-radius: 10px; margin-top: 6px; border: 1px solid #f9b218;">
-                <span style="color: #f9b218; font-size: 10px; font-weight: bold;">
+            <!-- 🔥 Ajuste leve aquí -->
+            <div style="
+                background: rgba(0,0,0,0.3);
+                padding: 4px 12px;
+                border-radius: 12px;
+                margin-top: 6px;
+                border: 1px solid #f9b218;
+            ">
+                <span style="
+                    color: #f9b218;
+                    font-size: 11px;
+                    font-weight: bold;
+                    letter-spacing: 0.3px;
+                ">
                     ${etiquetaMax} ${maximo}
                 </span>
             </div>
+
         </div>`;
 
         this.generarTrazo(id, porcentaje, colorSemaforo);
