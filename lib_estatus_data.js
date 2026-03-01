@@ -1,7 +1,7 @@
 /* lib_estatus_data.js */
-/* VERSION 2.5
+/* VERSION 2.6
    - Actualiza Husos
-   - Actualiza Fecha Act.
+   - Actualiza Fecha Act desde A2
    - Actualiza Maquinas Paradas
    - Actualiza Indicador
 */
@@ -21,8 +21,8 @@ const SatexEstatusData = {
         if (oe)   oe.textContent   = datosHusos.openEnd;
         if (con)  con.textContent  = datosHusos.coneras;
 
-        // 🔹 ACTUALIZAR FECHA
-        const fechaElemento = document.querySelector('[style*="Fecha Act."]');
+        // 🔹 ACTUALIZAR FECHA (A2)
+        const fechaElemento = document.getElementById("fecha-actualizacion");
 
         if (fechaElemento && datosHusos.fechaActualizacion) {
             fechaElemento.textContent = `(Fecha Act.: ${datosHusos.fechaActualizacion})`;
