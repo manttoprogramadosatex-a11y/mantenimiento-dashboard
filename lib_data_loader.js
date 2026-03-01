@@ -1,9 +1,9 @@
 /* lib_data_loader.js */
-/* VERSION 4.6
-   - Ajuste de índices: Desplazamiento +2 filas hacia abajo
-   - Fila 5 (Nombres) -> filas[3]
-   - Fila 6 (Toneladas Act.) -> filas[4]
-   - Fila 7 (Toneladas Max.) -> filas[5]
+/* VERSION 4.7
+   - Ajuste de índices definitivos para sincronizar con Excel:
+   - Título (Fila 5 del Excel) -> filas[4]
+   - Toneladas Act. (Fila 6 del Excel) -> filas[5]
+   - Toneladas Max. (Fila 7 del Excel) -> filas[6]
 */
 
 const SHEET_ID = "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok";
@@ -55,14 +55,17 @@ const SatexDataLoader = {
             const json = JSON.parse(texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1));
             const filas = json.table.rows;
 
-            // Ajuste de puntería basado en tu reporte de desfase (+2 filas):
-            const titulos  = filas[3].c; // Antes filas[1]
-            const actuales = filas[4].c; // Antes filas[2]
-            const maximos  = filas[5].c; // Antes filas[3]
+            // MAPEO CORRECTO SEGÚN CAPTURA (Subimos 4 filas respecto al error anterior)
+            // filas[4] -> Fila 5 de Excel (Nombres de Cardas)
+            // filas[5] -> Fila 6 de Excel (Toneladas Act. - Celdas Amarillas)
+            // filas[6] -> Fila 7 de Excel (Toneladas Max. - Celdas Blancas)
+            const titulos  = filas[4].c; 
+            const actuales = filas[5].c; 
+            const maximos  = filas[6].c; 
 
             const resultado = [];
-            // Columnas D(3) a N(13)
-            for (let i = 3; i <= 13; i++) {
+            // Columnas D(3) a M(12) para las 10 cardas
+            for (let i = 3; i <= 12; i++) {
                 resultado.push({
                     id: i - 2,
                     t: titulos[i]?.v || `CARDA ${i-2}`,
