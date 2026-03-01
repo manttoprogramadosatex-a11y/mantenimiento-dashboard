@@ -1,22 +1,17 @@
 /* lib_cardas_engine.js */
-/* VERSION 1.3
-   - Validación de datos externos para evitar indicadores en blanco
+/* VERSION 1.4
+   - Sincronización con nuevos índices del DataLoader
 */
 
 const SatexCardasEngine = {
     dibujar: function(idContenedor, datosExternos = null) {
         const grid = document.getElementById(idContenedor);
-        if (!grid) return;
+        if (!grid || !datosExternos) return;
 
-        // Si no hay datos, no hacemos nada para no borrar los gráficos
-        if (!datosExternos || datosExternos.length === 0) return;
-
-        // Renderizar el HTML
         grid.innerHTML = datosExternos.map(c => 
             SatexCardasDesign.crearCarda(c.id, c.t, c.ac, c.max)
         ).join('');
 
-        // Dibujar los gauges
         datosExternos.forEach(c => {
             const canvas = document.getElementById(`canvas-${c.id}`);
             if (canvas) {
