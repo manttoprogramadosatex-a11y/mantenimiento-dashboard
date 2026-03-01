@@ -13,27 +13,29 @@
         
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
         
-        /* Contenedor de Cardas: Altura optimizada */
+        /* Regreso a altura original de 190px */
         #cardas-grid { 
-            height: 152px !important; 
+            height: 190px !important; 
             flex-shrink: 0; 
             display: flex; 
             overflow-x: auto; 
-            padding: 2px 5px; 
+            padding: 5px 10px; 
             background: rgba(0,0,0,0.1); 
-            gap: 2px; 
+            gap: 10px; 
         }
 
-        /* Scrollbar ultra-fino para no desperdiciar espacio */
+        /* Scrollbar original */
         #cardas-grid::-webkit-scrollbar { 
-            height: 4px; 
+            height: 10px; 
         }
         #cardas-grid::-webkit-scrollbar-track { 
-            background: transparent; 
+            background: rgba(0,0,0,0.2); 
+            border-radius: 5px;
         }
         #cardas-grid::-webkit-scrollbar-thumb { 
             background: #f9b218; 
-            border-radius: 10px; 
+            border-radius: 5px;
+            border: 2px solid #2f5577;
         }
         
         #mantenimiento-container { flex-grow: 1; position: relative; }
