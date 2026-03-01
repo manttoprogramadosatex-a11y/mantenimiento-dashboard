@@ -1,18 +1,14 @@
 const SatexCardasDesign = {
     crearCarda: function(id, titulo, actual, maximo) {
-        // Reducción de márgenes laterales a 2px para evitar scroll innecesario
+        // Regreso a dimensiones originales de 175px de alto
         return `
-        <div id="carda-${id}" style="min-width: 130px; height: 142px; background: white; border-radius: 8px; margin: 2px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 0px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 2px solid #2f5577; box-sizing: border-box; overflow: hidden;">
+        <div id="carda-${id}" style="min-width: 130px; height: 175px; background: white; border-radius: 8px; margin: 5px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 5px 5px 2px 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 2px solid #2f5577; box-sizing: border-box;">
             
-            <div style="color: #003366; font-weight: bold; font-size: 14px; text-transform: uppercase; line-height: 1; margin-top: 2px;">
-                ${titulo}
-            </div>
+            <div style="color: #003366; font-weight: bold; font-size: 14px; margin-bottom: 2px; text-transform: uppercase;">${titulo}</div>
             
-            <div style="height: 85px; display: flex; align-items: center; margin: 0;">
-                <canvas id="canvas-${id}" width="120" height="85"></canvas>
-            </div>
+            <canvas id="canvas-${id}" width="120" height="85"></canvas>
             
-            <div style="text-align: center; line-height: 1; margin-bottom: 2px;">
+            <div style="margin-top: 2px; text-align: center;">
                 <div style="font-size: 13px; font-weight: bold; color: #333;">
                     Ac. ${actual}
                 </div>
