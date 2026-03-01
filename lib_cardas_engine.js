@@ -1,68 +1,129 @@
+/* lib_cardas_engine.js */
+/* VERSION 3.0.0
+   - Conectado a Google Sheets
+   - Pestaña: Informacion Cardas
+   - GID: 1547200035
+   - AC: D6-N6
+   - MAX: D7-N7
+   - No modifica diseño
+*/
+
 const SatexCardasEngine = {
-    dibujar: function(idContenedor) {
-        const grid = document.getElementById(idContenedor);
-        if (!grid) return;
 
-        // Array actualizado a 11 cardas con datos ficticios
-        const datos = [
-            {id: 1, t: "CARDA 1", ac: 956, max: 1000},
-            {id: 2, t: "CARDA 2", ac: 707, max: 1000},
-            {id: 3, t: "CARDA 3", ac: 0, max: 1000},
-            {id: 4, t: "CARDA 4", ac: 389, max: 1000},
-            {id: 5, t: "CARDA 5", ac: 1088, max: 1000},
-            {id: 6, t: "CARDA 6", ac: 1031, max: 1000},
-            {id: 7, t: "CARDA 7", ac: 651, max: 1000},
-            {id: 8, t: "CARDA 8", ac: 961, max: 1000},
-            {id: 9, t: "CARDA 9", ac: 450, max: 1000},
-            {id: 10, t: "CARDA 10", ac: 820, max: 1000},
-            {id: 11, t: "CARDA 11", ac: 120, max: 1000}
-        ];
+    SHEET_ID: "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok",
+    GID: "1547200035",
 
-        // Renderizar el HTML de las 11 cardas
-        grid.innerHTML = datos.map(c => SatexCardasDesign.crearCarda(c.id, c.t, c.ac, c.max)).join('');
+    async cargarDatos() {
 
-        // Dibujar los indicadores (gauges) en cada canvas
-        datos.forEach(c => {
-            const canvas = document.getElementById(`canvas-${c.id}`);
-            if (canvas) {
-                this.pintarGauje(canvas, c.ac, c.max);
-            }
+        const url =
+            `https://docs.google.com/spreadsheets/d/${this.SHEET_ID}/gviz/tq?gid=${this.GID}&tqx=out:json`;
+
+        const response = await fetch(url, { cache: "no-store" });
+        const text = await response.text();
+
+        const json = JSON.parse(
+            text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1)
+        );
+
+        const rows = json.table.rows;
+
+        if (!rows || rows.length < 7) return [];
+
+        // Fila 6 → índice 5
+        const filaAC  = rows[5].c;
+
+        // Fila 7 → índice 6
+        const filaMAX = rows[6].c;
+
+        const cardas = [];
+
+        // Columnas D a N → índices 3 a 13
+        for (let i = 3; i <= 13; i++) {
+
+            const ac  = filaAC[i]  ? filaAC[i].v  : 0;
+            const max = filaMAX[i] ? filaMAX[i].v : 0;
+
+            cardas.push({
+                id: i - 2,
+                nombre: `CARDA ${i - 2}`,
+                ac: ac,
+                max: max
+            });
+        }
+
+        return cardas;
+    },
+
+    async render(contenedorId) {
+
+        const container = document.getElementById(contenedorId);
+        if (!container) return;
+
+        const datos = await this.cargarDatos();
+        if (!datos.length) return;
+
+        container.innerHTML = "";
+
+        datos.forEach(carda => {
+
+            const porcentaje = carda.max > 0
+                ? (carda.ac / carda.max) * 100
+                : 0;
+
+            let color = "#2ecc71"; // verde
+
+            if (porcentaje >= 90) color = "#e74c3c";
+            else if (porcentaje >= 70) color = "#f39c12";
+
+            const tarjeta = `
+            <div class="carda-box">
+                <div class="carda-titulo">${carda.nombre}</div>
+
+                <canvas id="gauge-${carda.id}" width="160" height="100"></canvas>
+
+                <div class="carda-datos">
+                    <div>Ac. ${carda.ac}</div>
+                    <div>Max. ${carda.max}</div>
+                </div>
+            </div>
+            `;
+
+            container.innerHTML += tarjeta;
+
+            setTimeout(() => {
+                this.dibujarGauge(
+                    `gauge-${carda.id}`,
+                    carda.ac,
+                    carda.max,
+                    color
+                );
+            }, 10);
         });
     },
 
-    pintarGauje: function(canvas, ac, max) {
-        const ctx = canvas.getContext('2d');
-        const x = canvas.width / 2;
-        const y = canvas.height - 5;
-        const radio = 60;
+    dibujarGauge(canvasId, valor, maximo, color) {
+
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+
+        const ctx = canvas.getContext("2d");
+
+        const porcentaje = maximo > 0 ? valor / maximo : 0;
+        const angulo = Math.PI * porcentaje;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Fondo del arco (gris)
+        // Arco gris fondo
         ctx.beginPath();
-        ctx.arc(x, y, radio, Math.PI, 0);
         ctx.lineWidth = 12;
-        ctx.strokeStyle = '#eeeeee';
+        ctx.strokeStyle = "#ddd";
+        ctx.arc(80, 90, 60, Math.PI, 0);
         ctx.stroke();
 
-        // Arco de progreso
-        const porcentaje = Math.min(ac / max, 1);
-        let color = '#4caf50'; // Verde por defecto
-        if (porcentaje > 0.9) color = '#f44336'; // Rojo si supera el 90%
-        else if (porcentaje > 0.7) color = '#ff9800'; // Naranja si supera el 70%
-
+        // Arco valor
         ctx.beginPath();
-        ctx.arc(x, y, radio, Math.PI, Math.PI + (Math.PI * porcentaje));
         ctx.strokeStyle = color;
-        ctx.stroke();
-
-        // Aguja (Posicionada según 'Actual')
-        const angulo = Math.PI + (Math.PI * porcentaje);
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-        ctx.lineTo(x + Math.cos(angulo) * 50, y + Math.sin(angulo) * 50);
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = '#333';
+        ctx.arc(80, 90, 60, Math.PI, Math.PI + angulo);
         ctx.stroke();
     }
 };
