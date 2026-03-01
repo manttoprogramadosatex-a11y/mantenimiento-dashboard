@@ -1,17 +1,16 @@
 /* lib_estatus_data.js */
-/* VERSION 2.4
-   - Conectado a Google Sheets
+/* VERSION 2.5
    - Actualiza Husos
-   - Actualiza Tabla Maquinas Paradas
-   - Actualiza Indicador num-maquinas-paradas
-   - No modifica diseño
+   - Actualiza Fecha Act.
+   - Actualiza Maquinas Paradas
+   - Actualiza Indicador
 */
 
 const SatexEstatusData = {
 
     async actualizarDesdeSheet() {
 
-        // 🔹 1. HUSOS INACTIVOS
+        // 🔹 HUSOS + FECHA
         const datosHusos = await SatexDataLoader.obtenerHusosInactivos();
 
         const cont = document.getElementById("estatus-continuas");
@@ -22,18 +21,21 @@ const SatexEstatusData = {
         if (oe)   oe.textContent   = datosHusos.openEnd;
         if (con)  con.textContent  = datosHusos.coneras;
 
+        // 🔹 ACTUALIZAR FECHA
+        const fechaElemento = document.querySelector('[style*="Fecha Act."]');
 
-        // 🔹 2. MAQUINAS PARADAS
+        if (fechaElemento && datosHusos.fechaActualizacion) {
+            fechaElemento.textContent = `(Fecha Act.: ${datosHusos.fechaActualizacion})`;
+        }
+
+        // 🔹 MAQUINAS PARADAS
         const maquinas = await SatexDataLoader.obtenerMaquinasParadas();
 
-        const contenedorTabla = document.getElementById("maquinas-paradas-scroll");
-
-        if (contenedorTabla) {
+        if (document.getElementById("maquinas-paradas-scroll")) {
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", maquinas);
         }
 
-
-        // 🔹 3. INDICADOR DE CANTIDAD
+        // 🔹 INDICADOR
         const indicador = document.getElementById("num-maquinas-paradas");
 
         if (indicador) {
@@ -41,5 +43,4 @@ const SatexEstatusData = {
         }
 
     }
-
 };
