@@ -1,7 +1,8 @@
 /* lib_pmc_donas_design.js */
-/* VERSION 1.2 
-   - Ajuste leve tamaño texto "Max. H."
-   - Sin modificar proporciones generales
+/* VERSION 1.3 
+   - Donas ligeramente más grandes
+   - Sin modificar tamaño del contenedor
+   - Sin afectar títulos ni botones inferiores
 */
 
 const SatexPMCDonasDesign = {
@@ -22,14 +23,14 @@ const SatexPMCDonasDesign = {
         container.innerHTML = `
         <div style="display: flex; flex-direction: column; align-items: center; width: 100%; position: relative;">
             
-            <div style="color: white; font-size: 12px; font-weight: bold; margin-bottom: 6px;">
+            <div style="color: white; font-size: 12px; font-weight: bold; margin-bottom: 4px;">
                 ${titulo}
             </div>
 
             <div style="position: relative; width: 100px; height: 100px;">
                 <canvas id="canvas-${id}" width="100" height="100"></canvas>
-                <div style="position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                    <div style="color: white; font-size: 20px; font-weight: bold;">
+                <div style="position: absolute; top: 47%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                    <div style="color: white; font-size: 21px; font-weight: bold;">
                         ${actual}
                     </div>
                     <div style="color: #a1b1c1; font-size: 10px;">
@@ -38,12 +39,11 @@ const SatexPMCDonasDesign = {
                 </div>
             </div>
 
-            <!-- 🔥 Ajuste leve aquí -->
             <div style="
                 background: rgba(0,0,0,0.3);
                 padding: 4px 12px;
                 border-radius: 12px;
-                margin-top: 6px;
+                margin-top: 5px;
                 border: 1px solid #f9b218;
             ">
                 <span style="
@@ -64,16 +64,23 @@ const SatexPMCDonasDesign = {
     generarTrazo: function(id, p, color) {
         const canvas = document.getElementById(`canvas-${id}`);
         const ctx = canvas.getContext('2d');
-        const x = 50, y = 50, radio = 40;
+
+        const x = 50;
+        const y = 50;
+
+        // 🔥 Aumentamos radio ligeramente (antes 40)
+        const radio = 43;
 
         ctx.clearRect(0, 0, 100, 100);
 
+        // Fondo
         ctx.beginPath();
         ctx.arc(x, y, radio, 0.8 * Math.PI, 0.2 * Math.PI);
-        ctx.lineWidth = 8;
+        ctx.lineWidth = 10; // Antes 8
         ctx.strokeStyle = "rgba(255,255,255,0.1)";
         ctx.stroke();
 
+        // Progreso
         const finP = 0.8 * Math.PI + (Math.min(p, 120) / 120) * (1.4 * Math.PI);
         ctx.beginPath();
         ctx.arc(x, y, radio, 0.8 * Math.PI, finP);
