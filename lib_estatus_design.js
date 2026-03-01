@@ -1,7 +1,6 @@
 // lib_estatus_design.js
-// VERSION 1.2.0
-// Ajuste de anchos de columnas en bloque Máquinas Paradas
-// Se agrega ID a Fecha Act. para actualización dinámica
+// VERSION 1.2.1
+// Ajuste para que el botón DETALLES CARDAS abra la pestaña correspondiente
 
 const SatexEstatusDesign = {
     render: function(id) {
@@ -42,7 +41,13 @@ const SatexEstatusDesign = {
                 <div id="fecha-actualizacion" style="color: #a1b1c1; font-size: 11px; margin-bottom: 2px;">
                     (Fecha Act.: --)
                 </div>
-                <button style="background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 8px; font-size: 12px; font-weight: bold; cursor: pointer;">
+
+                <!-- 🚀 BOTÓN DETALLES CARDAS MODIFICADO -->
+                <button 
+                    id="btn-detalles-cardas"
+                    style="background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 8px; font-size: 12px; font-weight: bold; cursor: pointer;"
+                    onclick="window.open('https://docs.google.com/spreadsheets/d/e/2PACX-1vT7wFZesHZM_4ed4aj7oAU4MgNvuhZ8AQ-CUL_4QkrMzzR4PawAQ36-hGTvYhxeslLKjFzvfSwApNmT/pubhtml?gid=1547200035&single=true', '_blank');"
+                >
                     DETALLES CARDAS
                 </button>
             </div>
