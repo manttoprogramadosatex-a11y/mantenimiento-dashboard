@@ -1,8 +1,8 @@
 /* lib_correctivo_kpi_design.js */
-/* VERSION 1.2
-   - MTBF y MTTR en azul técnico (#00e0ff)
-   - OS ABIERTAS en rojo
-   - Número de OS centrado visualmente
+/* VERSION 1.3
+   - MTBF renombrado a "MTBF. D."
+   - MTTR renombrado a "MTTR. H."
+   - Se mantienen colores personalizados
    - No se modifican dimensiones ni estructura
 */
 
@@ -14,8 +14,8 @@ const SatexCorrectivoKPIDesign = {
         container.innerHTML = `
         <div style="display: flex; flex-direction: column; gap: 8px; height: 100%; justify-content: center;">
             <div style="display: flex; gap: 8px;">
-                ${this.caja("MTBF", mtbf)}
-                ${this.caja("MTTR", mttr)}
+                ${this.caja("MTBF. D.", mtbf)}
+                ${this.caja("MTTR. H.", mttr)}
             </div>
             ${this.caja("OS ABIERTAS", os)}
         </div>`;
@@ -25,18 +25,16 @@ const SatexCorrectivoKPIDesign = {
 
         let labelColor = "#a1b1c1";
         let valueColor = "#ffffff";
-        let justifyMode = "space-between";
 
         // MTBF y MTTR en azul técnico
-        if (label === "MTBF" || label === "MTTR") {
+        if (label === "MTBF. D." || label === "MTTR. H.") {
             valueColor = "#00e0ff";
         }
 
-        // OS ABIERTAS en rojo y número centrado
+        // OS ABIERTAS en rojo
         if (label === "OS ABIERTAS") {
             labelColor = "#ff4d4d";
             valueColor = "#ff4d4d";
-            justifyMode = "space-between";
         }
 
         return `
@@ -47,7 +45,7 @@ const SatexCorrectivoKPIDesign = {
             border-radius: 6px;
             padding: 8px;
             display: flex;
-            justify-content: ${justifyMode};
+            justify-content: space-between;
             align-items: center;
         ">
             <span style="
