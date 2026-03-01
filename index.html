@@ -10,9 +10,32 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; }
-        /* Ajuste a 155px para maximizar espacio de mantenimiento */
+        
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
-        #cardas-grid { height: 155px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 2px 10px; background: rgba(0,0,0,0.1); gap: 5px; }
+        
+        /* Contenedor de Cardas: Altura optimizada */
+        #cardas-grid { 
+            height: 152px !important; 
+            flex-shrink: 0; 
+            display: flex; 
+            overflow-x: auto; 
+            padding: 2px 5px; 
+            background: rgba(0,0,0,0.1); 
+            gap: 2px; 
+        }
+
+        /* Scrollbar ultra-fino para no desperdiciar espacio */
+        #cardas-grid::-webkit-scrollbar { 
+            height: 4px; 
+        }
+        #cardas-grid::-webkit-scrollbar-track { 
+            background: transparent; 
+        }
+        #cardas-grid::-webkit-scrollbar-thumb { 
+            background: #f9b218; 
+            border-radius: 10px; 
+        }
+        
         #mantenimiento-container { flex-grow: 1; position: relative; }
     </style>
 </head>
