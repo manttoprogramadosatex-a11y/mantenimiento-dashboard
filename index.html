@@ -7,22 +7,12 @@
         const v = new Date().getTime(); 
         document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
     </script>
-    <style>
-        html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
-        #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
-        #cardas-grid { height: 165px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 5px; background: rgba(0,0,0,0.15); gap: 10px; }
-        #mantenimiento-container { flex-grow: 1; position: relative; }
-    </style>
 </head>
 <body>
-
     <div id="header-container"></div>
     <div id="estatus-container"></div>
-
-    <div id="main-content">
-        <div id="cardas-grid"></div>
-        <div id="mantenimiento-container"></div>
-    </div>
+    <div id="cardas-grid" style="height:160px; display:flex; overflow-x:auto; gap:10px; padding:5px; background:rgba(0,0,0,0.1);"></div>
+    <div id="mantenimiento-container"></div>
 
     <script>
         const libs = [
@@ -32,39 +22,30 @@
             "lib_compras_pendientes_design.js", "lib_pmc_donas_design.js", 
             "lib_correctivo_kpi_design.js", "lib_accidentes.js", "lib_data_loader.js"
         ];
-        libs.forEach(lib => { document.write(`<script src="${lib}?v=${v}"><\/script>`); });
+        libs.forEach(lib => document.write(`<script src="${lib}?v=${v}"><\/script>`));
     </script>
 
     <script>
-        async function sincronizarTodo() {
-            try {
-                // Actualiza Husos y Paros
-                await SatexEstatusData.actualizarDesdeSheet();
-                // Actualiza Cardas con el nuevo ajuste de filas
-                await SatexCardasEngine.dibujar("cardas-grid");
-            } catch (err) {
-                console.error("Error en sincronización:", err);
-            }
+        async function actualizarTodo() {
+            // Actualiza Husos y Paros
+            await SatexEstatusData.actualizarDesdeSheet();
+            // Actualiza Cardas
+            await SatexCardasEngine.dibujar("cardas-grid");
         }
 
         window.onload = async () => {
-            // Dibujar estructura visual fija
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
 
-            // Accidentes (Carga manual inicial)
             const datosAcc = [
                 {item: "1", nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: "141"},
                 {item: "2", nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "2-feb-2025", dias: "391"}
             ];
             SatexAccidentes.render("accidentes-scroll", datosAcc);
 
-            // Primera carga de datos reales
-            await sincronizarTodo();
-
-            // Ciclo infinito cada 15 segundos
-            setInterval(sincronizarTodo, 15000);
+            await actualizarTodo();
+            setInterval(actualizarTodo, 15000);
         };
     </script>
 </body>
