@@ -9,9 +9,9 @@ const SatexMaquinasInactivas = {
         }
 
         const calcularDias = (fechaDesde) => {
+            // Espera formato AAAA/MM/DD
             const inicio = new Date(fechaDesde);
             const hoy = new Date();
-            // Ponemos ambos en horas 0 para contar días naturales exactos
             inicio.setHours(0, 0, 0, 0);
             hoy.setHours(0, 0, 0, 0);
             
@@ -21,8 +21,8 @@ const SatexMaquinasInactivas = {
         };
 
         container.innerHTML = datos.map(m => {
-            // Si el dato 'desde' parece una fecha (tiene /), calculamos los días
-            const diasCalculados = m.desde.includes('/') ? calcularDias(m.desde) : m.dias;
+            // Cálculo automático si es una fecha
+            const diasCalculados = m.desde.includes('/') ? calcularDias(m.desde) : (m.dias || 0);
             
             return `
             <div style="display: flex; border-bottom: 1px solid rgba(255,68,68,0.2); color: white; font-size: 13px; padding: 4px 0; font-family: 'Segoe UI', sans-serif; align-items: center;">
