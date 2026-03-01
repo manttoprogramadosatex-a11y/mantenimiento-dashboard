@@ -1,19 +1,22 @@
 /* lib_cardas_engine.js */
-/* VERSION 1.2
-   - Renderizado dinámico de 11 cardas
+/* VERSION 1.3
+   - Validación de datos externos para evitar indicadores en blanco
 */
 
 const SatexCardasEngine = {
     dibujar: function(idContenedor, datosExternos = null) {
         const grid = document.getElementById(idContenedor);
-        if (!grid || !datosExternos) return;
+        if (!grid) return;
 
-        // Renderizar estructura
+        // Si no hay datos, no hacemos nada para no borrar los gráficos
+        if (!datosExternos || datosExternos.length === 0) return;
+
+        // Renderizar el HTML
         grid.innerHTML = datosExternos.map(c => 
             SatexCardasDesign.crearCarda(c.id, c.t, c.ac, c.max)
         ).join('');
 
-        // Pintar Gauges
+        // Dibujar los gauges
         datosExternos.forEach(c => {
             const canvas = document.getElementById(`canvas-${c.id}`);
             if (canvas) {
@@ -30,15 +33,13 @@ const SatexCardasEngine = {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Fondo
         ctx.beginPath();
         ctx.arc(x, y, radio, Math.PI, 0);
         ctx.lineWidth = 12;
         ctx.strokeStyle = '#eeeeee';
         ctx.stroke();
 
-        // Progreso
-        const porcentaje = Math.min(ac / max, 1);
+        const porcentaje = Math.max(0, Math.min(ac / (max || 1), 1));
         let color = '#4caf50'; 
         if (porcentaje > 0.9) color = '#f44336'; 
         else if (porcentaje > 0.7) color = '#ff9800'; 
@@ -48,7 +49,6 @@ const SatexCardasEngine = {
         ctx.strokeStyle = color;
         ctx.stroke();
 
-        // Aguja
         const angulo = Math.PI + (Math.PI * porcentaje);
         ctx.beginPath();
         ctx.moveTo(x, y);
