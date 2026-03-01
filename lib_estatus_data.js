@@ -1,12 +1,11 @@
 /* lib_estatus_data.js */
-/* VERSION 4.3
-   - Refresco de cardas sincronizado
+/* VERSION 4.4
+   - Flujo optimizado para evitar saltos visuales
 */
 
 const SatexEstatusData = {
 
     async actualizarDesdeSheet() {
-        // 1. Husos
         const datos = await SatexDataLoader.obtenerDatosPrincipales();
         if (datos) {
             const cont = document.getElementById("estatus-continuas");
@@ -20,7 +19,6 @@ const SatexEstatusData = {
             if (fe && datos.fecha) fe.textContent = `(Fecha Act.: ${datos.fecha})`;
         }
 
-        // 2. Máquinas Paradas
         const maquinas = await SatexDataLoader.obtenerMaquinasParadas();
         if (window.SatexMaquinasInactivas) {
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", maquinas);
@@ -28,7 +26,6 @@ const SatexEstatusData = {
         const ind = document.getElementById("num-maquinas-paradas");
         if (ind) ind.textContent = maquinas.length;
 
-        // 3. Cardas dinámicas
         const datosCardas = await SatexDataLoader.obtenerDatosCardas();
         if (datosCardas) {
             SatexCardasEngine.dibujar("cardas-grid", datosCardas);
