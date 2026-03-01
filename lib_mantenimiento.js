@@ -1,7 +1,7 @@
 /* lib_mantenimiento.js */
-/* VERSION 1.3
-   - Reducción leve de texto en botones correctivos
-   - No modifica altura
+/* VERSION 1.3.1
+   - Ajuste leve vertical del título "Accidentes"
+   - No modifica alturas
    - No altera layout
 */
 
@@ -63,9 +63,20 @@ const SatexMantenimiento = {
                 <div id="preventivos-grafico-container" style="width: 100%; height: 180px;"></div>
                 
                 <div style="margin-top: auto; padding-bottom: 10px;">
-                    <div style="color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; text-align: center; margin-bottom: 5px; text-transform: uppercase;">
+                    
+                    <div style="
+                        color: #ff9999;
+                        font-size: 14px;
+                        font-weight: bold;
+                        border-bottom: 1px solid #ff9999;
+                        text-align: center;
+                        margin-top: 4px; /* ← BAJAMOS LIGERAMENTE */
+                        margin-bottom: 5px;
+                        text-transform: uppercase;
+                    ">
                         Accidentes
                     </div>
+
                     <div id="accidentes-scroll" style="height: 75px; background: rgba(0,0,0,0.2); border-radius: 4px; overflow-y: auto;"></div>
                 </div>
             </div>
