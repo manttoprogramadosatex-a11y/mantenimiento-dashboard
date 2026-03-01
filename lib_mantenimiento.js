@@ -1,6 +1,6 @@
 /* lib_mantenimiento.js */
-/* VERSION 1.3.2
-   - Ajuste leve vertical del título "ACCIDENTES"
+/* VERSION 1.3.3
+   - Ajuste real vertical del título "ACCIDENTES"
    - No modifica alturas generales
    - No altera layout
 */
@@ -64,7 +64,8 @@ const SatexMantenimiento = {
                 
                 <div id="preventivos-grafico-container" style="width: 100%; height: 180px;"></div>
                 
-                <div style="margin-top: auto; padding-bottom: 10px;">
+                <!-- BLOQUE INFERIOR -->
+                <div style="margin-top: auto; padding-top: 8px; padding-bottom: 10px;">
                     
                     <div style="
                         color: #ff9999;
@@ -72,7 +73,6 @@ const SatexMantenimiento = {
                         font-weight: bold;
                         border-bottom: 1px solid #ff9999;
                         text-align: center;
-                        margin-top: 6px;   /* ← Ajuste fino vertical */
                         margin-bottom: 5px;
                         text-transform: uppercase;
                     ">
