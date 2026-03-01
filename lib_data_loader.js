@@ -1,9 +1,9 @@
 /* lib_data_loader.js */
-/* VERSION 1.2
+/* VERSION 1.4
    - Carga datos reales desde Google Sheets
-   - Anti-cache agregado
-   - Actualización estable cada 15s
-   - Agregado: Maquinas Paradas
+   - Anti-cache robusto
+   - Husos Inactivos
+   - Maquinas Paradas conectado correctamente
    - Solo datos, no toca diseño
 */
 
@@ -12,17 +12,12 @@ const SatexDataLoader = {
     async obtenerHusosInactivos() {
 
         try {
-
             const timestamp = new Date().getTime();
 
             const url =
             "https://docs.google.com/spreadsheets/d/1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok/gviz/tq?tqx=out:json&sheet=Husos%20inactivos&t=" + timestamp;
 
-            const respuesta = await fetch(url, {
-                method: "GET",
-                cache: "no-store"
-            });
-
+            const respuesta = await fetch(url, { method: "GET", cache: "no-store" });
             const texto = await respuesta.text();
 
             const json = JSON.parse(
@@ -38,33 +33,20 @@ const SatexDataLoader = {
             };
 
         } catch (error) {
-
             console.error("Error cargando Husos Inactivos:", error);
-
-            return {
-                continuas: 0,
-                openEnd: 0,
-                coneras: 0
-            };
-
+            return { continuas: 0, openEnd: 0, coneras: 0 };
         }
     },
 
-    // 🔥 NUEVA FUNCIÓN
     async obtenerMaquinasParadas() {
 
         try {
-
             const timestamp = new Date().getTime();
 
             const url =
             "https://docs.google.com/spreadsheets/d/1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok/gviz/tq?tqx=out:json&sheet=Maquinas%20Paradas&t=" + timestamp;
 
-            const respuesta = await fetch(url, {
-                method: "GET",
-                cache: "no-store"
-            });
-
+            const respuesta = await fetch(url, { method: "GET", cache: "no-store" });
             const texto = await respuesta.text();
 
             const json = JSON.parse(
@@ -75,12 +57,10 @@ const SatexDataLoader = {
 
             if (!filas || filas.length === 0) return [];
 
-            // 🔥 Ignorar fila 1 (encabezados)
-            return filas.slice(1).map(f => {
-
+            return filas.map(f => {
                 const c = f.c;
 
-                const fechaDesde = c[0]?.f || c[0]?.v || "";
+                const fechaDesde = c[0]?.f || "";
                 const tipo = c[1]?.v || "";
                 const num = c[2]?.v || "";
 
@@ -88,22 +68,19 @@ const SatexDataLoader = {
                     tipo: tipo,
                     num: num,
                     desde: formatearFecha(fechaDesde),
-                    dias: "" // no se usa, el render calcula
+                    dias: ""
                 };
-
             });
 
         } catch (error) {
-
             console.error("Error cargando Maquinas Paradas:", error);
             return [];
-
         }
     }
 
 };
 
-// 🔥 Función auxiliar para formatear fecha
+// Función auxiliar para formatear fechas
 function formatearFecha(fecha) {
 
     if (!fecha) return "";
