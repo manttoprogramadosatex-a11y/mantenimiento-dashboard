@@ -2,70 +2,53 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Satex Master Project 2026</title>
-    <script>
-        // Forzar recarga de archivos para evitar cache
-        const v = new Date().getTime(); 
-        document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
-    </script>
+    <title>Tablero Master Satex 2026</title>
+    <script>const v = new Date().getTime(); document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);</script>
     <style>
-        html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; }
-        #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
-        #cardas-grid { height: 160px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 5px; background: rgba(0,0,0,0.2); gap: 8px; }
-        #mantenimiento-container { flex-grow: 1; position: relative; }
+        body { background-color: #1a3a5a; margin: 0; overflow: hidden; font-family: sans-serif; }
+        #cardas-grid { display: flex; flex-wrap: nowrap; overflow-x: auto; background: #24486d; padding: 10px; gap: 10px; height: 160px; }
+        .mantenimiento-area { display: flex; height: calc(100vh - 280px); }
     </style>
 </head>
 <body>
 
     <div id="header-container"></div>
     <div id="estatus-container"></div>
+    
+    <div id="cardas-grid"></div>
 
-    <div id="main-content">
-        <div id="cardas-grid"></div>
-        <div id="mantenimiento-container"></div>
-    </div>
+    <div id="mantenimiento-container"></div>
 
     <script>
         const libs = [
             "lib_header_design.js", "lib_estatus_design.js", "lib_estatus_data.js",
-            "lib_maquinas_inactivas.js", "lib_cardas_design.js", "lib_cardas_engine.js",
-            "lib_mantenimiento.js", "lib_preventivo_design.js", "lib_personal_mantto_design.js",
-            "lib_compras_pendientes_design.js", "lib_pmc_donas_design.js", 
-            "lib_correctivo_kpi_design.js", "lib_accidentes.js", "lib_data_loader.js"
+            "lib_cardas_design.js", "lib_cardas_engine.js", "lib_mantenimiento.js",
+            "lib_data_loader.js", "lib_pmc_donas_design.js", "lib_correctivo_kpi_design.js",
+            "lib_preventivo_design.js", "lib_personal_mantto_design.js", "lib_compras_pendientes_design.js"
         ];
-        libs.forEach(lib => { document.write(`<script src="${lib}?v=${v}"><\/script>`); });
+        libs.forEach(lib => document.write(`<script src="${lib}?v=${v}"><\/script>`));
     </script>
 
     <script>
-        // Función para actualizar TODO lo que venga de Google Sheets
-        async function actualizarDatosEnTiempoReal() {
-            try {
-                console.log("Sincronizando con Excel...");
-                // 1. Husos y Maquinas Paradas (gid=0 y Maquinas Paradas)
-                await SatexEstatusData.actualizarDesdeSheet();
-                // 2. Cardas (D5:M7 de Info Cardas)
-                await SatexCardasEngine.dibujar("cardas-grid");
-            } catch (e) {
-                console.error("Fallo en la actualización:", e);
-            }
+        async function actualizarTodo() {
+            console.log("Sincronizando datos...");
+            // Actualiza Estatus Planta (Hilos, Máquinas paradas)
+            await SatexEstatusData.actualizarDesdeSheet();
+            // Actualiza Cardas (Datos de Toneladas Act vs Max)
+            await SatexCardasEngine.dibujar("cardas-grid");
         }
 
         window.onload = async () => {
-            // Renderizado de estructuras estáticas
+            // Renderizado inicial de estructuras
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
+            
+            // Carga inicial de datos
+            await actualizarTodo();
 
-            // Datos de accidentes (estáticos por ahora)
-            const datosAccidentes = [
-                {item: "1", nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: "141"},
-                {item: "2", nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "2-feb-2025", dias: "391"}
-            ];
-            SatexAccidentes.render("accidentes-scroll", datosAccidentes);
-
-            // Carga inicial y bucle de 15 segundos
-            await actualizarDatosEnTiempoReal();
-            setInterval(actualizarDatosEnTiempoReal, 15000);
+            // Refresco automático cada 15 segundos
+            setInterval(actualizarTodo, 15000);
         };
     </script>
 </body>
