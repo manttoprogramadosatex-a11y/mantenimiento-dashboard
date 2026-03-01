@@ -1,8 +1,14 @@
-/* lib_data_loader.js - VERSIÓN FINAL SINCRONIZADA */
+/* lib_data_loader.js */
+/* VERSION 5.0
+   - Husos y Máquinas Paradas
+   - Lectura dinámica de Cardas (Pestaña Info Cardas)
+   - Rango: D5:N7 (Acumulados y Máximos)
+*/
+
 const SHEET_ID = "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok";
 
 const SatexDataLoader = {
-    // Lee datos de la pestaña principal (gid=0)
+
     async obtenerDatosPrincipales() {
         try {
             const timestamp = new Date().getTime();
@@ -25,7 +31,6 @@ const SatexDataLoader = {
         }
     },
 
-    // Lee Máquinas Paradas de la pestaña correspondiente
     async obtenerMaquinasParadas() {
         try {
             const timestamp = new Date().getTime();
@@ -34,44 +39,46 @@ const SatexDataLoader = {
             const texto = await respuesta.text();
             const json = JSON.parse(texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1));
             const filas = json.table.rows;
-            return filas ? filas.map(f => ({
+            if (!filas || filas.length === 0) return [];
+            return filas.map(f => ({
                 desde: f.c[0]?.f || f.c[0]?.v || "",
                 tipo:  f.c[1]?.v || "",
                 num:   f.c[2]?.v || ""
-            })).filter(m => m.tipo !== "" && m.num !== "") : [];
+            })).filter(m => m.tipo !== "" && m.num !== "");
         } catch (error) {
             console.error("Error cargando Maquinas Paradas:", error);
             return [];
         }
     },
 
-    // NUEVA: Lee Toneladas de "Info Cardas" (gid=1547200035)
+    // NUEVA FUNCIÓN PARA CARDAS
     async obtenerDatosCardas() {
         try {
             const timestamp = new Date().getTime();
+            // GID 1547200035 corresponde a "Info Cardas"
             const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=1547200035&t=${timestamp}`;
             const respuesta = await fetch(url, { cache: "no-store" });
             const texto = await respuesta.text();
             const json = JSON.parse(texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1));
             
             const filas = json.table.rows;
+            // Fila 4 (index 4) -> Nombres (D5:N5)
+            // Fila 5 (index 5) -> Acumulados (D6:N6)
+            // Fila 6 (index 6) -> Máximos (D7:N7)
+            // Las columnas D a N en la API comienzan desde el índice 3
+            
             let cardasData = [];
-
-            // Mapeo: Columnas D(3) a M(12)
-            // Fila 5 (index 4) -> Nombres (Carda 1, 2...)
-            // Fila 6 (index 5) -> Toneladas Act.
-            // Fila 7 (index 6) -> Toneladas Max.
-            for (let i = 3; i <= 12; i++) { 
+            for (let i = 3; i <= 13; i++) { // Columnas D(3) a N(13)
                 cardasData.push({
                     id: i - 2,
                     t:  filas[4]?.c[i]?.v || `CARDA ${i-2}`,
-                    ac: parseFloat(filas[5]?.c[i]?.v || 0),
-                    max: parseFloat(filas[6]?.c[i]?.v || 1000)
+                    ac: filas[5]?.c[i]?.v || 0,
+                    max: filas[6]?.c[i]?.v || 1000
                 });
             }
             return cardasData;
         } catch (error) {
-            console.error("Error en obtenerDatosCardas:", error);
+            console.error("Error cargando datos de Cardas:", error);
             return [];
         }
     }
