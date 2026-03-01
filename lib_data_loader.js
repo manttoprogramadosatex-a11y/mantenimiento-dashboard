@@ -1,23 +1,19 @@
 /* lib_data_loader.js */
-/* VERSION 2.0 ESTABLE TOTAL
-   - Todo lee del mismo Google Sheet publicado
-   - Fecha desde A2 (gid=0)
-   - Husos desde columnas B2, C2, D2
-   - No rompe diseño
+/* VERSION 3.0 DEFINITIVA
+   - Lee correctamente fecha tipo DATE
+   - Lee Husos desde B2, C2, D2
+   - Funciona con tu JSON real confirmado
 */
 
 const SatexDataLoader = {
 
-    // ==============================
-    // LECTURA GENERAL DESDE GID=0
-    // ==============================
     async obtenerDatosPrincipales() {
         try {
 
             const timestamp = new Date().getTime();
 
             const url =
-            "https://docs.google.com/spreadsheets/d/e/2PACX-1vT7wFZesHZM_4ed4aj7oAU4MgNvuhZ8AQ-CUL_4QkrMzzR4PawAQ36-hGTvYhxeslLKjFzvfSwApNmT/gviz/tq?tqx=out:json&gid=0&t=" + timestamp;
+            "https://docs.google.com/spreadsheets/d/1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok/gviz/tq?tqx=out:json&gid=0&t=" + timestamp;
 
             const respuesta = await fetch(url, { cache: "no-store" });
             const texto = await respuesta.text();
@@ -28,7 +24,7 @@ const SatexDataLoader = {
 
             const filas = json.table.rows;
 
-            if (!filas || filas.length < 2) {
+            if (!filas || filas.length === 0) {
                 return {
                     fecha: "",
                     continuas: 0,
@@ -37,10 +33,10 @@ const SatexDataLoader = {
                 };
             }
 
-            const fila = filas[1].c;
+            const fila = filas[0].c;
 
             return {
-                fecha: fila[0]?.f || fila[0]?.v || "",
+                fecha: fila[0]?.f || "",      // 👈 usa .f porque es tipo date
                 continuas: fila[1]?.v || 0,
                 openEnd: fila[2]?.v || 0,
                 coneras: fila[3]?.v || 0
