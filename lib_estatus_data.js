@@ -1,6 +1,6 @@
 /* lib_estatus_data.js */
-/* VERSION 4.4
-   - Flujo optimizado para evitar saltos visuales
+/* VERSION 4.5
+   - Refresco de datos corregido
 */
 
 const SatexEstatusData = {
