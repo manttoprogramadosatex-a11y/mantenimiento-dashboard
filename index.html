@@ -48,7 +48,7 @@
             "lib_pmc_donas_design.js",
             "lib_correctivo_kpi_design.js",
             "lib_accidentes.js",
-            "lib_data_loader.js"   // 🔥 NUEVO (solo agregamos esto)
+            "lib_data_loader.js"
         ];
 
         libs.forEach(lib => {
@@ -59,12 +59,12 @@
     <script>
         window.onload = async () => {
 
-            // Render de estructuras base
+            // Render base
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
 
-            // Accidentes (se mantienen por ahora)
+            // Accidentes
             const datosAccidentes = [
                 {item: "1", nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: "141"},
                 {item: "2", nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "2-feb-2025", dias: "391"},
@@ -82,9 +82,13 @@
                 {tipo:"CARDA", num:"05", desde:"2026/02/15", dias:""}
             ]);
 
-            // 🔥 AQUÍ CAMBIA TODO
-            // En vez de datos ficticios, ahora trae datos reales desde Google Sheets
+            // 🔥 Primera carga desde Google Sheets
             await SatexEstatusData.actualizarDesdeSheet();
+
+            // 🔥 Actualización automática cada 15 segundos
+            setInterval(async () => {
+                await SatexEstatusData.actualizarDesdeSheet();
+            }, 15000);
 
             // Cardas
             SatexCardasEngine.dibujar("cardas-grid");
@@ -93,7 +97,7 @@
             SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
 
-            // Preventivo y Listas
+            // Preventivo
             SatexPreventivoDesign.render("preventivos-grafico-container", 90);
             SatexPersonalManttoDesign.render("personal-mantto-scroll", []);
             SatexComprasPendientesDesign.render("compras-pendientes-scroll", []);
