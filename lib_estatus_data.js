@@ -1,23 +1,23 @@
 /* lib_estatus_data.js */
-/* VERSION 4.2
-   - Integración de flujo de Cardas
+/* VERSION 4.3
+   - Refresco de cardas sincronizado
 */
 
 const SatexEstatusData = {
 
     async actualizarDesdeSheet() {
-        // 1. Datos Principales
+        // 1. Husos
         const datos = await SatexDataLoader.obtenerDatosPrincipales();
         if (datos) {
             const cont = document.getElementById("estatus-continuas");
             const oe   = document.getElementById("estatus-openend");
             const con  = document.getElementById("estatus-coneras");
-            const fechaElemento = document.getElementById("fecha-actualizacion");
+            const fe   = document.getElementById("fecha-actualizacion");
 
             if (cont) cont.textContent = datos.continuas;
             if (oe)   oe.textContent   = datos.openEnd;
             if (con)  con.textContent  = datos.coneras;
-            if (fechaElemento && datos.fecha) fechaElemento.textContent = `(Fecha Act.: ${datos.fecha})`;
+            if (fe && datos.fecha) fe.textContent = `(Fecha Act.: ${datos.fecha})`;
         }
 
         // 2. Máquinas Paradas
@@ -25,12 +25,12 @@ const SatexEstatusData = {
         if (window.SatexMaquinasInactivas) {
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", maquinas);
         }
-        const indicador = document.getElementById("num-maquinas-paradas");
-        if (indicador) indicador.textContent = maquinas.length;
+        const ind = document.getElementById("num-maquinas-paradas");
+        if (ind) ind.textContent = maquinas.length;
 
-        // 3. Cardas
+        // 3. Cardas dinámicas
         const datosCardas = await SatexDataLoader.obtenerDatosCardas();
-        if (datosCardas && window.SatexCardasEngine) {
+        if (datosCardas) {
             SatexCardasEngine.dibujar("cardas-grid", datosCardas);
         }
     }
