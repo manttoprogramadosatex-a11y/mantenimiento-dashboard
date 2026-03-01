@@ -1,22 +1,14 @@
 /* lib_cardas_engine.js */
-/* VERSION 1.7
-   - Renderizado limpio de Gauges con datos de Cardas
-*/
-
 const SatexCardasEngine = {
-    dibujar: function(idContenedor, datosExternos = null) {
+    dibujar: function(idContenedor, datos) {
         const grid = document.getElementById(idContenedor);
-        if (!grid || !datosExternos) return;
+        if (!grid || !datos) return;
 
-        grid.innerHTML = datosExternos.map(c => 
-            SatexCardasDesign.crearCarda(c.id, c.t, c.ac, c.max)
-        ).join('');
+        grid.innerHTML = datos.map(c => SatexCardasDesign.crearCarda(c.id, c.t, c.ac, c.max)).join('');
 
-        datosExternos.forEach(c => {
+        datos.forEach(c => {
             const canvas = document.getElementById(`canvas-${c.id}`);
-            if (canvas) {
-                this.pintarGauje(canvas, c.ac, c.max);
-            }
+            if (canvas) this.pintarGauje(canvas, c.ac, c.max);
         });
     },
 
@@ -25,25 +17,25 @@ const SatexCardasEngine = {
         const x = canvas.width / 2;
         const y = canvas.height - 5;
         const radio = 60;
-
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // Fondo gris
         ctx.beginPath();
         ctx.arc(x, y, radio, Math.PI, 0);
         ctx.lineWidth = 12;
         ctx.strokeStyle = '#eeeeee';
         ctx.stroke();
 
-        const porcentaje = Math.max(0, Math.min(ac / (max || 1), 1));
-        let color = '#4caf50'; 
-        if (porcentaje > 0.9) color = '#f44336'; 
-        else if (porcentaje > 0.7) color = '#ff9800'; 
+        // Progreso basado en toneladas
+        const porcentaje = Math.min(ac / (max || 1), 1);
+        let color = porcentaje > 0.9 ? '#f44336' : (porcentaje > 0.7 ? '#ff9800' : '#4caf50');
 
         ctx.beginPath();
         ctx.arc(x, y, radio, Math.PI, Math.PI + (Math.PI * porcentaje));
         ctx.strokeStyle = color;
         ctx.stroke();
 
+        // Aguja
         const angulo = Math.PI + (Math.PI * porcentaje);
         ctx.beginPath();
         ctx.moveTo(x, y);
