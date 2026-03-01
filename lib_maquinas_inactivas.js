@@ -1,11 +1,9 @@
 /* lib_maquinas_inactivas.js */
-/* VERSION 2.1.0
-   - Conexión directa a Google Sheets
-   - Pestaña: Maquinas Paradas (gid=217931005)
-   - Columnas: A=DESDE | B=TIPO | C=NUM
-   - Ignora fila 1 (títulos)
-   - Calcula días automáticamente
-   - No modifica diseño visual
+/* VERSION 2.2.0
+   - Compatible con formato Date(YYYY,MM,DD)
+   - Pestaña Maquinas Paradas gid=217931005
+   - A=DESDE | B=TIPO | C=NUM
+   - No modifica diseño
 */
 
 const SatexMaquinasInactivas = {
@@ -20,20 +18,18 @@ const SatexMaquinasInactivas = {
 
         try {
 
-            const url = 
+            const url =
                 `https://docs.google.com/spreadsheets/d/${this.SHEET_ID}/gviz/tq?gid=${this.GID}&tqx=out:json`;
 
             const response = await fetch(url, { cache: "no-store" });
             const text = await response.text();
 
-            // Extrae JSON sin wrapper
             const json = JSON.parse(
                 text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1)
             );
 
             const rows = json.table.rows;
 
-            // Si no hay datos
             if (!rows || rows.length <= 1) {
                 container.innerHTML = `
                     <div style="color: #666; text-align: center; padding: 5px; font-size: 14px;">
@@ -42,18 +38,37 @@ const SatexMaquinasInactivas = {
                 return;
             }
 
-            // Ignora encabezado (fila 1)
             const data = rows.slice(1);
 
-            // Función para calcular días
-            const calcularDias = (fechaDesde) => {
+            // 🔥 Interpretar formato Date(YYYY,MM,DD)
+            const parseGoogleDate = (value) => {
 
-                if (!fechaDesde) return 0;
+                if (!value) return null;
 
-                const inicio = new Date(fechaDesde);
-                if (isNaN(inicio)) return 0;
+                if (typeof value === "string" && value.startsWith("Date(")) {
 
+                    const partes = value
+                        .replace("Date(", "")
+                        .replace(")", "")
+                        .split(",");
+
+                    const year  = parseInt(partes[0]);
+                    const month = parseInt(partes[1]); // OJO: ya viene 0-indexado
+                    const day   = parseInt(partes[2]);
+
+                    return new Date(year, month, day);
+                }
+
+                return new Date(value);
+            };
+
+            const calcularDias = (fecha) => {
+
+                if (!fecha) return 0;
+
+                const inicio = new Date(fecha);
                 const hoy = new Date();
+
                 inicio.setHours(0,0,0,0);
                 hoy.setHours(0,0,0,0);
 
@@ -63,19 +78,22 @@ const SatexMaquinasInactivas = {
                 return dias < 0 ? 0 : dias;
             };
 
-            // Construir HTML
             let html = "";
 
             data.forEach(row => {
 
-                // Validar existencia
                 if (!row.c[0] || !row.c[1] || !row.c[2]) return;
 
-                const fechaDesde = row.c[0].v;
-                const tipo       = row.c[1].v;
-                const numero     = row.c[2].v;
+                const fechaObj = parseGoogleDate(row.c[0].v);
+                const tipo     = row.c[1].v;
+                const numero   = row.c[2].v;
 
-                const diasCalculados = calcularDias(fechaDesde);
+                if (!fechaObj) return;
+
+                const diasCalculados = calcularDias(fechaObj);
+
+                const fechaFormateada =
+                    fechaObj.toISOString().split("T")[0];
 
                 html += `
                 <div style="display: flex;
@@ -86,7 +104,7 @@ const SatexMaquinasInactivas = {
                             font-family: 'Segoe UI', sans-serif;
                             align-items: center;">
                     
-                    <div style="width: 35%; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    <div style="width: 35%; text-align: center;">
                         ${tipo}
                     </div>
 
@@ -95,7 +113,7 @@ const SatexMaquinasInactivas = {
                     </div>
 
                     <div style="width: 30%; text-align: center;">
-                        ${new Date(fechaDesde).toISOString().split("T")[0]}
+                        ${fechaFormateada}
                     </div>
 
                     <div style="width: 20%; text-align: center; font-weight: bold;">
@@ -105,7 +123,6 @@ const SatexMaquinasInactivas = {
                 </div>`;
             });
 
-            // Pintar en pantalla
             container.innerHTML = html;
 
         } catch (error) {
