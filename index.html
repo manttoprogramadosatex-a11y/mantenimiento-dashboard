@@ -10,34 +10,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; }
-        
+        /* Ajuste a 155px para maximizar espacio de mantenimiento */
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
-        
-        #cardas-grid { 
-            height: 190px !important; 
-            flex-shrink: 0; 
-            display: flex; 
-            overflow-x: auto; 
-            padding: 5px 10px; 
-            background: rgba(0,0,0,0.1); 
-            gap: 10px; 
-        }
-
-        /* Scrollbar horizontal Cardas */
-        #cardas-grid::-webkit-scrollbar { height: 10px; }
-        #cardas-grid::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 5px; }
-        #cardas-grid::-webkit-scrollbar-thumb { background: #f9b218; border-radius: 5px; border: 2px solid #2f5577; }
-        
-        /* Contenedor de Accidentes con Scroll Vertical */
-        #accidentes-scroll {
-            height: 90px; /* Ajustado para ver varias filas y activar scroll */
-            overflow-y: auto;
-            background: rgba(0,0,0,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        #accidentes-scroll::-webkit-scrollbar { width: 6px; }
-        #accidentes-scroll::-webkit-scrollbar-thumb { background: #ff9999; border-radius: 3px; }
-
+        #cardas-grid { height: 155px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 2px 10px; background: rgba(0,0,0,0.1); gap: 5px; }
         #mantenimiento-container { flex-grow: 1; position: relative; }
     </style>
 </head>
@@ -64,29 +39,31 @@
 
     <script>
         window.onload = () => {
+            // Render de estructuras base
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
             
-            // DATOS FICTICIOS (Se reemplazarán con Excel después)
-            const datosExcelSimulados = [
-                {item: "1", nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: "141"},
-                {item: "2", nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "2-feb-2025", dias: "391"},
-                {item: "3", nombre: "Ejemplo Ficticio 1", puesto: "Puesto Prueba", fecha: "01-ene-2026", dias: "58"},
-                {item: "4", nombre: "Ejemplo Ficticio 2", puesto: "Puesto Prueba", fecha: "15-feb-2026", dias: "13"}
-            ];
-
-            SatexAccidentes.render("accidentes-scroll", datosExcelSimulados);
-
-            // Otros componentes
+            // Datos de Máquinas Paradas con cálculo automático
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", [
-                {tipo:"CARDA", num:"02", desde:"2025/02/26", dias:"2"}
+                {tipo:"CARDA", num:"02", desde:"2025/02/26", dias:""},
+                {tipo:"CARDA", num:"08", desde:"2026/02/20", dias:""},
+                {tipo:"CONERA", num:"04", desde:"2026/02/27", dias:""},
+                {tipo:"CONTINUA", num:"12", desde:"2026/02/28", dias:""},
+                {tipo:"CARDA", num:"05", desde:"2026/02/15", dias:""}
             ]);
 
-            SatexEstatusData.actualizar(14, 6, 4, 1);
+            // Indicadores de estatus
+            SatexEstatusData.actualizar(14, 6, 4, 5);
+
+            // Dibujado de Cardas
             SatexCardasEngine.dibujar("cardas-grid");
+
+            // Mantenimiento
             SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
+
+            // Preventivo y Listas
             SatexPreventivoDesign.render("preventivos-grafico-container", 90);
             SatexPersonalManttoDesign.render("personal-mantto-scroll", []);
             SatexComprasPendientesDesign.render("compras-pendientes-scroll", []);
