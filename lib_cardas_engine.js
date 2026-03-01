@@ -66,3 +66,4 @@ const SatexCardasEngine = {
         ctx.stroke();
     }
 };
+
