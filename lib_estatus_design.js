@@ -1,10 +1,6 @@
-/* lib_estatus_design.js */
-/* VERSION 1.2
-   - Info. Cardas centrado
-   - Info. Cardas en negrita
-   - Sin alterar layout general
-   - Sin modificar dimensiones del header
-*/
+// lib_estatus_design.js
+// VERSION 1.1.0
+// Ajuste de anchos de columnas en bloque Máquinas Paradas
 
 const SatexEstatusDesign = {
     render: function(id) {
@@ -16,11 +12,7 @@ const SatexEstatusDesign = {
             
             <div style="flex-shrink: 0; color: white; text-align: right; line-height: 1; padding-right: 10px; border-right: 1px solid #444;">
                 <div style="font-size: 20px; font-weight: bold;">Estatus planta ►</div>
-                
-                <!-- AJUSTE CONTROLADO -->
-                <div style="font-size: 14px; color: #a1b1c1; font-weight: bold; text-align: center;">
-                    Info. Cardas ▼
-                </div>
+                <div style="font-size: 14px; color: #a1b1c1;">Info. Cardas ▼</div>
             </div>
 
             ${this.crearBloque("CONTINUAS (INACT.)", "14", "Husos", "estatus-continuas")}
@@ -32,13 +24,16 @@ const SatexEstatusDesign = {
                 <div id="num-maquinas-paradas" style="color: #ff4444; font-size: 32px; font-weight: bold;">3</div>
             </div>
 
+            <!-- TABLA AJUSTADA -->
             <div style="flex-grow: 1; height: 45px; border: 1px solid #ff4444; border-radius: 4px; background: rgba(0,0,0,0.3); overflow: hidden; display: flex; flex-direction: column;">
+                
                 <div style="display: flex; background: rgba(0,0,0,0.5); color: #ff8c69; font-size: 12px; font-weight: bold; border-bottom: 1px solid #ff4444; padding: 1px 0;">
-                    <div style="width: 25%; text-align: center;">TIPO</div>
-                    <div style="width: 20%; text-align: center;">NÚM</div>
-                    <div style="width: 35%; text-align: center;">DESDE</div>
+                    <div style="width: 35%; text-align: center;">TIPO</div>
+                    <div style="width: 15%; text-align: center;">NÚM</div>
+                    <div style="width: 30%; text-align: center;">DESDE</div>
                     <div style="width: 20%; text-align: center;">DÍAS</div>
                 </div>
+
                 <div id="maquinas-paradas-scroll" style="flex-grow: 1; overflow-y: auto;"></div>
             </div>
 
