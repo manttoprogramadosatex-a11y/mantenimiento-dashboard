@@ -1,4 +1,4 @@
-/* lib_mantenimiento.js - VERSION 1.0 */
+/* lib_mantenimiento.js - VERSION 1.1 */
 const SatexMantenimiento = {
     render: function(id) {
         const container = document.getElementById(id);
@@ -50,10 +50,3 @@ const SatexMantenimiento = {
                     <div style="color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; text-align: center; margin-bottom: 5px; text-transform: uppercase;">Accidentes</div>
                     <div id="accidentes-scroll" style="height: 75px; background: rgba(0,0,0,0.2); border-radius: 4px; overflow-y: auto;"></div>
                 </div>
-            </div>
-        </div>`;
-    },
-    btn: function(t, c) {
-        return `<button style="width: 100%; height: 22px; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 3px; font-size: 9px; font-weight: bold; cursor: pointer;">${t}</button>`;
-    }
-};
