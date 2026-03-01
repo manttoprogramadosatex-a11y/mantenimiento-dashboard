@@ -1,8 +1,7 @@
-/* lib_data_loader.js - VERSIÓN FINAL SINCRONIZADA */
+/* lib_data_loader.js - VERSIÓN CORREGIDA POR DESFASE */
 const SHEET_ID = "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok";
 
 const SatexDataLoader = {
-    // Lee datos de la pestaña principal (gid=0)
     async obtenerDatosPrincipales() {
         try {
             const timestamp = new Date().getTime();
@@ -20,12 +19,10 @@ const SatexDataLoader = {
                 coneras: fila[3]?.v || 0
             };
         } catch (error) {
-            console.error("Error cargando datos principales:", error);
             return { fecha: "", continuas: 0, openEnd: 0, coneras: 0 };
         }
     },
 
-    // Lee Máquinas Paradas de la pestaña correspondiente
     async obtenerMaquinasParadas() {
         try {
             const timestamp = new Date().getTime();
@@ -40,12 +37,10 @@ const SatexDataLoader = {
                 num:   f.c[2]?.v || ""
             })).filter(m => m.tipo !== "" && m.num !== "") : [];
         } catch (error) {
-            console.error("Error cargando Maquinas Paradas:", error);
             return [];
         }
     },
 
-    // NUEVA: Lee Toneladas de "Info Cardas" (gid=1547200035)
     async obtenerDatosCardas() {
         try {
             const timestamp = new Date().getTime();
@@ -57,16 +52,19 @@ const SatexDataLoader = {
             const filas = json.table.rows;
             let cardasData = [];
 
-            // Mapeo: Columnas D(3) a M(12)
-            // Fila 5 (index 4) -> Nombres (Carda 1, 2...)
-            // Fila 6 (index 5) -> Toneladas Act.
-            // Fila 7 (index 6) -> Toneladas Max.
+            // AJUSTE DE FILAS: Si el dato estaba en la 5 y hay que subir 5, 
+            // los índices reales en el objeto JSON suelen ser 0, 1 y 2.
+            const idxNombres = 0; // Fila superior real
+            const idxAcumulados = 1; 
+            const idxMaximos = 2;
+
+            // Columnas D(3) a M(12)
             for (let i = 3; i <= 12; i++) { 
                 cardasData.push({
                     id: i - 2,
-                    t:  filas[4]?.c[i]?.v || `CARDA ${i-2}`,
-                    ac: parseFloat(filas[5]?.c[i]?.v || 0),
-                    max: parseFloat(filas[6]?.c[i]?.v || 1000)
+                    t:  filas[idxNombres]?.c[i]?.v || `CARDA ${i-2}`,
+                    ac: parseFloat(filas[idxAcumulados]?.c[i]?.v || 0),
+                    max: parseFloat(filas[idxMaximos]?.c[i]?.v || 1000)
                 });
             }
             return cardasData;
@@ -76,4 +74,3 @@ const SatexDataLoader = {
         }
     }
 };
-
