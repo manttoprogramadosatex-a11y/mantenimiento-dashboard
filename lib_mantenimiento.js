@@ -1,7 +1,7 @@
 /* lib_mantenimiento.js */
-/* VERSION 1.3.1
-   - Ajuste leve vertical del título "Accidentes"
-   - No modifica alturas
+/* VERSION 1.3.2
+   - Ajuste leve vertical del título "ACCIDENTES"
+   - No modifica alturas generales
    - No altera layout
 */
 
@@ -15,6 +15,7 @@ const SatexMantenimiento = {
             
             <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background-color: #f9b218; transform: translateX(-50%); z-index: 5;"></div>
             
+            <!-- COLUMNA IZQUIERDA -->
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
                 
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 6px;">
@@ -54,6 +55,7 @@ const SatexMantenimiento = {
                 </div>
             </div>
 
+            <!-- COLUMNA DERECHA -->
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
                 
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 6px;">
@@ -70,7 +72,7 @@ const SatexMantenimiento = {
                         font-weight: bold;
                         border-bottom: 1px solid #ff9999;
                         text-align: center;
-                        margin-top: 4px; /* ← BAJAMOS LIGERAMENTE */
+                        margin-top: 6px;   /* ← Ajuste fino vertical */
                         margin-bottom: 5px;
                         text-transform: uppercase;
                     ">
