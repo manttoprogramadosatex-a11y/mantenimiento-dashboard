@@ -1,9 +1,8 @@
 const SatexCardasDesign = {
     crearCarda: function(id, titulo, actual, maximo) {
-        // Reducción extrema a 142px de alto (espacios de ~1mm)
-        // Mantiene canvas de 85px y fuentes originales intactas.
+        // Reducción de márgenes laterales a 2px para evitar scroll innecesario
         return `
-        <div id="carda-${id}" style="min-width: 130px; height: 142px; background: white; border-radius: 8px; margin: 4px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 0px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 2px solid #2f5577; box-sizing: border-box; overflow: hidden;">
+        <div id="carda-${id}" style="min-width: 130px; height: 142px; background: white; border-radius: 8px; margin: 2px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 0px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 2px solid #2f5577; box-sizing: border-box; overflow: hidden;">
             
             <div style="color: #003366; font-weight: bold; font-size: 14px; text-transform: uppercase; line-height: 1; margin-top: 2px;">
                 ${titulo}
