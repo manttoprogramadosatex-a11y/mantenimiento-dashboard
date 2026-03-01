@@ -13,7 +13,6 @@ const SatexHeaderDesign = {
         const mes = meses[hoy.getMonth()];
         const anio = hoy.getFullYear();
         
-        // Ajuste de formato: Sábado 28-Febrero-2026
         const fechaFormateada = `${diaSemana} ${diaMes}-${mes}-${anio}`;
 
         container.innerHTML = `
