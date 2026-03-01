@@ -1,30 +1,42 @@
 /* lib_estatus_data.js */
-/* VERSION 3.1 DEFINITIVA
-   - Compatible con JSON real de tu Sheet
+/* VERSION 4.0
+   - Actualiza Husos
+   - Actualiza Fecha
+   - Actualiza Máquinas Paradas correctamente
 */
 
 const SatexEstatusData = {
 
     async actualizarDesdeSheet() {
 
+        // ===== HUSOS =====
         const datos = await SatexDataLoader.obtenerDatosPrincipales();
 
-        // CONTINUAS
         const cont = document.getElementById("estatus-continuas");
-        if (cont) cont.textContent = datos.continuas;
-
-        // OPEN-END
-        const oe = document.getElementById("estatus-openend");
-        if (oe) oe.textContent = datos.openEnd;
-
-        // CONERAS
-        const con = document.getElementById("estatus-coneras");
-        if (con) con.textContent = datos.coneras;
-
-        // FECHA
+        const oe   = document.getElementById("estatus-openend");
+        const con  = document.getElementById("estatus-coneras");
         const fechaElemento = document.getElementById("fecha-actualizacion");
+
+        if (cont) cont.textContent = datos.continuas;
+        if (oe)   oe.textContent   = datos.openEnd;
+        if (con)  con.textContent  = datos.coneras;
+
         if (fechaElemento && datos.fecha) {
             fechaElemento.textContent = `(Fecha Act.: ${datos.fecha})`;
+        }
+
+        // ===== MAQUINAS PARADAS =====
+        const maquinas = await SatexDataLoader.obtenerMaquinasParadas();
+
+        // Render lista derecha
+        if (window.SatexMaquinasInactivas) {
+            SatexMaquinasInactivas.render("maquinas-paradas-scroll", maquinas);
+        }
+
+        // Actualizar contador rojo
+        const indicador = document.getElementById("num-maquinas-paradas");
+        if (indicador) {
+            indicador.textContent = maquinas.length;
         }
 
     }
