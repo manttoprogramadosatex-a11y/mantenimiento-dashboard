@@ -1,7 +1,8 @@
 // lib_preventivo_design.js
-// VERSION 1.3
-// Redistribución vertical ligera de botones preventivos
-// No altera altura total ni invade sección inferior
+// VERSION 1.4
+// - Separación leve entre título y primer botón
+// - Botón PROCEDIMIENTOS alineado abajo
+// - No altera altura general
 
 const SatexPreventivoDesign = {
     render: function(id, porcentaje) {
@@ -11,19 +12,25 @@ const SatexPreventivoDesign = {
         container.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; align-items: stretch; justify-content: space-between; padding: 0 5px; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;">
             
-            <!-- COLUMNA DONA -->
-            <div style="width: 28%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                <div style="position: relative; width: 105px; height: 105px;">
-                    <canvas id="canvas-preventivo" width="105" height="105"></canvas>
-                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 18px;">
-                        ${porcentaje}%
+            <!-- COLUMNA IZQUIERDA -->
+            <div style="width: 28%; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+
+                <!-- BLOQUE SUPERIOR (DONA + TEXTO) -->
+                <div style="display:flex; flex-direction:column; align-items:center;">
+
+                    <div style="position: relative; width: 105px; height: 105px;">
+                        <canvas id="canvas-preventivo" width="105" height="105"></canvas>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-weight: bold; font-size: 18px;">
+                            ${porcentaje}%
+                        </div>
+                    </div>
+
+                    <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-transform: uppercase; text-align: center; line-height: 1;">
+                        Cumplimiento Acumulado
                     </div>
                 </div>
 
-                <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-transform: uppercase; text-align: center; line-height: 1;">
-                    Cumplimiento Acumulado
-                </div>
-
+                <!-- BOTÓN ABAJO -->
                 <button style="
                     width: 90%;
                     height: 32px;
@@ -35,7 +42,6 @@ const SatexPreventivoDesign = {
                     font-weight: bold;
                     cursor: pointer;
                     text-transform: uppercase;
-                    margin-top: 10px;
                     transition: 0.1s;
                 "
                 onmousedown="this.style.transform='scale(0.97)'"
@@ -44,16 +50,14 @@ const SatexPreventivoDesign = {
                 </button>
             </div>
 
-            <!-- COLUMNA BOTONES -->
+            <!-- COLUMNA DERECHA -->
             <div style="
                 width: 70%;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
-                gap: 8px;
-                padding-top: 10px;
-                padding-bottom: 10px;
+                justify-content: space-between;
+                gap: 4px;
                 padding-left: 10px;
                 border-left: 1px solid rgba(255,255,255,0.1);
                 box-sizing: border-box;
