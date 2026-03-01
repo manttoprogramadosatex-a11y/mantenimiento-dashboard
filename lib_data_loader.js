@@ -1,5 +1,9 @@
 /* lib_data_loader.js */
-/* VERSION 4.1 ESTABLE Y NO BLOQUEANTE */
+/* VERSION 4.2 ESTABLE TOTAL
+   - Lee Husos + Fecha
+   - Lee Máquinas Paradas usando GID fijo
+   - Protegido contra errores de JSON
+*/
 
 const SHEET_ID = "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok";
 
@@ -9,38 +13,34 @@ const SatexDataLoader = {
     // HUSOS + FECHA (gid=0)
     // ==============================
     async obtenerDatosPrincipales() {
-
         try {
 
             const timestamp = new Date().getTime();
-
             const url =
             `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=0&t=${timestamp}`;
 
             const respuesta = await fetch(url, { cache: "no-store" });
 
             if (!respuesta.ok) {
-                throw new Error("Respuesta no válida del Sheet");
+                throw new Error("Respuesta no válida del Sheet Husos");
             }
 
             const texto = await respuesta.text();
-
             const inicio = texto.indexOf("{");
-            const fin = texto.lastIndexOf("}");
+            const fin    = texto.lastIndexOf("}");
 
             if (inicio === -1 || fin === -1) {
-                throw new Error("Formato inesperado del Sheet");
+                throw new Error("Formato inesperado en JSON de Husos");
             }
 
             const json = JSON.parse(texto.substring(inicio, fin + 1));
-
             const filas = json?.table?.rows;
 
             if (!filas || filas.length === 0) {
-                return this._datosVacios();
+                return { fecha: "", continuas: 0, openEnd: 0, coneras: 0 };
             }
 
-            const fila = filas[0]?.c || [];
+            const fila = filas[0].c || [];
 
             return {
                 fecha: fila[0]?.f || "",
@@ -50,49 +50,38 @@ const SatexDataLoader = {
             };
 
         } catch (error) {
-            console.warn("Sheet principal no disponible:", error);
-            return this._datosVacios();
+            console.warn("Error cargando Husos:", error);
+            return { fecha: "", continuas: 0, openEnd: 0, coneras: 0 };
         }
     },
 
-    _datosVacios() {
-        return {
-            fecha: "",
-            continuas: 0,
-            openEnd: 0,
-            coneras: 0
-        };
-    },
-
     // ==============================
-    // MAQUINAS PARADAS
+    // MAQUINAS PARADAS (GID fijo)
     // ==============================
     async obtenerMaquinasParadas() {
-
         try {
 
             const timestamp = new Date().getTime();
+            const GID_MAQUINAS = "217931005";
 
             const url =
-            `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Maquinas%20Paradas&t=${timestamp}`;
+            `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID_MAQUINAS}&t=${timestamp}`;
 
             const respuesta = await fetch(url, { cache: "no-store" });
 
             if (!respuesta.ok) {
-                throw new Error("Respuesta no válida del Sheet");
+                throw new Error("Respuesta no válida del Sheet Maquinas Paradas");
             }
 
             const texto = await respuesta.text();
-
             const inicio = texto.indexOf("{");
-            const fin = texto.lastIndexOf("}");
+            const fin    = texto.lastIndexOf("}");
 
             if (inicio === -1 || fin === -1) {
-                throw new Error("Formato inesperado del Sheet");
+                throw new Error("Formato inesperado en JSON Maquinas Paradas");
             }
 
             const json = JSON.parse(texto.substring(inicio, fin + 1));
-
             const filas = json?.table?.rows;
 
             if (!filas || filas.length === 0) return [];
@@ -109,7 +98,7 @@ const SatexDataLoader = {
                 .filter(m => m.tipo !== "" && m.num !== "");
 
         } catch (error) {
-            console.warn("Sheet Maquinas Paradas no disponible:", error);
+            console.warn("Error cargando Máquinas Paradas:", error);
             return [];
         }
     }
