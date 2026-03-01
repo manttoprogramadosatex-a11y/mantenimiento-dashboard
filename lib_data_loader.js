@@ -1,9 +1,9 @@
 /* lib_data_loader.js */
-/* VERSION 4.4 
-   - Ajuste de índices de filas para eliminar desfase
-   - Fila 5 (Nombres) -> Índice 3
-   - Fila 6 (Toneladas Act.) -> Índice 4
-   - Fila 7 (Toneladas Max.) -> Índice 5
+/* VERSION 4.5
+   - Ajuste final de índices basado en estructura real de la captura
+   - Fila 5 (Nombres) -> filas[1]
+   - Fila 6 (Toneladas Act.) -> filas[2]
+   - Fila 7 (Toneladas Max.) -> filas[3]
 */
 
 const SHEET_ID = "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok";
@@ -55,14 +55,13 @@ const SatexDataLoader = {
             const json = JSON.parse(texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1));
             const filas = json.table.rows;
 
-            // Ajuste de desfase: 
-            // Según la estructura de la captura, los índices correctos son:
-            const titulos  = filas[3].c; // Corresponde a Fila 5 del Excel
-            const actuales = filas[4].c; // Corresponde a Fila 6 del Excel
-            const maximos  = filas[5].c; // Corresponde a Fila 7 del Excel
+            // Ajuste según interpretación de Google Sheets de tu captura:
+            const titulos  = filas[1].c; // Corresponde a Fila 5 del Excel (Carda X)
+            const actuales = filas[2].c; // Corresponde a Fila 6 del Excel (794, 1016...)
+            const maximos  = filas[3].c; // Corresponde a Fila 7 del Excel (1100, 950...)
 
             const resultado = [];
-            // Columnas D(3) a M(12) para las 10 cardas visibles en tu captura
+            // Columnas D(3) a M(12) para las 10 cardas
             for (let i = 3; i <= 12; i++) {
                 resultado.push({
                     id: i - 2,
