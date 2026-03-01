@@ -1,6 +1,6 @@
 // lib_preventivo_design.js
-// VERSION 1.1.0
-// Ajuste de separación vertical para alineación con bloque correctivo
+// VERSION 1.1.1
+// Ajuste fino de alineación vertical
 
 const SatexPreventivoDesign = {
     render: function(id, porcentaje) {
@@ -18,7 +18,7 @@ const SatexPreventivoDesign = {
                         ${porcentaje}%
                     </div>
                 </div>
-                <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 6px; text-transform: uppercase; text-align: center; line-height: 1;">
+                <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-transform: uppercase; text-align: center; line-height: 1;">
                     Cumplimiento Acumulado
                 </div>
             </div>
@@ -30,7 +30,7 @@ const SatexPreventivoDesign = {
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                gap: 8px;  /* ← AQUÍ aumentamos el espacio */
+                gap: 4px; /* ← reducido */
                 padding-left: 10px;
                 border-left: 1px solid rgba(255,255,255,0.1);
                 box-sizing: border-box;
@@ -49,7 +49,7 @@ const SatexPreventivoDesign = {
 
     btn: function(t, v, c) {
         return `
-        <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.15); padding: 4px 6px; border-radius: 4px; flex: 1;">
+        <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(0,0,0,0.15); padding: 3px 6px; border-radius: 4px; height: 14%;">
             
             <button style="
                 width: 82%;
@@ -73,7 +73,7 @@ const SatexPreventivoDesign = {
                 ${t}
             </button>
 
-            <div style="width: 15%; color: ${c}; font-size: 17px; font-weight: bold; text-align: right;">
+            <div style="width: 15%; color: ${c}; font-size: 16px; font-weight: bold; text-align: right;">
                 ${v}
             </div>
         </div>`;
