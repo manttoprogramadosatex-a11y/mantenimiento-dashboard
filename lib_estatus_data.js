@@ -1,6 +1,6 @@
 /* lib_estatus_data.js */
-/* VERSION 4.6
-   - Mantiene ciclo de actualización de 15 segundos
+/* VERSION 4.7
+   - Actualización integrada
 */
 
 const SatexEstatusData = {
