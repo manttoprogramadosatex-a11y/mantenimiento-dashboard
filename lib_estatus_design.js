@@ -1,3 +1,11 @@
+/* lib_estatus_design.js */
+/* VERSION 1.2
+   - Info. Cardas centrado
+   - Info. Cardas en negrita
+   - Sin alterar layout general
+   - Sin modificar dimensiones del header
+*/
+
 const SatexEstatusDesign = {
     render: function(id) {
         const container = document.getElementById(id);
@@ -8,7 +16,11 @@ const SatexEstatusDesign = {
             
             <div style="flex-shrink: 0; color: white; text-align: right; line-height: 1; padding-right: 10px; border-right: 1px solid #444;">
                 <div style="font-size: 20px; font-weight: bold;">Estatus planta ►</div>
-                <div style="font-size: 14px; color: #a1b1c1;">Info. Cardas ▼</div>
+                
+                <!-- AJUSTE CONTROLADO -->
+                <div style="font-size: 14px; color: #a1b1c1; font-weight: bold; text-align: center;">
+                    Info. Cardas ▼
+                </div>
             </div>
 
             ${this.crearBloque("CONTINUAS (INACT.)", "14", "Husos", "estatus-continuas")}
