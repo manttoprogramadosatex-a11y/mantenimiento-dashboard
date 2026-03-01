@@ -1,8 +1,9 @@
 /* lib_header.js */
-/* VERSION 1.1
-   - Se agrega subtítulo: MONITOREO CORRECTIVOS EN TIEMPO REAL
-   - No se modifica altura (60px)
-   - No se altera layout general
+/* VERSION 1.1.1
+   - Logo desplazado 1cm a la derecha
+   - No se modifica centrado del título
+   - No se altera fecha
+   - No se modifica altura
 */
 
 const SatexHeader = {
@@ -13,7 +14,7 @@ const SatexHeader = {
         document.getElementById(id).innerHTML = `
             <div style="background:#274a66; display:flex; align-items:center; height:60px; padding:0 15px; border-bottom:2px solid #1e3a50;">
                 
-                <img src="logo.png.jpeg" style="height:45px;">
+                <img src="logo.png.jpeg" style="height:45px; margin-left:35px;">
 
                 <h1 style="
                     font-family:'Calibri';
