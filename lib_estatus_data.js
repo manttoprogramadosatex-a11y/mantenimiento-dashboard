@@ -1,7 +1,6 @@
 /* lib_estatus_data.js */
-/* VERSION 3.0 ESTABLE
-   - Lee todo desde obtenerDatosPrincipales()
-   - No rompe estructura visual
+/* VERSION 3.1 DEFINITIVA
+   - Compatible con JSON real de tu Sheet
 */
 
 const SatexEstatusData = {
@@ -14,7 +13,7 @@ const SatexEstatusData = {
         const cont = document.getElementById("estatus-continuas");
         if (cont) cont.textContent = datos.continuas;
 
-        // OPEN END
+        // OPEN-END
         const oe = document.getElementById("estatus-openend");
         if (oe) oe.textContent = datos.openEnd;
 
@@ -27,6 +26,7 @@ const SatexEstatusData = {
         if (fechaElemento && datos.fecha) {
             fechaElemento.textContent = `(Fecha Act.: ${datos.fecha})`;
         }
+
     }
 
 };
