@@ -4,11 +4,18 @@ const SatexCardasEngine = {
         const grid = document.getElementById(idContenedor);
         if (!grid || !datos) return;
 
+        // Limpiar contenido previo
+        grid.innerHTML = "";
+
+        // Crear nuevas tarjetas
         grid.innerHTML = datos.map(c => SatexCardasDesign.crearCarda(c.id, c.t, c.ac, c.max)).join('');
 
+        // Pintar Gauges
         datos.forEach(c => {
             const canvas = document.getElementById(`canvas-${c.id}`);
-            if (canvas) this.pintarGauje(canvas, c.ac, c.max);
+            if (canvas) {
+                this.pintarGauje(canvas, c.ac, c.max);
+            }
         });
     },
 
@@ -19,14 +26,12 @@ const SatexCardasEngine = {
         const radio = 60;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Fondo gris
         ctx.beginPath();
         ctx.arc(x, y, radio, Math.PI, 0);
         ctx.lineWidth = 12;
         ctx.strokeStyle = '#eeeeee';
         ctx.stroke();
 
-        // Progreso basado en toneladas
         const porcentaje = Math.min(ac / (max || 1), 1);
         let color = porcentaje > 0.9 ? '#f44336' : (porcentaje > 0.7 ? '#ff9800' : '#4caf50');
 
@@ -35,7 +40,6 @@ const SatexCardasEngine = {
         ctx.strokeStyle = color;
         ctx.stroke();
 
-        // Aguja
         const angulo = Math.PI + (Math.PI * porcentaje);
         ctx.beginPath();
         ctx.moveTo(x, y);
