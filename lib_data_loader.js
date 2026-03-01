@@ -1,10 +1,8 @@
 /* lib_data_loader.js */
-/* VERSION 1.5
-   - Carga Husos
-   - Carga Maquinas Paradas
-   - Obtiene Fecha A2 desde Husos inactivos
-   - Anti-cache activo
-   - Solo datos
+/* VERSION 1.6
+   - Lee A2 correctamente
+   - Lee husos desde fila 2
+   - Anti-cache
 */
 
 const SatexDataLoader = {
@@ -25,13 +23,25 @@ const SatexDataLoader = {
                 texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1)
             );
 
-            const fila = json.table.rows[0].c;
+            const filas = json.table.rows;
+
+            if (!filas || filas.length < 2) {
+                return {
+                    fechaActualizacion: "",
+                    continuas: 0,
+                    openEnd: 0,
+                    coneras: 0
+                };
+            }
+
+            // 🔹 Fila 2 = índice 1 (A2)
+            const filaDatos = filas[1].c;
 
             return {
-                fechaActualizacion: fila[0] ? fila[0].f : "",
-                continuas: fila[1] ? fila[1].v : 0,
-                openEnd:  fila[2] ? fila[2].v : 0,
-                coneras:  fila[3] ? fila[3].v : 0
+                fechaActualizacion: filaDatos[0]?.f || "",
+                continuas: filaDatos[1]?.v || 0,
+                openEnd: filaDatos[2]?.v || 0,
+                coneras: filaDatos[3]?.v || 0
             };
 
         } catch (error) {
