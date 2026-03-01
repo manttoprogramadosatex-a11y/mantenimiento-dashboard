@@ -10,9 +10,36 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; }
-        /* Ajuste a 155px para maximizar espacio de mantenimiento */
+        
+        /* Contenedor principal */
         #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
-        #cardas-grid { height: 155px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 2px 10px; background: rgba(0,0,0,0.1); gap: 5px; }
+        
+        /* Sección de Cardas: Se mantiene scroll horizontal y altura estándar */
+        #cardas-grid { 
+            height: 190px !important; 
+            flex-shrink: 0; 
+            display: flex; 
+            overflow-x: auto; 
+            padding: 5px 10px; 
+            background: rgba(0,0,0,0.1); 
+            gap: 10px; 
+        }
+        
+        #cardas-grid::-webkit-scrollbar { height: 10px; }
+        #cardas-grid::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 5px; }
+        #cardas-grid::-webkit-scrollbar-thumb { background: #f9b218; border-radius: 5px; border: 2px solid #2f5577; }
+
+        /* MEJORA: Estilos para scroll vertical en Listas (Inactivas y Accidentes) */
+        #maquinas-paradas-scroll, #accidentes-scroll {
+            overflow-y: auto;
+            max-height: 100%; /* Se adapta al contenedor padre en lib_mantenimiento */
+        }
+
+        /* Personalización del scroll de accidentes (color rosado según encabezado) */
+        #accidentes-scroll::-webkit-scrollbar { width: 6px; }
+        #accidentes-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        #accidentes-scroll::-webkit-scrollbar-thumb { background: #ff9999; border-radius: 3px; }
+
         #mantenimiento-container { flex-grow: 1; position: relative; }
     </style>
 </head>
@@ -39,12 +66,22 @@
 
     <script>
         window.onload = () => {
-            // Render de estructuras base
+            // 1. Render de estructuras base
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
             
-            // Datos de Máquinas Paradas con cálculo automático
+            // 2. Carga de datos de Accidentes (Ficticios para Excel posterior)
+            // Se usa el ID 'accidentes-scroll' definido arriba y en lib_mantenimiento
+            const datosAccidentesExcel = [
+                {item: "1", nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: "141"},
+                {item: "2", nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "2-feb-2025", dias: "391"},
+                {item: "3", nombre: "Dato Ficticio A", puesto: "Operador", fecha: "01-ene-2026", dias: "58"},
+                {item: "4", nombre: "Dato Ficticio B", puesto: "Mantenimiento", fecha: "15-feb-2026", dias: "13"}
+            ];
+            SatexAccidentes.render("accidentes-scroll", datosAccidentesExcel);
+
+            // 3. Datos de Máquinas Paradas (Scroll Vertical)
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", [
                 {tipo:"CARDA", num:"02", desde:"2025/02/26", dias:""},
                 {tipo:"CARDA", num:"08", desde:"2026/02/20", dias:""},
@@ -53,17 +90,15 @@
                 {tipo:"CARDA", num:"05", desde:"2026/02/15", dias:""}
             ]);
 
-            // Indicadores de estatus
+            // 4. Indicadores de estatus
             SatexEstatusData.actualizar(14, 6, 4, 5);
 
-            // Dibujado de Cardas
+            // 5. Dibujado de Cardas (Scroll Horizontal)
             SatexCardasEngine.dibujar("cardas-grid");
 
-            // Mantenimiento
+            // 6. Resto de módulos de Mantenimiento
             SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
-
-            // Preventivo y Listas
             SatexPreventivoDesign.render("preventivos-grafico-container", 90);
             SatexPersonalManttoDesign.render("personal-mantto-scroll", []);
             SatexComprasPendientesDesign.render("compras-pendientes-scroll", []);
