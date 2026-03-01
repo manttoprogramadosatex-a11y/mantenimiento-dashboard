@@ -1,4 +1,4 @@
-/* lib_mantenimiento.js */
+/* lib_mantenimiento.js - VERSION 1.0 */
 const SatexMantenimiento = {
     render: function(id) {
         const container = document.getElementById(id);
@@ -9,7 +9,7 @@ const SatexMantenimiento = {
             <div style="position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background-color: #f9b218; transform: translateX(-50%); z-index: 5;"></div>
             
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
-                <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 4px; margin-top: 0px;">
+                <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 4px; margin-top: 4px;">
                     Mantto. Correctivo
                 </div>
                 
@@ -40,13 +40,13 @@ const SatexMantenimiento = {
             </div>
 
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
-                <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 4px; margin-top: 0px;">
+                <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 4px; margin-top: 4px;">
                     Mantto. Preventivo
                 </div>
                 
                 <div id="preventivos-grafico-container" style="width: 100%; height: 180px;"></div>
                 
-                <div style="margin-top: auto; padding-bottom: 10px;">
+                <div style="margin-top: 15px; padding-bottom: 35px;">
                     <div style="color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; text-align: center; margin-bottom: 5px; text-transform: uppercase;">Accidentes</div>
                     <div id="accidentes-scroll" style="height: 75px; background: rgba(0,0,0,0.2); border-radius: 4px; overflow-y: auto;"></div>
                 </div>
