@@ -1,7 +1,8 @@
 // lib_preventivo_design.js
 // VERSION 1.7
-// - Botón "Preventivos Hoy" abre Google Calendar
-// - No altera layout ni dimensiones
+// - Botón Mantto. Abril abre Google Sheets publicada
+// - No altera alturas
+// - No altera alineaciones
 
 const SatexPreventivoDesign = {
     render: function(id, porcentaje) {
@@ -11,7 +12,6 @@ const SatexPreventivoDesign = {
         container.innerHTML = `
         <div style="width: 100%; height: 100%; display: flex; align-items: stretch; justify-content: space-between; padding: 0 5px; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;">
             
-            <!-- COLUMNA IZQUIERDA -->
             <div style="
                 width: 28%;
                 height: 100%;
@@ -72,7 +72,6 @@ const SatexPreventivoDesign = {
                 </button>
             </div>
 
-            <!-- COLUMNA DERECHA -->
             <div style="
                 width: 70%;
                 height: 100%;
@@ -83,11 +82,11 @@ const SatexPreventivoDesign = {
                 border-left: 1px solid rgba(255,255,255,0.1);
                 box-sizing: border-box;
             ">
-                ${this.btn("Preventivos Hoy", "55", "#f9b218", true)}
+                ${this.btn("Preventivos Hoy", "55", "#f9b218")}
                 ${this.btn("Prev. pendientes antes hoy", "20", "#ff9999")}
                 ${this.btn("Preventivos Extraordinarios", "03", "#ffffff")} 
                 ${this.btn("Mantto. Diciembre", "12", "#4caf50")}
-                ${this.btn("Mantto. Abril", "8", "#00bcd4")}
+                ${this.btnAbril("Mantto. Abril", "8", "#00bcd4")}
                 ${this.btn("Mantto. D. Festivos", "5", "#e91e63")}
             </div>
         </div>`;
@@ -95,12 +94,7 @@ const SatexPreventivoDesign = {
         this.dibujarCirculo(porcentaje);
     },
 
-    btn: function(t, v, c, abrirCalendario = false) {
-
-        const accion = abrirCalendario
-            ? `onclick="window.open('https://calendar.google.com/calendar/embed?src=mantto.programado.satex%40gmail.com','_blank')"`
-            : "";
-
+    btn: function(t, v, c) {
         return `
         <div style="
             display: flex;
@@ -129,7 +123,54 @@ const SatexPreventivoDesign = {
                 justify-content: center;
                 text-align: center;
             "
-            ${accion}
+            onmousedown="this.style.transform='scale(0.96)'"
+            onmouseup="this.style.transform='scale(1)'">
+                ${t}
+            </button>
+
+            <div style="
+                width: 15%;
+                color: ${c};
+                font-size: 16px;
+                font-weight: bold;
+                text-align: right;
+            ">
+                ${v}
+            </div>
+        </div>`;
+    },
+
+    // 🔥 NUEVO BOTÓN CON LINK
+    btnAbril: function(t, v, c) {
+        return `
+        <div style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.15);
+            padding: 3px 6px;
+            border-radius: 4px;
+            height: 14%;
+        ">
+            
+            <button style="
+                width: 82%;
+                height: 100%;
+                background: #2f5577;
+                color: white;
+                border: 1px solid ${c};
+                border-radius: 4px;
+                font-size: 11px;
+                font-weight: bold;
+                text-transform: uppercase;
+                cursor: pointer;
+                padding: 0 6px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            "
+            onclick="window.open('https://docs.google.com/spreadsheets/d/e/2PACX-1vT8MEMWOM2kgJ79JsgeYlBDY3b6R2pkaPn9PMPYMk8KRmH5u4eZ3WS5pz0Fae-w2mUcokmJHc-qmun2/pubhtml','_blank')"
             onmousedown="this.style.transform='scale(0.96)'"
             onmouseup="this.style.transform='scale(1)'">
                 ${t}
