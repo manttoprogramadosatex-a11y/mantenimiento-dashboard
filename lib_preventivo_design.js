@@ -1,211 +1,68 @@
-// lib_preventivo_design.js
-// VERSION 1.7
-// - Botón Mantto. Abril abre Google Sheets publicada
-// - No altera alturas
-// - No altera alineaciones
-
 const SatexPreventivoDesign = {
-    render: function(id, porcentaje) {
+    render: function(id, cumplimiento) {
         const container = document.getElementById(id);
         if (!container) return;
 
         container.innerHTML = `
-        <div style="width: 100%; height: 100%; display: flex; align-items: stretch; justify-content: space-between; padding: 0 5px; box-sizing: border-box; font-family: 'Segoe UI', sans-serif;">
-            
-            <div style="
-                width: 28%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                align-items: center;
-            ">
-
-                <div style="display:flex; flex-direction:column; align-items:center;">
-
-                    <div style="position: relative; width: 120px; height: 120px;">
-                        <canvas id="canvas-preventivo" width="120" height="120"></canvas>
-                        <div style="
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            color: white;
-                            font-weight: bold;
-                            font-size: 20px;
-                        ">
-                            ${porcentaje}%
-                        </div>
-                    </div>
-
-                    <div style="
-                        color: #a1b1c1;
-                        font-size: 10px;
-                        font-weight: bold;
-                        margin-top: 6px;
-                        text-transform: uppercase;
-                        text-align: center;
-                        line-height: 1;
-                    ">
-                        Cumplimiento Acumulado
+        <div style="display: flex; height: 100%; align-items: center; padding: 5px; gap: 15px; font-family: 'Segoe UI', sans-serif;">
+            <div style="width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div style="position: relative; width: 85px; height: 85px;">
+                    <canvas id="chart-cumplimiento"></canvas>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 18px; font-weight: bold;">
+                        ${cumplimiento}%
                     </div>
                 </div>
-
-                <button style="
-                    width: 90%;
-                    height: 14%;
-                    background: #2f5577;
-                    color: white;
-                    border: 1px solid #f9b218;
-                    border-radius: 4px;
-                    font-size: 12px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    text-transform: uppercase;
-                    display:flex;
-                    align-items:center;
-                    justify-content:center;
-                "
-                onmousedown="this.style.transform='scale(0.97)'"
-                onmouseup="this.style.transform='scale(1)'">
-                    Procedimientos
-                </button>
+                <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-align: center;">CUMPLIMIENTO ACUMULADO</div>
+                <button style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 11px; font-weight: bold; cursor: pointer; width: 100%;">PROCEDIMIENTOS</button>
             </div>
 
-            <div style="
-                width: 70%;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                padding-left: 10px;
-                border-left: 1px solid rgba(255,255,255,0.1);
-                box-sizing: border-box;
-            ">
-                ${this.btn("Preventivos Hoy", "55", "#f9b218")}
-                ${this.btn("Prev. pendientes antes hoy", "20", "#ff9999")}
-                ${this.btn("Preventivos Extraordinarios", "03", "#ffffff")} 
-                ${this.btn("Mantto. Diciembre", "12", "#4caf50")}
-                ${this.btnAbril("Mantto. Abril", "8", "#00bcd4")}
-                ${this.btn("Mantto. D. Festivos", "5", "#e91e63")}
+            <div style="width: 65%; display: flex; flex-direction: column; gap: 4px; justify-content: center;">
+                ${this.crearFila("PREVENTIVOS HOY", "55", "#f9b218")}
+                ${this.crearFila("PREV. PENDIENTES ANTES HOY", "20", "#ff9999")}
+                ${this.crearFila("PREVENTIVOS EXTRAORDINARIOS", "03", "#ffffff")}
+                ${this.crearFila("MANTTO. DICIEMBRE", "12", "#4caf50")}
+                ${this.crearFila("MANTTO. ABRIL", "8", "#00bcd4")}
+                ${this.crearFila("MANTTO. D. FESTIVOS", "5", "#e91e63")}
             </div>
         </div>`;
 
-        this.dibujarCirculo(porcentaje);
+        this.inicializarGrafico(cumplimiento);
     },
 
-    btn: function(t, v, c) {
+    crearFila: function(label, valor, color) {
         return `
-        <div style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.15);
-            padding: 3px 6px;
-            border-radius: 4px;
-            height: 14%;
-        ">
-            
-            <button style="
-                width: 82%;
-                height: 100%;
-                background: #2f5577;
-                color: white;
-                border: 1px solid ${c};
-                border-radius: 4px;
-                font-size: 11px;
-                font-weight: bold;
-                text-transform: uppercase;
-                cursor: pointer;
-                padding: 0 6px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-            "
-            onmousedown="this.style.transform='scale(0.96)'"
-            onmouseup="this.style.transform='scale(1)'">
-                ${t}
-            </button>
-
-            <div style="
-                width: 15%;
-                color: ${c};
-                font-size: 16px;
-                font-weight: bold;
-                text-align: right;
-            ">
-                ${v}
-            </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 2px 8px; height: 22px;">
+            <span style="color: white; font-size: 10px; font-weight: bold; text-transform: uppercase;">${label}</span>
+            <span style="color: ${color}; font-size: 13px; font-weight: bold;">${valor}</span>
         </div>`;
     },
 
-    // 🔥 NUEVO BOTÓN CON LINK
-    btnAbril: function(t, v, c) {
-        return `
-        <div style="
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.15);
-            padding: 3px 6px;
-            border-radius: 4px;
-            height: 14%;
-        ">
-            
-            <button style="
-                width: 82%;
-                height: 100%;
-                background: #2f5577;
-                color: white;
-                border: 1px solid ${c};
-                border-radius: 4px;
-                font-size: 11px;
-                font-weight: bold;
-                text-transform: uppercase;
-                cursor: pointer;
-                padding: 0 6px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-            "
-            onclick="window.open('https://docs.google.com/spreadsheets/d/e/2PACX-1vT8MEMWOM2kgJ79JsgeYlBDY3b6R2pkaPn9PMPYMk8KRmH5u4eZ3WS5pz0Fae-w2mUcokmJHc-qmun2/pubhtml','_blank')"
-            onmousedown="this.style.transform='scale(0.96)'"
-            onmouseup="this.style.transform='scale(1)'">
-                ${t}
-            </button>
+    inicializarGrafico: function(porcentaje) {
+        const ctx = document.getElementById('chart-cumplimiento');
+        if (!ctx) return;
+        
+        // Limpiar gráfico anterior si existe
+        const chartExistente = Chart.getChart("chart-cumplimiento");
+        if (chartExistente) { chartExistente.destroy(); }
 
-            <div style="
-                width: 15%;
-                color: ${c};
-                font-size: 16px;
-                font-weight: bold;
-                text-align: right;
-            ">
-                ${v}
-            </div>
-        </div>`;
-    },
-
-    dibujarCirculo: function(p) {
-        const canvas = document.getElementById('canvas-preventivo');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const x = 60, y = 60, radio = 50;
-
-        ctx.clearRect(0, 0, 120, 120);
-
-        ctx.beginPath();
-        ctx.arc(x, y, radio, 0, 2 * Math.PI);
-        ctx.lineWidth = 12;
-        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(x, y, radio, -Math.PI / 2, (p / 100) * (2 * Math.PI) - Math.PI / 2);
-        ctx.strokeStyle = '#4caf50';
-        ctx.lineCap = 'round';
-        ctx.stroke();
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [porcentaje, 100 - porcentaje],
+                    backgroundColor: ['#4caf50', 'rgba(255,255,255,0.1)'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                cutout: '80%',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
+            }
+        });
     }
 };
