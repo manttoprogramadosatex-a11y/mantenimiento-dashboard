@@ -1,5 +1,5 @@
 const SatexHeaderDesign = {
-    version: "6.0",
+    version: "7.0",
 
     render: function(id) {
         const container = document.getElementById(id);
@@ -38,8 +38,9 @@ const SatexHeaderDesign = {
                 </div>
 
                 <a 
-                    href="https://calendar.google.com/calendar/u/0/r?cid=mantto.programado.satex%40gmail.com"
+                    href="https://calendar.google.com/calendar/embed?src=mantto.programado.satex%40gmail.com&ctz=America/Mexico_City"
                     target="_blank"
+                    rel="noopener"
                     style="
                         background-color: #0d47a1;
                         color: white;
