@@ -1,18 +1,27 @@
 /* lib_accidentes_engine.js */
-/* VERSION 2.2
-   - FIX: Google ya elimina encabezados (parsedNumHeaders:2)
-   - Ahora recorre todas las filas disponibles
-   - No modifica estructura visual
-   - No altera layout
+/* VERSION 2.3
+   - Auto actualización cada 2 minutos
+   - Evita crear múltiples intervalos
+   - No modifica layout
 */
 
 const SHEET_ACCIDENTES_ID = "14moaQL1gg0Ia6Qg-Ww1W5tCuEO8X5IUESyqI5ajbB2g";
 
 const SatexAccidentesEngine = {
 
+    _intervalo: null,
+
     async inicializar() {
         const datos = await this.obtenerDesdeSheet();
         SatexAccidentes.render("accidentes-scroll", datos);
+    },
+
+    iniciarAutoActualizacion() {
+        if (this._intervalo) return;
+
+        this._intervalo = setInterval(() => {
+            this.inicializar();
+        }, 120000); // 2 minutos
     },
 
     async obtenerDesdeSheet() {
@@ -66,3 +75,9 @@ const SatexAccidentesEngine = {
     }
 
 };
+
+/* Inicialización segura */
+document.addEventListener("DOMContentLoaded", () => {
+    SatexAccidentesEngine.inicializar();
+    SatexAccidentesEngine.iniciarAutoActualizacion();
+});
