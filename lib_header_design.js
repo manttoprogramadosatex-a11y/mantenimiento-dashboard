@@ -1,5 +1,5 @@
 const SatexHeaderDesign = {
-    version: "7.0",
+    version: "9.0",
 
     render: function(id) {
         const container = document.getElementById(id);
@@ -25,39 +25,31 @@ const SatexHeaderDesign = {
                 </div>
             </div>
 
-            <div style="width: 50%; text-align: center;">
-                <div style="font-size: 22px; font-weight: 800; letter-spacing: 0.5px; color: #ffffff; text-transform: uppercase; line-height: 1;">
+            <div style="width: 40%; text-align: center;">
+                <div style="font-size: 20px; font-weight: 800; letter-spacing: 0.5px; color: #ffffff; text-transform: uppercase; line-height: 1;">
                     TABLERO MASTER MANTTO. SATEX TEXTIL HILATURA
                 </div>
             </div>
 
-            <div style="width: 30%; text-align: right; line-height: 1.1; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+            <div style="width: 40%; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
                 
+                <button 
+                    onclick="window.open('https://docs.google.com/spreadsheets/d/e/2PACX-1vT8MEMWOM2kgJ79JsgeYlBDY3b6R2pkaPn9PMPYMk8KRmH5u4eZ3WS5pz0Fae-w2mUcokmJHc-qmun2/pubhtml','_blank')"
+                    style="
+                        background-color: #00a8e8;
+                        color: white;
+                        border: none;
+                        padding: 6px 12px;
+                        font-size: 12px;
+                        font-weight: bold;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    ">
+                    MANTO.ABRIL
+                </button>
+
                 <div style="font-size: 16px; font-weight: bold; color: #f9b218;">
                     ${fechaFormateada}
-                </div>
-
-                <a 
-                    href="https://calendar.google.com/calendar/embed?src=mantto.programado.satex%40gmail.com&ctz=America/Mexico_City"
-                    target="_blank"
-                    rel="noopener"
-                    style="
-                        background-color: #0d47a1;
-                        color: white;
-                        border: 2px solid #f9b218;
-                        padding: 4px 10px;
-                        font-size: 11px;
-                        font-weight: bold;
-                        text-decoration: none;
-                        border-radius: 4px;
-                        letter-spacing: 0.5px;
-                        display: inline-block;
-                    ">
-                    PREVENTIVOS HOY
-                </a>
-
-                <div style="font-size: 10px; color: #a1b1c1; text-transform: uppercase; letter-spacing: 1px;">
-                    Monitoreo en Tiempo Real
                 </div>
 
             </div>
