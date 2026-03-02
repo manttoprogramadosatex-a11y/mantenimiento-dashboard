@@ -1,6 +1,6 @@
 /* lib_preventivo_design.js */
-/* VERSION 1.8
-   - Apertura de Google Calendar público
+/* VERSION 1.9
+   - Apertura de Google Calendar público mediante iframe oficial
    - No se modifica estructura visual
    - No se elimina ningún elemento
 */
@@ -105,14 +105,29 @@ const SatexPreventivoDesign = {
 
 
 /* ============================================================
-   FUNCIONES GLOBALES (NO ALTERAN DISEÑO)
+   FUNCIONES GLOBALES
    ============================================================ */
 
 function accionPreventivosHoy() {
 
-    const url = "https://calendar.google.com/calendar/embed?src=mantto.programado.satex@gmail.com&ctz=America/Mexico_City";
+    const nuevaVentana = window.open("", "_blank");
 
-    window.open(url, "_blank");
+    nuevaVentana.document.write(`
+        <html>
+            <head>
+                <title>Calendario Preventivos</title>
+                <style>
+                    body { margin:0; background:#1e1e1e; }
+                    iframe { width:100%; height:100vh; border:0; }
+                </style>
+            </head>
+            <body>
+                <iframe src="https://calendar.google.com/calendar/embed?src=mantto.programado.satex%40gmail.com&ctz=America%2FMexico_City"></iframe>
+            </body>
+        </html>
+    `);
+
+    nuevaVentana.document.close();
 }
 
 function accionPendientes() {}
