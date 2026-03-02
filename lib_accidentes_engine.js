@@ -1,10 +1,9 @@
 /* lib_accidentes_engine.js */
-/* VERSION 2.0
-   - Conecta ACCIDENTES a Google Sheets
-   - Lee columnas B, C, D, E, F desde fila 3
+/* VERSION 2.2
+   - FIX: Google ya elimina encabezados (parsedNumHeaders:2)
+   - Ahora recorre todas las filas disponibles
    - No modifica estructura visual
    - No altera layout
-   - Compatible con render existente
 */
 
 const SHEET_ACCIDENTES_ID = "14moaQL1gg0Ia6Qg-Ww1W5tCuEO8X5IUESyqI5ajbB2g";
@@ -33,20 +32,19 @@ const SatexAccidentesEngine = {
 
             const filas = json.table.rows;
 
-            if (!filas || filas.length < 3) return [];
+            if (!filas || filas.length === 0) return [];
 
             const datos = [];
 
-            // Empezamos en índice 2 (fila 3 real)
-            for (let i = 2; i < filas.length; i++) {
+            for (let i = 0; i < filas.length; i++) {
 
                 const c = filas[i].c;
 
-                const item   = c[1]?.v || "";
+                const item   = c[1]?.f || c[1]?.v || "";
                 const nombre = c[2]?.v || "";
                 const puesto = c[3]?.v || "";
-                const fecha  = c[4]?.f || c[4]?.v || "";
-                const dias   = c[5]?.v || "";
+                const fecha  = c[4]?.f || "";
+                const dias   = c[5]?.f || c[5]?.v || "";
 
                 if (nombre !== "") {
                     datos.push({
