@@ -17,31 +17,49 @@ const SatexPreventivoDesign = {
             </div>
 
             <div style="width: 65%; display: flex; flex-direction: column; gap: 4px; justify-content: center;">
-                ${this.crearFila("PREVENTIVOS HOY", "55", "#f9b218")}
-                ${this.crearFila("PREV. PENDIENTES ANTES HOY", "20", "#ff9999")}
-                ${this.crearFila("PREVENTIVOS EXTRAORDINARIOS", "03", "#ffffff")}
-                ${this.crearFila("MANTTO. DICIEMBRE", "12", "#4caf50")}
-                ${this.crearFila("MANTTO. ABRIL", "8", "#00bcd4")}
-                ${this.crearFila("MANTTO. D. FESTIVOS", "5", "#e91e63")}
+                ${this.crearFila("PREVENTIVOS HOY", "55", "#f9b218", "accionPreventivosHoy()")}
+                ${this.crearFila("PREV. PENDIENTES ANTES HOY", "20", "#ff9999", "accionPendientes()")}
+                ${this.crearFila("PREVENTIVOS EXTRAORDINARIOS", "03", "#ffffff", "accionExtraordinarios()")}
+                ${this.crearFila("MANTTO. DICIEMBRE", "12", "#4caf50", "accionDiciembre()")}
+                ${this.crearFila("MANTTO. ABRIL", "8", "#00bcd4", "accionAbril()")}
+                ${this.crearFila("MANTTO. D. FESTIVOS", "5", "#e91e63", "accionFestivos()")}
             </div>
         </div>`;
 
         this.inicializarGrafico(cumplimiento);
     },
 
-    crearFila: function(label, valor, color) {
+    // Ahora crea elementos <button> en lugar de <div>
+    crearFila: function(label, valor, color, funcionAccion) {
         return `
-        <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; padding: 2px 8px; height: 22px;">
-            <span style="color: white; font-size: 10px; font-weight: bold; text-transform: uppercase;">${label}</span>
-            <span style="color: ${color}; font-size: 13px; font-weight: bold;">${valor}</span>
-        </div>`;
+        <button 
+            onclick="${funcionAccion}"
+            style="
+                display: flex; 
+                align-items: center; 
+                justify-content: space-between; 
+                background: rgba(255,255,255,0.05); 
+                border: 1px solid rgba(255,255,255,0.1); 
+                border-radius: 4px; 
+                padding: 2px 8px; 
+                height: 22px;
+                cursor: pointer;
+                width: 100%;
+                outline: none;
+                transition: background 0.2s;
+            "
+            onmouseover="this.style.background='rgba(255,255,255,0.15)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.05)'"
+        >
+            <span style="color: white; font-size: 10px; font-weight: bold; text-transform: uppercase; pointer-events: none;">${label}</span>
+            <span style="color: ${color}; font-size: 13px; font-weight: bold; pointer-events: none;">${valor}</span>
+        </button>`;
     },
 
     inicializarGrafico: function(porcentaje) {
         const ctx = document.getElementById('chart-cumplimiento');
         if (!ctx) return;
         
-        // Limpiar gráfico anterior si existe
         const chartExistente = Chart.getChart("chart-cumplimiento");
         if (chartExistente) { chartExistente.destroy(); }
 
