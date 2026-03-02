@@ -1,45 +1,39 @@
-const SatexAccidentesDesign = {
-    render: function(id, listaAccidentes = []) {
+const SatexAccidentes = {
+    render: function(id, datos) {
         const container = document.getElementById(id);
         if (!container) return;
 
-        // Forzamos exactamente 5 filas para que el diseño no se pierda
-        let filasHtml = "";
-        for (let i = 0; i < 5; i++) {
-            const acc = listaAccidentes[i] || { item: "", nombre: "", puesto: "", fecha: "", dias: "" };
-            
-            // Si el dato de días existe, lo ponemos en rojo negrita como el original
-            const estiloDias = acc.dias ? 'color: #ff4d4d; font-weight: 900; font-size: 13px;' : 'color: white;';
+        // Si no hay datos, mostramos la tabla vacía con encabezados
+        const listaDatos = (datos && datos.length > 0) ? datos : [];
 
-            filasHtml += `
-            <tr style="border-bottom: 1px solid rgba(255, 153, 153, 0.3); height: 32px;">
-                <td style="color: white; font-size: 11px; text-align: center; font-weight: bold; width: 8%;">${acc.item || ""}</td>
-                <td style="color: white; font-size: 11px; text-align: center; width: 42%;">${acc.nombre || ""}</td>
-                <td style="color: white; font-size: 11px; text-align: center; width: 20%;">${acc.puesto || ""}</td>
-                <td style="color: white; font-size: 11px; text-align: center; width: 15%;">${acc.fecha || ""}</td>
-                <td style="text-align: center; width: 15%; ${estiloDias}">${acc.dias || ""}</td>
-            </tr>`;
+        let html = `
+        <table style="width: 100%; border-collapse: collapse; color: white; font-family: 'Segoe UI', sans-serif; font-size: 11px; text-align: center;">
+            <thead style="position: sticky; top: 0; background: #2f5577; border-bottom: 2px solid #ff9999; z-index: 10;">
+                <tr>
+                    <th style="padding: 4px; width: 8%; border: 1px solid rgba(255,255,255,0.2);">Item</th>
+                    <th style="padding: 4px; width: 37%; border: 1px solid rgba(255,255,255,0.2);">Nombre del Involucrado</th>
+                    <th style="padding: 4px; width: 20%; border: 1px solid rgba(255,255,255,0.2);">Puesto</th>
+                    <th style="padding: 4px; width: 20%; border: 1px solid rgba(255,255,255,0.2);">Fecha de Accidente</th>
+                    <th style="padding: 4px; width: 15%; border: 1px solid rgba(255,255,255,0.2);">Dias de Incapacitado</th>
+                </tr>
+            </thead>
+            <tbody>`;
+
+        if (listaDatos.length === 0) {
+            html += `<tr><td colspan="5" style="padding: 10px; color: #aaa;">Esperando datos de Excel...</td></tr>`;
+        } else {
+            html += listaDatos.map(acc => `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 4px; border: 1px solid rgba(255,255,255,0.1);">${acc.item}</td>
+                    <td style="padding: 4px; text-align: left; border: 1px solid rgba(255,255,255,0.1); font-weight: 500;">${acc.nombre}</td>
+                    <td style="padding: 4px; border: 1px solid rgba(255,255,255,0.1);">${acc.puesto}</td>
+                    <td style="padding: 4px; border: 1px solid rgba(255,255,255,0.1);">${acc.fecha}</td>
+                    <td style="padding: 4px; font-weight: bold; color: #ff4444; border: 1px solid rgba(255,255,255,0.1);">${acc.dias}</td>
+                </tr>`).join('');
         }
 
-        container.innerHTML = `
-        <div style="width: 100%; font-family: 'Segoe UI', sans-serif; padding-top: 5px;">
-            <div style="color: #ff9999; font-size: 14px; font-weight: bold; text-align: center; text-transform: uppercase; margin-bottom: 5px; letter-spacing: 1px;">
-                ACCIDENTES
-            </div>
-            <table style="width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.03); border-radius: 4px; overflow: hidden;">
-                <thead>
-                    <tr style="background: rgba(255, 153, 153, 0.15); border-bottom: 2px solid #ff9999; height: 30px;">
-                        <th style="color: white; font-size: 10px; text-transform: uppercase;">Item</th>
-                        <th style="color: white; font-size: 10px; text-transform: uppercase;">Nombre del Involucrado</th>
-                        <th style="color: white; font-size: 10px; text-transform: uppercase;">Puesto</th>
-                        <th style="color: white; font-size: 10px; text-transform: uppercase;">Fecha</th>
-                        <th style="color: white; font-size: 10px; text-transform: uppercase;">Días</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${filasHtml}
-                </tbody>
-            </table>
-        </div>`;
+        html += `</tbody></table>`;
+        container.innerHTML = html;
     }
 };
+
