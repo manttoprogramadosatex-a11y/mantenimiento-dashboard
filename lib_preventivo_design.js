@@ -13,7 +13,12 @@ const SatexPreventivoDesign = {
                     </div>
                 </div>
                 <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-align: center;">CUMPLIMIENTO ACUMULADO</div>
-                <button style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%;">PROCEDIMIENTOS</button>
+                <button 
+                    onmousedown="this.style.transform='scale(0.95)'"
+                    onmouseup="this.style.transform='scale(1)'"
+                    style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; transition: transform 0.1s;">
+                    PROCEDIMIENTOS
+                </button>
             </div>
 
             <div style="width: 65%; display: flex; flex-direction: column; gap: 6px; justify-content: center;">
@@ -35,6 +40,8 @@ const SatexPreventivoDesign = {
             onclick="${funcion}"
             onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
             onmouseout="this.style.backgroundColor='transparent'"
+            onmousedown="this.style.transform='scale(0.97)'"
+            onmouseup="this.style.transform='scale(1)'"
             style="
                 display: flex; 
                 align-items: center; 
@@ -46,8 +53,9 @@ const SatexPreventivoDesign = {
                 height: 28px; 
                 width: 100%; 
                 cursor: pointer;
-                transition: all 0.2s ease;
+                transition: all 0.1s ease;
                 outline: none;
+                transform: scale(1);
             "
         >
             <span style="color: white; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px; pointer-events: none;">
