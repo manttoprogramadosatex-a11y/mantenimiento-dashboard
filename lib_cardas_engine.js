@@ -1,12 +1,11 @@
 const SatexCardasEngine = {
-    version: "2.1",
+    version: "2.2",
     intervalo: null,
 
     dibujar: function(idContenedor) {
         this.contenedor = idContenedor;
         this.cargarDatos();
 
-        // Activar refresco automático cada 1 minuto
         if (!this.intervalo) {
             this.intervalo = setInterval(() => {
                 this.cargarDatos();
@@ -32,7 +31,6 @@ const SatexCardasEngine = {
 
             const datos = [];
 
-            // Columnas D → N (3 a 13)
             for (let i = 3; i <= 13; i++) {
                 const id = i - 2;
 
@@ -76,9 +74,9 @@ const SatexCardasEngine = {
 
         const porcentaje = max > 0 ? Math.min(ac / max, 1) : 0;
 
-        let color = '#4caf50';
-        if (porcentaje > 0.9) color = '#f44336';
-        else if (porcentaje > 0.7) color = '#ff9800';
+        let color = '#4caf50'; // Verde 0–80%
+        if (porcentaje > 0.9) color = '#f44336';      // Rojo 90–100%
+        else if (porcentaje > 0.8) color = '#ffc107'; // Amarillo 80–90%
 
         ctx.beginPath();
         ctx.arc(x, y, radio, Math.PI, Math.PI + (Math.PI * porcentaje));
