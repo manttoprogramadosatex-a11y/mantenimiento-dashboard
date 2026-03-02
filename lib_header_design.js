@@ -1,5 +1,5 @@
 const SatexHeaderDesign = {
-    version: "5.0",
+    version: "6.0",
 
     render: function(id) {
         const container = document.getElementById(id);
@@ -37,8 +37,9 @@ const SatexHeaderDesign = {
                     ${fechaFormateada}
                 </div>
 
-                <button 
-                    onclick="window.open('https://calendar.google.com/calendar/u/0/r?cid=mantto.programado.satex%40gmail.com','_blank')" 
+                <a 
+                    href="https://calendar.google.com/calendar/u/0/r?cid=mantto.programado.satex%40gmail.com"
+                    target="_blank"
                     style="
                         background-color: #0d47a1;
                         color: white;
@@ -46,12 +47,13 @@ const SatexHeaderDesign = {
                         padding: 4px 10px;
                         font-size: 11px;
                         font-weight: bold;
-                        cursor: pointer;
+                        text-decoration: none;
                         border-radius: 4px;
                         letter-spacing: 0.5px;
+                        display: inline-block;
                     ">
                     PREVENTIVOS HOY
-                </button>
+                </a>
 
                 <div style="font-size: 10px; color: #a1b1c1; text-transform: uppercase; letter-spacing: 1px;">
                     Monitoreo en Tiempo Real
