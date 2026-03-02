@@ -48,6 +48,7 @@
             "lib_pmc_donas_design.js",
             "lib_correctivo_kpi_design.js",
             "lib_accidentes.js",
+            "lib_accidentes_engine.js",
             "lib_data_loader.js"
         ];
 
@@ -64,14 +65,8 @@
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
 
-            // Accidentes
-            const datosAccidentes = [
-                {item: "1", nombre: "Gonzalez Solis Mario", puesto: "Ayudante Mec.", fecha: "10-oct-2025", dias: "141"},
-                {item: "2", nombre: "Ambriz Mendoza Rosa", puesto: "Tornero", fecha: "2-feb-2025", dias: "391"},
-                {item: "3", nombre: "Ejemplo Ficticio A", puesto: "Puesto Prueba", fecha: "01-ene-2026", dias: "58"},
-                {item: "4", nombre: "Ejemplo Ficticio B", puesto: "Puesto Prueba", fecha: "15-feb-2026", dias: "13"}
-            ];
-            SatexAccidentes.render("accidentes-scroll", datosAccidentes);
+            // Accidentes (ahora controlado por engine)
+            SatexAccidentesEngine.inicializar();
 
             // Máquinas Paradas
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", [
