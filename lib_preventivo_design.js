@@ -13,7 +13,7 @@ const SatexPreventivoDesign = {
                     </div>
                 </div>
                 <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-align: center;">CUMPLIMIENTO ACUMULADO</div>
-                <button style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 11px; font-weight: bold; cursor: pointer; width: 100%;">PROCEDIMIENTOS</button>
+                <button style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%;">PROCEDIMIENTOS</button>
             </div>
 
             <div style="width: 65%; display: flex; flex-direction: column; gap: 6px; justify-content: center;">
@@ -42,7 +42,7 @@ const SatexPreventivoDesign = {
                 background-color: transparent; 
                 border: 1px solid ${color}; 
                 border-radius: 6px; 
-                padding: 4px 10px; 
+                padding: 4px 12px; 
                 height: 28px; 
                 width: 100%; 
                 cursor: pointer;
@@ -50,7 +50,7 @@ const SatexPreventivoDesign = {
                 outline: none;
             "
         >
-            <span style="color: white; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px; pointer-events: none;">
+            <span style="color: white; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px; pointer-events: none;">
                 ${label}
             </span>
             <span style="color: ${color}; font-size: 14px; font-weight: 900; pointer-events: none;">
