@@ -1,5 +1,5 @@
 const SatexHeaderDesign = {
-    version: "2.0",
+    version: "4.0",
 
     render: function(id) {
         const container = document.getElementById(id);
@@ -38,7 +38,7 @@ const SatexHeaderDesign = {
                 </div>
 
                 <button 
-                    onclick="window.open('https://calendar.google.com/calendar/u/0?cid=bWFudHRvLnByb2dyYW1hZG8uc2F0ZXhAZ21haWwuY29t','_blank')" 
+                    onclick="window.open('https://calendar.google.com/calendar/embed?src=mantto.programado.satex%40gmail.com&ctz=America/Mexico_City&mode=DAY','_blank')" 
                     style="
                         background-color: #0d47a1;
                         color: white;
