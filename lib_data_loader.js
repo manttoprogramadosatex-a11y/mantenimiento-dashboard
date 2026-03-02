@@ -1,12 +1,10 @@
 /* lib_data_loader.js */
-/* VERSION 4.0 DEFINITIVA
-   - Husos (gid=0)
-   - Máquinas Paradas (pestaña: "Maquinas Paradas")
-   - Ignora fila 1 (encabezados)
-   - Columnas:
-        A = Desde
-        B = Tipo
-        C = Numero
+/* VERSION 5.0
+   - Se agrega obtenerDatosCardas()
+   - Lee pestaña: "Informacion Cardas"
+   - Cardas D→N
+   - Fila 6 = Ac.
+   - Fila 7 = Max.
 */
 
 const SHEET_ID = "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok";
@@ -84,7 +82,6 @@ const SatexDataLoader = {
 
             if (!filas || filas.length === 0) return [];
 
-            // Ignorar fila 1 (encabezado)
             return filas.map(f => {
                 const c = f.c;
 
@@ -97,6 +94,52 @@ const SatexDataLoader = {
 
         } catch (error) {
             console.error("Error cargando Maquinas Paradas:", error);
+            return [];
+        }
+    },
+
+    // ==============================
+    // CARDAS (Informacion Cardas)
+    // ==============================
+    async obtenerDatosCardas() {
+        try {
+
+            const timestamp = new Date().getTime();
+
+            const url =
+            `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=Informacion%20Cardas&t=${timestamp}`;
+
+            const respuesta = await fetch(url, { cache: "no-store" });
+            const texto = await respuesta.text();
+
+            const json = JSON.parse(
+                texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1)
+            );
+
+            const filas = json.table.rows;
+
+            if (!filas || filas.length < 7) return [];
+
+            // Fila 6 y 7 (index 5 y 6)
+            const filaAc  = filas[5].c; // Fila 6
+            const filaMax = filas[6].c; // Fila 7
+
+            // Columnas D (3) a N (13)
+            const datos = [];
+
+            for (let i = 3; i <= 13; i++) {
+                datos.push({
+                    id: (i - 2),
+                    t: `CARDA ${i - 2}`,
+                    ac: filaAc[i]?.v || 0,
+                    max: filaMax[i]?.v || 0
+                });
+            }
+
+            return datos;
+
+        } catch (error) {
+            console.error("Error cargando Cardas:", error);
             return [];
         }
     }
