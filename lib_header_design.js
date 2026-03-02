@@ -1,5 +1,5 @@
 const SatexHeaderDesign = {
-    version: "9.0",
+    version: "9.2",
 
     render: function(id) {
         const container = document.getElementById(id);
@@ -19,37 +19,22 @@ const SatexHeaderDesign = {
         container.innerHTML = `
         <div style="background-color: #1a2a3a; color: white; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 3px solid #f9b218; height: 50px; font-family: 'Segoe UI', sans-serif;">
             
-            <div style="width: 20%; display: flex; align-items: center;">
+            <div style="flex: 1; display: flex; align-items: center; justify-content: flex-start;">
                 <div style="background-color: white; padding: 3px; border-radius: 4px; display: flex; align-items: center; justify-content: center;">
                     <img src="logo.png.jpeg" alt="SATEX" style="height: 32px; width: auto;">
                 </div>
             </div>
 
-            <div style="width: 40%; text-align: center;">
+            <div style="flex: 2; text-align: center;">
                 <div style="font-size: 20px; font-weight: 800; letter-spacing: 0.5px; color: #ffffff; text-transform: uppercase; line-height: 1;">
                     TABLERO MASTER MANTTO. SATEX TEXTIL HILATURA
                 </div>
             </div>
 
-            <div style="width: 40%; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 10px;">
-                
+            <div style="flex: 1; display: flex; align-items: center; justify-content: flex-end;">
                 <div style="color: #f9b218; font-size: 16px; font-weight: bold; letter-spacing: 0.5px;">
                     ${fechaFormateada}
                 </div>
-
-                <button 
-                    onclick="window.open('https://docs.google.com/spreadsheets/d/e/2PACX-1vT8MEMWOM2kgJ79JsgeYlBDY3b6R2pkaPn9PMPYMk8KRmH5u4eZ3WS5pz0Fae-w2mUcokmJHc-qmun2/pubhtml','_blank')"
-                    style="
-                        background-color: #00a8e8;
-                        color: white;
-                        border: none;
-                        padding: 6px 12px;
-                        font-size: 12px;
-                        font-weight: bold;
-                        border-radius: 5px;
-                        cursor: pointer;
-                    ">file
-                </button>
             </div>
 
         </div>`;
