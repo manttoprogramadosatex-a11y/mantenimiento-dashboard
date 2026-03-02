@@ -1,11 +1,23 @@
 const SatexCardasEngine = {
-    version: "2.0",
+    version: "2.1",
+    intervalo: null,
 
-    dibujar: async function(idContenedor) {
-        const grid = document.getElementById(idContenedor);
+    dibujar: function(idContenedor) {
+        this.contenedor = idContenedor;
+        this.cargarDatos();
+
+        // Activar refresco automático cada 1 minuto
+        if (!this.intervalo) {
+            this.intervalo = setInterval(() => {
+                this.cargarDatos();
+            }, 60000);
+        }
+    },
+
+    cargarDatos: async function() {
+        const grid = document.getElementById(this.contenedor);
         if (!grid) return;
 
-        // URL CSV directa Google Sheets
         const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT7wFZesHZM_4ed4aj7oAU4MgNvuhZ8AQ-CUL_4QkrMzzR4PawAQ36-hGTvYhxeslLKjFzvfSwApNmT/pub?gid=1547200035&single=true&output=csv";
 
         try {
@@ -13,15 +25,14 @@ const SatexCardasEngine = {
             const csv = await response.text();
             const filas = csv.split("\n").map(f => f.split(","));
 
-            // Buscar filas clave
             const filaAct = filas.find(f => f.includes("Toneladas Act."));
             const filaMax = filas.find(f => f.includes("Toneladas Max. Vida"));
 
             if (!filaAct || !filaMax) return;
 
-            // Columnas D → N (índice 3 a 13)
             const datos = [];
 
+            // Columnas D → N (3 a 13)
             for (let i = 3; i <= 13; i++) {
                 const id = i - 2;
 
@@ -33,12 +44,10 @@ const SatexCardasEngine = {
                 });
             }
 
-            // Renderizar HTML
-            grid.innerHTML = datos.map(c => 
+            grid.innerHTML = datos.map(c =>
                 SatexCardasDesign.crearCarda(c.id, c.t, c.ac, c.max)
             ).join('');
 
-            // Pintar gauges
             datos.forEach(c => {
                 const canvas = document.getElementById(`canvas-${c.id}`);
                 if (canvas) {
@@ -47,7 +56,7 @@ const SatexCardasEngine = {
             });
 
         } catch (error) {
-            console.error("Error cargando datos de Google Sheets:", error);
+            console.error("Error cargando datos:", error);
         }
     },
 
@@ -59,7 +68,6 @@ const SatexCardasEngine = {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Fondo del arco
         ctx.beginPath();
         ctx.arc(x, y, radio, Math.PI, 0);
         ctx.lineWidth = 12;
