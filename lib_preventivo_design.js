@@ -16,43 +16,46 @@ const SatexPreventivoDesign = {
                 <button style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 11px; font-weight: bold; cursor: pointer; width: 100%;">PROCEDIMIENTOS</button>
             </div>
 
-            <div style="width: 65%; display: flex; flex-direction: column; gap: 4px; justify-content: center;">
-                ${this.crearFila("PREVENTIVOS HOY", "55", "#f9b218", "accionPreventivosHoy()")}
-                ${this.crearFila("PREV. PENDIENTES ANTES HOY", "20", "#ff9999", "accionPendientes()")}
-                ${this.crearFila("PREVENTIVOS EXTRAORDINARIOS", "03", "#ffffff", "accionExtraordinarios()")}
-                ${this.crearFila("MANTTO. DICIEMBRE", "12", "#4caf50", "accionDiciembre()")}
-                ${this.crearFila("MANTTO. ABRIL", "8", "#00bcd4", "accionAbril()")}
-                ${this.crearFila("MANTTO. D. FESTIVOS", "5", "#e91e63", "accionFestivos()")}
+            <div style="width: 65%; display: flex; flex-direction: column; gap: 6px; justify-content: center;">
+                ${this.crearBotonPreventivo("PREVENTIVOS HOY", "55", "#f9b218", "accionPreventivosHoy()")}
+                ${this.crearBotonPreventivo("PREV. PENDIENTES ANTES HOY", "20", "#ff9999", "accionPendientes()")}
+                ${this.crearBotonPreventivo("PREVENTIVOS EXTRAORDINARIOS", "03", "#ffffff", "accionExtraordinarios()")}
+                ${this.crearBotonPreventivo("MANTTO. DICIEMBRE", "12", "#4caf50", "accionDiciembre()")}
+                ${this.crearBotonPreventivo("MANTTO. ABRIL", "8", "#00bcd4", "accionAbril()")}
+                ${this.crearBotonPreventivo("MANTTO. D. FESTIVOS", "5", "#e91e63", "accionFestivos()")}
             </div>
         </div>`;
 
         this.inicializarGrafico(cumplimiento);
     },
 
-    // Ahora crea elementos <button> en lugar de <div>
-    crearFila: function(label, valor, color, funcionAccion) {
+    crearBotonPreventivo: function(label, valor, color, funcion) {
         return `
         <button 
-            onclick="${funcionAccion}"
+            onclick="${funcion}"
+            onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'"
+            onmouseout="this.style.backgroundColor='transparent'"
             style="
                 display: flex; 
                 align-items: center; 
                 justify-content: space-between; 
-                background: rgba(255,255,255,0.05); 
-                border: 1px solid rgba(255,255,255,0.1); 
-                border-radius: 4px; 
-                padding: 2px 8px; 
-                height: 22px;
+                background-color: transparent; 
+                border: 1px solid ${color}; 
+                border-radius: 6px; 
+                padding: 4px 10px; 
+                height: 28px; 
+                width: 100%; 
                 cursor: pointer;
-                width: 100%;
+                transition: all 0.2s ease;
                 outline: none;
-                transition: background 0.2s;
             "
-            onmouseover="this.style.background='rgba(255,255,255,0.15)'"
-            onmouseout="this.style.background='rgba(255,255,255,0.05)'"
         >
-            <span style="color: white; font-size: 10px; font-weight: bold; text-transform: uppercase; pointer-events: none;">${label}</span>
-            <span style="color: ${color}; font-size: 13px; font-weight: bold; pointer-events: none;">${valor}</span>
+            <span style="color: white; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3px; pointer-events: none;">
+                ${label}
+            </span>
+            <span style="color: ${color}; font-size: 14px; font-weight: 900; pointer-events: none;">
+                ${valor}
+            </span>
         </button>`;
     },
 
