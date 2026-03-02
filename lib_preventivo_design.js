@@ -1,6 +1,6 @@
 /* lib_preventivo_design.js */
-/* VERSION 1.7
-   - Se agrega apertura de Google Calendar en PREVENTIVOS HOY
+/* VERSION 1.8
+   - Apertura de Google Calendar público
    - No se modifica estructura visual
    - No se elimina ningún elemento
 */
@@ -110,16 +110,13 @@ const SatexPreventivoDesign = {
 
 function accionPreventivosHoy() {
 
-    const baseUrl = "https://calendar.google.com/calendar/u/0?cid=bWFudHRvLnByb2dyYW1hZG8uc2F0ZXhAZ21haWwuY29t";
+    const url = "https://calendar.google.com/calendar/embed?src=mantto.programado.satex@gmail.com&ctz=America/Mexico_City";
 
-    const hoy = new Date();
-    const yyyy = hoy.getFullYear();
-    const mm = String(hoy.getMonth() + 1).padStart(2, "0");
-    const dd = String(hoy.getDate()).padStart(2, "0");
-
-    const fechaHoy = `${yyyy}${mm}${dd}`;
-
-    const urlFinal = `${baseUrl}&pli=1&date=${fechaHoy}`;
-
-    window.open(urlFinal, "_blank");
+    window.open(url, "_blank");
 }
+
+function accionPendientes() {}
+function accionExtraordinarios() {}
+function accionDiciembre() {}
+function accionAbril() {}
+function accionFestivos() {}
