@@ -1,5 +1,5 @@
 const SatexCardasEngine = {
-    version: "2.2",
+    version: "2.3",
     intervalo: null,
 
     dibujar: function(idContenedor) {
@@ -66,6 +66,7 @@ const SatexCardasEngine = {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // Fondo
         ctx.beginPath();
         ctx.arc(x, y, radio, Math.PI, 0);
         ctx.lineWidth = 12;
@@ -74,9 +75,9 @@ const SatexCardasEngine = {
 
         const porcentaje = max > 0 ? Math.min(ac / max, 1) : 0;
 
-        let color = '#4caf50'; // Verde 0–80%
-        if (porcentaje > 0.9) color = '#f44336';      // Rojo 90–100%
-        else if (porcentaje > 0.8) color = '#ffc107'; // Amarillo 80–90%
+        let color = '#4caf50'; // Verde 0–75%
+        if (porcentaje > 0.9) color = '#f44336';       // Rojo 90–100%
+        else if (porcentaje > 0.75) color = '#ffc107'; // Amarillo 75–90%
 
         ctx.beginPath();
         ctx.arc(x, y, radio, Math.PI, Math.PI + (Math.PI * porcentaje));
