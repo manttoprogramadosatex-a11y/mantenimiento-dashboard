@@ -23,7 +23,11 @@ const SatexPreventivoDesign = {
                 </div>
                 <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-align: center;">CUMPLIMIENTO ACUMULADO</div>
                 <button 
-                    style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%;">
+                    style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.1s ease;"
+                    onmousedown="this.style.transform='scale(1.05)';"
+                    onmouseup="this.style.transform='scale(1)';"
+                    onmouseleave="this.style.transform='scale(1)';"
+                >
                     PROCEDIMIENTOS
                 </button>
             </div>
@@ -60,7 +64,11 @@ const SatexPreventivoDesign = {
                 height: 28px; 
                 width: 100%; 
                 cursor: pointer;
+                transition: all 0.1s ease;
             "
+            onmousedown="this.style.transform='scale(1.05)';"
+            onmouseup="this.style.transform='scale(1)';"
+            onmouseleave="this.style.transform='scale(1)';"
         >
             <span style="color: white; font-size: 12px; font-weight: bold; text-transform: uppercase;">
                 ${label}
