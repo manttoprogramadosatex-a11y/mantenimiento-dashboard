@@ -197,7 +197,7 @@ async function cargarManttoAbril() {
    ============================================================ */
 
 function accionProcedimientos() {
-    window.open("AQUI_PONES_TU_LINK_DE_GOOGLE", "_blank");
+    window.open("https://docs.google.com/spreadsheets/d/1bDPlAnYnT9PWJwcG-jhtxON_Uv2Qzd8IWR5geLJn8mc/edit?usp=sharing", "_blank");
 }
 
 function accionPreventivosHoy() {
