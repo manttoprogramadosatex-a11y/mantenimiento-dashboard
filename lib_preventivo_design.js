@@ -1,11 +1,8 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.3
-   - Mantto Abril suma Personal Satex + Personal Externo
-   - Mantto Diciembre toma MAX columna A (libro Diciembre)
-   - Preventivos Extraordinarios toma MAX columna A (nuevo libro)
-   - Mantto D. Festivos toma MAX columna A (nuevo libro)
+/* VERSION 2.4
+   - Se agrega botón PROCEDIMIENTOS funcional
+   - No se elimina nada
    - No se modifica estructura visual
-   - No se elimina ningún elemento
 */
 
 const SatexPreventivoDesign = {
@@ -24,6 +21,7 @@ const SatexPreventivoDesign = {
                 </div>
                 <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-align: center;">CUMPLIMIENTO ACUMULADO</div>
                 <button 
+                    onclick="accionProcedimientos()"
                     style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.1s ease;"
                     onmousedown="this.style.transform='scale(1.05)';"
                     onmouseup="this.style.transform='scale(1)';"
@@ -198,6 +196,10 @@ async function cargarManttoAbril() {
    FUNCIONES GLOBALES
    ============================================================ */
 
+function accionProcedimientos() {
+    window.open("AQUI_PONES_TU_LINK_DE_GOOGLE", "_blank");
+}
+
 function accionPreventivosHoy() {
     const nuevaVentana = window.open("", "_blank");
     nuevaVentana.document.write(`
@@ -223,6 +225,7 @@ function accionExtraordinarios() {
 }
 
 function accionPendientes() {}
+
 function accionFestivos() {
     window.open("https://docs.google.com/spreadsheets/d/1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U/edit?gid=0#gid=0", "_blank");
 }
