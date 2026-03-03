@@ -1,7 +1,8 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.2
+/* VERSION 2.3
    - Mantto Abril suma Personal Satex + Personal Externo
-   - Mantto Diciembre toma el valor máximo de la columna A desde Google Sheets
+   - Mantto Diciembre toma MAX columna A (libro Diciembre)
+   - Preventivos Extraordinarios toma MAX columna A (nuevo libro)
    - No se modifica estructura visual
    - No se elimina ningún elemento
 */
@@ -30,7 +31,7 @@ const SatexPreventivoDesign = {
             <div style="width: 65%; display: flex; flex-direction: column; gap: 6px; justify-content: center;">
                 ${this.crearBotonPreventivo("PREVENTIVOS HOY", "55", "#f9b218", "accionPreventivosHoy()")}
                 ${this.crearBotonPreventivo("PREV. PENDIENTES ANTES HOY", "20", "#ff9999", "accionPendientes()")}
-                ${this.crearBotonPreventivo("PREVENTIVOS EXTRAORDINARIOS", "03", "#ffffff", "accionExtraordinarios()")}
+                ${this.crearBotonPreventivo("PREVENTIVOS EXTRAORDINARIOS", "<span id='valor-extraordinarios'>...</span>", "#ffffff", "accionExtraordinarios()")}
                 ${this.crearBotonPreventivo("MANTTO. DICIEMBRE", "<span id='valor-mantto-diciembre'>...</span>", "#4caf50", "accionDiciembre()")}
                 ${this.crearBotonPreventivo("MANTTO. ABRIL", "<span id='valor-mantto-abril'>...</span>", "#00bcd4", "accionAbril()")}
                 ${this.crearBotonPreventivo("MANTTO. D. FESTIVOS", "5", "#e91e63", "accionFestivos()")}
@@ -38,8 +39,10 @@ const SatexPreventivoDesign = {
         </div>`;
 
         this.inicializarGrafico(cumplimiento);
+
         cargarManttoAbril();
         cargarManttoDiciembre();
+        cargarExtraordinarios();
     },
 
     crearBotonPreventivo: function(label, valor, color, funcion) {
@@ -94,12 +97,10 @@ const SatexPreventivoDesign = {
 
 
 /* ============================================================
-   GOOGLE SHEETS REAL (2 ubicaciones)
+   GOOGLE SHEETS
    ============================================================ */
 
-async function obtenerValorMaxColumnaA() {
-    const sheetId = "1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0";
-    const gid = 0; // Pestaña principal con Diciembre
+async function obtenerMaxColumnaA(sheetId, gid) {
     const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&tqx=out:json&tq=select A`;
 
     const response = await fetch(url);
@@ -116,9 +117,12 @@ async function obtenerValorMaxColumnaA() {
     return valores.length ? Math.max(...valores) : 0;
 }
 
+/* ================= DICIEMBRE ================= */
+
 async function cargarManttoDiciembre() {
     try {
-        const maxA = await obtenerValorMaxColumnaA();
+        const sheetId = "1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0";
+        const maxA = await obtenerMaxColumnaA(sheetId, 0);
 
         const span = document.getElementById("valor-mantto-diciembre");
         if (span) span.textContent = maxA;
@@ -128,7 +132,23 @@ async function cargarManttoDiciembre() {
     }
 }
 
-// Reusa la función de septiembre
+/* ================= EXTRAORDINARIOS ================= */
+
+async function cargarExtraordinarios() {
+    try {
+        const sheetId = "15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc";
+        const maxA = await obtenerMaxColumnaA(sheetId, 0);
+
+        const span = document.getElementById("valor-extraordinarios");
+        if (span) span.textContent = maxA;
+
+    } catch (error) {
+        console.error("Error cargando Extraordinarios:", error);
+    }
+}
+
+/* ================= ABRIL ================= */
+
 async function obtenerValorCelda(gid, celda) {
     const sheetId = "1sySN3ckuUjiYLTEbqxVA2LOtAjkp2moX2HKR2UR0ha4";
     const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${celda}&tqx=out:json`;
@@ -144,8 +164,8 @@ async function obtenerValorCelda(gid, celda) {
 
 async function cargarManttoAbril() {
     try {
-        const valorSatex = await obtenerValorCelda(0, "N1"); // Personal Satex
-        const valorExterno = await obtenerValorCelda(1266295995, "L1"); // Personal Externo
+        const valorSatex = await obtenerValorCelda(0, "N1");
+        const valorExterno = await obtenerValorCelda(1266295995, "L1");
 
         const total = valorSatex + valorExterno;
 
@@ -182,6 +202,9 @@ function accionDiciembre() {
     window.open("https://docs.google.com/spreadsheets/d/1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0/edit?gid=0#gid=0", "_blank");
 }
 
+function accionExtraordinarios() {
+    window.open("https://docs.google.com/spreadsheets/d/15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc/edit?gid=0#gid=0", "_blank");
+}
+
 function accionPendientes() {}
-function accionExtraordinarios() {}
 function accionFestivos() {}
