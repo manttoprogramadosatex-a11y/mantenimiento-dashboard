@@ -3,6 +3,7 @@
    - Mantto Abril suma Personal Satex + Personal Externo
    - Mantto Diciembre toma MAX columna A (libro Diciembre)
    - Preventivos Extraordinarios toma MAX columna A (nuevo libro)
+   - Mantto D. Festivos toma MAX columna A (nuevo libro)
    - No se modifica estructura visual
    - No se elimina ningún elemento
 */
@@ -38,7 +39,7 @@ const SatexPreventivoDesign = {
                 ${this.crearBotonPreventivo("PREVENTIVOS EXTRAORDINARIOS", "<span id='valor-extraordinarios'>...</span>", "#ffffff", "accionExtraordinarios()")}
                 ${this.crearBotonPreventivo("MANTTO. DICIEMBRE", "<span id='valor-mantto-diciembre'>...</span>", "#4caf50", "accionDiciembre()")}
                 ${this.crearBotonPreventivo("MANTTO. ABRIL", "<span id='valor-mantto-abril'>...</span>", "#00bcd4", "accionAbril()")}
-                ${this.crearBotonPreventivo("MANTTO. D. FESTIVOS", "5", "#e91e63", "accionFestivos()")}
+                ${this.crearBotonPreventivo("MANTTO. D. FESTIVOS", "<span id='valor-mantto-festivos'>...</span>", "#e91e63", "accionFestivos()")}
             </div>
         </div>`;
 
@@ -47,6 +48,7 @@ const SatexPreventivoDesign = {
         cargarManttoAbril();
         cargarManttoDiciembre();
         cargarExtraordinarios();
+        cargarManttoFestivos();
     },
 
     crearBotonPreventivo: function(label, valor, color, funcion) {
@@ -131,10 +133,8 @@ async function cargarManttoDiciembre() {
     try {
         const sheetId = "1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0";
         const maxA = await obtenerMaxColumnaA(sheetId, 0);
-
         const span = document.getElementById("valor-mantto-diciembre");
         if (span) span.textContent = maxA;
-
     } catch (error) {
         console.error("Error cargando Mantto Diciembre:", error);
     }
@@ -146,12 +146,23 @@ async function cargarExtraordinarios() {
     try {
         const sheetId = "15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc";
         const maxA = await obtenerMaxColumnaA(sheetId, 0);
-
         const span = document.getElementById("valor-extraordinarios");
         if (span) span.textContent = maxA;
-
     } catch (error) {
         console.error("Error cargando Extraordinarios:", error);
+    }
+}
+
+/* ================= FESTIVOS ================= */
+
+async function cargarManttoFestivos() {
+    try {
+        const sheetId = "1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U";
+        const maxA = await obtenerMaxColumnaA(sheetId, 0);
+        const span = document.getElementById("valor-mantto-festivos");
+        if (span) span.textContent = maxA;
+    } catch (error) {
+        console.error("Error cargando Mantto Festivos:", error);
     }
 }
 
@@ -174,12 +185,9 @@ async function cargarManttoAbril() {
     try {
         const valorSatex = await obtenerValorCelda(0, "N1");
         const valorExterno = await obtenerValorCelda(1266295995, "L1");
-
         const total = valorSatex + valorExterno;
-
         const span = document.getElementById("valor-mantto-abril");
         if (span) span.textContent = total;
-
     } catch (error) {
         console.error("Error cargando Mantto Abril:", error);
     }
@@ -215,4 +223,6 @@ function accionExtraordinarios() {
 }
 
 function accionPendientes() {}
-function accionFestivos() {}
+function accionFestivos() {
+    window.open("https://docs.google.com/spreadsheets/d/1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U/edit?gid=0#gid=0", "_blank");
+}
