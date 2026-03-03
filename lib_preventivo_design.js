@@ -1,10 +1,10 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.0
-   - Mantto Abril ahora se calcula dinámicamente desde Google Sheets
-   - Suma Personal Satex N1 + Personal Externo L1
-   - Abre hoja correspondiente al dar clic
-   - NO se modifica estructura visual
-   - NO se elimina ningún elemento
+/* VERSION 2.1
+   - Mantto Abril ahora suma:
+     Personal Satex (N1)  +  Personal Externo (L1)
+   - Se usa endpoint gviz oficial por pestaña
+   - No se modifica estructura visual
+   - No se elimina ningún elemento
 */
 
 const SatexPreventivoDesign = {
@@ -94,19 +94,26 @@ const SatexPreventivoDesign = {
 
 
 /* ============================================================
-   NUEVA FUNCIÓN: CARGAR MANTTO ABRIL DESDE GOOGLE SHEETS
+   CARGA REAL DESDE GOOGLE SHEETS (2 PESTAÑAS)
    ============================================================ */
+
+async function obtenerValorCelda(gid, celda) {
+    const sheetId = "1sySN3ckuUjiYLTEbqxVA2LOtAjkp2moX2HKR2UR0ha4";
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${celda}&tqx=out:json`;
+
+    const response = await fetch(url);
+    const text = await response.text();
+
+    const json = JSON.parse(text.substring(47, text.length - 2));
+    const valor = json.table.rows[0]?.c[0]?.v;
+
+    return parseFloat(valor) || 0;
+}
 
 async function cargarManttoAbril() {
     try {
-        const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vT8MEMWOM2kgJ79JsgeYlBDY3b6R2pkaPn9PMPYMk8KRmH5u4eZ3WS5pz0Fae-w2mUcokmJHc-qmun2/pub?output=csv");
-        const data = await response.text();
-
-        const filas = data.split("\n");
-
-        // Ajusta índices si cambian posiciones
-        const valorSatex = parseFloat(filas[0].split(",")[13]) || 0;   // N1
-        const valorExterno = parseFloat(filas[0].split(",")[11]) || 0; // L1
+        const valorSatex = await obtenerValorCelda(0, "N1"); // Personal Satex
+        const valorExterno = await obtenerValorCelda(1266295995, "L1"); // Personal Externo
 
         const total = valorSatex + valorExterno;
 
