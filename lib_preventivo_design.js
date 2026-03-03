@@ -1,8 +1,8 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.5
-   - Se agrega lectura de % desde Google Sheets D4
-   - NO se elimina nada
-   - NO se modifica estructura visual
+/* VERSION 2.4
+   - Se agrega botón PROCEDIMIENTOS funcional
+   - No se elimina nada
+   - No se modifica estructura visual
 */
 
 const SatexPreventivoDesign = {
@@ -15,7 +15,7 @@ const SatexPreventivoDesign = {
             <div style="width: 35%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
                 <div style="position: relative; width: 85px; height: 85px;">
                     <canvas id="chart-cumplimiento"></canvas>
-                    <div id="texto-cumplimiento" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 18px; font-weight: bold;">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 18px; font-weight: bold;">
                         ${cumplimiento}%
                     </div>
                 </div>
@@ -47,9 +47,6 @@ const SatexPreventivoDesign = {
         cargarManttoDiciembre();
         cargarExtraordinarios();
         cargarManttoFestivos();
-
-        /* NUEVO */
-        cargarCumplimientoDesdeSheet();
     },
 
     crearBotonPreventivo: function(label, valor, color, funcion) {
@@ -107,38 +104,128 @@ const SatexPreventivoDesign = {
 };
 
 
-/* ================= NUEVO BLOQUE PARA % ================= */
+/* ============================================================
+   GOOGLE SHEETS
+   ============================================================ */
 
-async function cargarCumplimientoDesdeSheet() {
+async function obtenerMaxColumnaA(sheetId, gid) {
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&tqx=out:json&tq=select A`;
+
+    const response = await fetch(url);
+    const text = await response.text();
+
+    const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+
+    if (!json.table.rows) return 0;
+
+    const valores = json.table.rows
+        .map(r => parseFloat(r.c[0]?.v))
+        .filter(v => !isNaN(v));
+
+    return valores.length ? Math.max(...valores) : 0;
+}
+
+/* ================= DICIEMBRE ================= */
+
+async function cargarManttoDiciembre() {
     try {
-        const sheetId = "16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg";
-        const gid = 0;
-        const celda = "D4";
-
-        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${celda}&tqx=out:json`;
-
-        const response = await fetch(url);
-        const text = await response.text();
-        const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
-
-        let valor = json.table.rows[0]?.c[0]?.v;
-
-        if (typeof valor === "string") {
-            valor = valor.replace("%", "").trim();
-        }
-
-        valor = parseFloat(valor) || 0;
-
-        const texto = document.getElementById("texto-cumplimiento");
-        if (texto) texto.textContent = valor + "%";
-
-        const chart = Chart.getChart("chart-cumplimiento");
-        if (chart) {
-            chart.data.datasets[0].data = [valor, 100 - valor];
-            chart.update();
-        }
-
+        const sheetId = "1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0";
+        const maxA = await obtenerMaxColumnaA(sheetId, 0);
+        const span = document.getElementById("valor-mantto-diciembre");
+        if (span) span.textContent = maxA;
     } catch (error) {
-        console.error("Error cargando cumplimiento:", error);
+        console.error("Error cargando Mantto Diciembre:", error);
     }
+}
+
+/* ================= EXTRAORDINARIOS ================= */
+
+async function cargarExtraordinarios() {
+    try {
+        const sheetId = "15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc";
+        const maxA = await obtenerMaxColumnaA(sheetId, 0);
+        const span = document.getElementById("valor-extraordinarios");
+        if (span) span.textContent = maxA;
+    } catch (error) {
+        console.error("Error cargando Extraordinarios:", error);
+    }
+}
+
+/* ================= FESTIVOS ================= */
+
+async function cargarManttoFestivos() {
+    try {
+        const sheetId = "1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U";
+        const maxA = await obtenerMaxColumnaA(sheetId, 0);
+        const span = document.getElementById("valor-mantto-festivos");
+        if (span) span.textContent = maxA;
+    } catch (error) {
+        console.error("Error cargando Mantto Festivos:", error);
+    }
+}
+
+/* ================= ABRIL ================= */
+
+async function obtenerValorCelda(gid, celda) {
+    const sheetId = "1sySN3ckuUjiYLTEbqxVA2LOtAjkp2moX2HKR2UR0ha4";
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${celda}&tqx=out:json`;
+
+    const response = await fetch(url);
+    const text = await response.text();
+
+    const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+    const valor = json.table.rows[0]?.c[0]?.v;
+
+    return parseFloat(valor) || 0;
+}
+
+async function cargarManttoAbril() {
+    try {
+        const valorSatex = await obtenerValorCelda(0, "N1");
+        const valorExterno = await obtenerValorCelda(1266295995, "L1");
+        const total = valorSatex + valorExterno;
+        const span = document.getElementById("valor-mantto-abril");
+        if (span) span.textContent = total;
+    } catch (error) {
+        console.error("Error cargando Mantto Abril:", error);
+    }
+}
+
+
+/* ============================================================
+   FUNCIONES GLOBALES
+   ============================================================ */
+
+function accionProcedimientos() {
+    window.open("https://docs.google.com/spreadsheets/d/1bDPlAnYnT9PWJwcG-jhtxON_Uv2Qzd8IWR5geLJn8mc/edit?usp=sharing", "_blank");
+}
+
+function accionPreventivosHoy() {
+    const nuevaVentana = window.open("", "_blank");
+    nuevaVentana.document.write(`
+        <html>
+            <body style="margin:0;background:#1e1e1e;">
+                <iframe src="https://calendar.google.com/calendar/embed?src=mantto.programado.satex%40gmail.com&ctz=America%2FMexico_City" 
+                style="width:100%;height:100vh;border:0;"></iframe>
+            </body>
+        </html>
+    `);
+}
+
+function accionAbril() {
+    window.open("https://docs.google.com/spreadsheets/d/1sySN3ckuUjiYLTEbqxVA2LOtAjkp2moX2HKR2UR0ha4/edit?gid=0#gid=0", "_blank");
+}
+
+function accionDiciembre() {
+    window.open("https://docs.google.com/spreadsheets/d/1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0/edit?gid=0#gid=0", "_blank");
+}
+
+function accionExtraordinarios() {
+    window.open("https://docs.google.com/spreadsheets/d/15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc/edit?gid=0#gid=0", "_blank");
+}
+
+function accionPendientes() {}
+
+function accionFestivos() {
+    window.open("https://docs.google.com/spreadsheets/d/1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U/edit?gid=0#gid=0", "_blank");
 }
