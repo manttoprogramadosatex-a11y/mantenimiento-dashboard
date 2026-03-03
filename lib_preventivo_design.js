@@ -1,9 +1,8 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.4
+/* VERSION 2.3
    - Mantto Abril suma Personal Satex + Personal Externo
-   - Mantto Diciembre toma MAX columna A
-   - Preventivos Extraordinarios toma MAX columna A
-   - Mantto D. Festivos toma MAX columna A
+   - Mantto Diciembre toma MAX columna A (libro Diciembre)
+   - Preventivos Extraordinarios toma MAX columna A (nuevo libro)
    - No se modifica estructura visual
    - No se elimina ningún elemento
 */
@@ -35,7 +34,7 @@ const SatexPreventivoDesign = {
                 ${this.crearBotonPreventivo("PREVENTIVOS EXTRAORDINARIOS", "<span id='valor-extraordinarios'>...</span>", "#ffffff", "accionExtraordinarios()")}
                 ${this.crearBotonPreventivo("MANTTO. DICIEMBRE", "<span id='valor-mantto-diciembre'>...</span>", "#4caf50", "accionDiciembre()")}
                 ${this.crearBotonPreventivo("MANTTO. ABRIL", "<span id='valor-mantto-abril'>...</span>", "#00bcd4", "accionAbril()")}
-                ${this.crearBotonPreventivo("MANTTO. D. FESTIVOS", "<span id='valor-festivos'>...</span>", "#e91e63", "accionFestivos()")}
+                ${this.crearBotonPreventivo("MANTTO. D. FESTIVOS", "5", "#e91e63", "accionFestivos()")}
             </div>
         </div>`;
 
@@ -44,7 +43,6 @@ const SatexPreventivoDesign = {
         cargarManttoAbril();
         cargarManttoDiciembre();
         cargarExtraordinarios();
-        cargarFestivos();
     },
 
     crearBotonPreventivo: function(label, valor, color, funcion) {
@@ -99,7 +97,7 @@ const SatexPreventivoDesign = {
 
 
 /* ============================================================
-   FUNCIÓN GENÉRICA MAX COLUMNA A
+   GOOGLE SHEETS
    ============================================================ */
 
 async function obtenerMaxColumnaA(sheetId, gid) {
@@ -117,21 +115,6 @@ async function obtenerMaxColumnaA(sheetId, gid) {
         .filter(v => !isNaN(v));
 
     return valores.length ? Math.max(...valores) : 0;
-}
-
-/* ================= FESTIVOS ================= */
-
-async function cargarFestivos() {
-    try {
-        const sheetId = "1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U";
-        const maxA = await obtenerMaxColumnaA(sheetId, 0);
-
-        const span = document.getElementById("valor-festivos");
-        if (span) span.textContent = maxA;
-
-    } catch (error) {
-        console.error("Error cargando Festivos:", error);
-    }
 }
 
 /* ================= DICIEMBRE ================= */
@@ -199,9 +182,29 @@ async function cargarManttoAbril() {
    FUNCIONES GLOBALES
    ============================================================ */
 
-function accionPreventivosHoy() {}
-function accionAbril() {}
-function accionDiciembre() {}
-function accionExtraordinarios() {}
-function accionFestivos() {}
+function accionPreventivosHoy() {
+    const nuevaVentana = window.open("", "_blank");
+    nuevaVentana.document.write(`
+        <html>
+            <body style="margin:0;background:#1e1e1e;">
+                <iframe src="https://calendar.google.com/calendar/embed?src=mantto.programado.satex%40gmail.com&ctz=America%2FMexico_City" 
+                style="width:100%;height:100vh;border:0;"></iframe>
+            </body>
+        </html>
+    `);
+}
+
+function accionAbril() {
+    window.open("https://docs.google.com/spreadsheets/d/1sySN3ckuUjiYLTEbqxVA2LOtAjkp2moX2HKR2UR0ha4/edit?gid=0#gid=0", "_blank");
+}
+
+function accionDiciembre() {
+    window.open("https://docs.google.com/spreadsheets/d/1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0/edit?gid=0#gid=0", "_blank");
+}
+
+function accionExtraordinarios() {
+    window.open("https://docs.google.com/spreadsheets/d/15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc/edit?gid=0#gid=0", "_blank");
+}
+
 function accionPendientes() {}
+function accionFestivos() {}
