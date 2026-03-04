@@ -1,9 +1,8 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.7
-   - PREVENTIVOS HOY dinámico (F2)
-   - PENDIENTES ANTES HOY dinámico (E2)
-   - Botón Pendientes abre pestaña correcta (gid=899933574)
-   - Integración total de funciones de Sheets
+/* VERSION 2.8
+   - Mantiene PREVENTIVOS HOY y PENDIENTES dinámicos
+   - Agrega botón "LECCIONES APRENDIDAS" debajo de PROCEDIMIENTOS
+   - Mantiene integración total de funciones de Sheets
 */
 
 const SatexPreventivoDesign = {
@@ -21,6 +20,7 @@ const SatexPreventivoDesign = {
                     </div>
                 </div>
                 <div style="color: #a1b1c1; font-size: 9px; font-weight: bold; margin-top: 5px; text-align: center;">CUMPLIMIENTO ACUMULADO</div>
+                
                 <button 
                     onclick="accionProcedimientos()"
                     style="margin-top: 8px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.1s ease;"
@@ -29,6 +29,16 @@ const SatexPreventivoDesign = {
                     onmouseleave="this.style.transform='scale(1)';"
                 >
                     PROCEDIMIENTOS
+                </button>
+
+                <button 
+                    onclick="accionLeccionesAprendidas()"
+                    style="margin-top: 6px; background: transparent; color: white; border: 1px solid #f9b218; border-radius: 4px; padding: 3px 10px; font-size: 12px; font-weight: bold; cursor: pointer; width: 100%; transition: all 0.1s ease;"
+                    onmousedown="this.style.transform='scale(1.05)';"
+                    onmouseup="this.style.transform='scale(1)';"
+                    onmouseleave="this.style.transform='scale(1)';"
+                >
+                    LECCIONES APRENDIDAS
                 </button>
             </div>
 
@@ -56,36 +66,19 @@ const SatexPreventivoDesign = {
         return `
         <button 
             onclick="${funcion}"
-            style="
-                display: flex; 
-                align-items: center; 
-                justify-content: space-between; 
-                background-color: transparent; 
-                border: 1px solid ${color}; 
-                border-radius: 6px; 
-                padding: 4px 12px; 
-                height: 28px; 
-                width: 100%; 
-                cursor: pointer;
-                transition: all 0.1s ease;
-            "
+            style="display: flex; align-items: center; justify-content: space-between; background-color: transparent; border: 1px solid ${color}; border-radius: 6px; padding: 4px 12px; height: 28px; width: 100%; cursor: pointer; transition: all 0.1s ease;"
             onmousedown="this.style.transform='scale(1.05)';"
             onmouseup="this.style.transform='scale(1)';"
             onmouseleave="this.style.transform='scale(1)';"
         >
-            <span style="color: white; font-size: 12px; font-weight: bold; text-transform: uppercase;">
-                ${label}
-            </span>
-            <span style="color: ${color}; font-size: 14px; font-weight: 900;">
-                ${valor}
-            </span>
+            <span style="color: white; font-size: 12px; font-weight: bold; text-transform: uppercase;">${label}</span>
+            <span style="color: ${color}; font-size: 14px; font-weight: 900;">${valor}</span>
         </button>`;
     },
 
     inicializarGrafico: function(porcentaje) {
         const ctx = document.getElementById('chart-cumplimiento');
         if (!ctx) return;
-
         const chartExistente = Chart.getChart("chart-cumplimiento");
         if (chartExistente) chartExistente.destroy();
 
@@ -179,6 +172,10 @@ function accionProcedimientos() {
     window.open("https://docs.google.com/spreadsheets/d/1bDPlAnYnT9PWJwcG-jhtxON_Uv2Qzd8IWR5geLJn8mc/edit?usp=sharing", "_blank");
 }
 
+function accionLeccionesAprendidas() {
+    window.open("https://docs.google.com", "_blank");
+}
+
 function accionPreventivosHoy() {
     const nuevaVentana = window.open("", "_blank");
     nuevaVentana.document.write(`<html><body style="margin:0;background:#1e1e1e;">
@@ -203,8 +200,5 @@ function accionFestivos() {
 }
 
 function accionPendientes() {
-    window.open(
-        "https://docs.google.com/spreadsheets/d/16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg/edit?gid=899933574#gid=899933574",
-        "_blank"
-    );
+    window.open("https://docs.google.com/spreadsheets/d/16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg/edit?gid=899933574#gid=899933574", "_blank");
 }
