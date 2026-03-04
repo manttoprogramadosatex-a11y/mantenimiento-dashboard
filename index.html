@@ -27,78 +27,69 @@
     <script src="lib_accidentes.js"></script>
     <script src="lib_maquinas_inactivas.js"></script>
     <script src="lib_maquinas_paradas.js"></script>
-    
     <script src="lib_data_loader.js"></script>
-
+    
     <script src="lib_data_bridge.js"></script>
-
 </head>
 <body>
-    <div id="main-container">
-        </div>
+    <div id="main-container"></div>
 
     <script>
         window.onload = async function() {
-            // --- INICIALIZACIÓN DE COMPONENTES ---
-            
-            // Header
-            SatexHeaderDesign.render("header-container");
-            
-            // Estatus Planta
-            SatexEstatusDesign.render("estatus-container");
-            
-            // Cardas
-            SatexCardasDesign.render("cardas-container");
-            
-            // Mantenimiento Correctivo
-            SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
-            SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
-            
-            // Mantenimiento Preventivo (Carga inicial con 90% estático)
-            SatexPreventivoDesign.render("preventivos-grafico-container", 90);
-            
-            // Personal y Compras
-            SatexPersonalDesign.render("personal-container");
-            SatexComprasDesign.render("compras-container", 14, 8);
-            
-            // Accidentes
-            SatexAccidentes.init("accidentes-container");
-
-            // --- CICLO DE ACTUALIZACIÓN AUTOMÁTICA ---
-            
-            // Ejecución inmediata de la primera carga de datos reales
-            await actualizarTablero();
-
-            // Intervalo principal: Cada 15 segundos crece para incluir el Puente de Datos
-            setInterval(async () => {
-                await actualizarTablero();
-            }, 15000);
-        };
-
-        async function actualizarTablero() {
-            console.log("Actualizando datos del tablero...");
-
+            // RENDER INICIAL DE COMPONENTES
             try {
-                // 1. Actualización de Husos y Máquinas (Existente)
-                const datosPlanta = await SatexDataLoader.obtenerDatosPrincipales();
-                if(datosPlanta) {
-                    SatexEstatusData.actualizar(datosPlanta);
+                if(window.SatexHeaderDesign) SatexHeaderDesign.render("header-container");
+                if(window.SatexEstatusDesign) SatexEstatusDesign.render("estatus-container");
+                if(window.SatexCardasDesign) SatexCardasDesign.render("cardas-container");
+                
+                if(window.SatexPMCDonasDesign) {
+                    SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
+                }
+                
+                if(window.SatexCorrectivoKPIDesign) {
+                    SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
                 }
 
-                // 2. NUEVA FUNCIÓN: Actualización de Dona Preventivos (D4 de Google Sheets)
-                // Esta llamada usa la nueva lib_data_bridge para no saturar el index
-                if (typeof SatexDataBridge !== 'undefined') {
-                    await SatexDataBridge.updatePreventivo();
+                // Carga inicial del preventivo (El 90 es base, el puente lo actualizará)
+                if(window.SatexPreventivoDesign) {
+                    SatexPreventivoDesign.render("preventivos-grafico-container", 90);
                 }
 
-                // 3. Actualización de Accidentes (Cada ciclo)
-                await SatexAccidentes.refresh();
+                if(window.SatexPersonalDesign) SatexPersonalDesign.render("personal-container");
+                if(window.SatexComprasDesign) SatexComprasDesign.render("compras-container", 14, 8);
+                if(window.SatexAccidentes) SatexAccidentes.init("accidentes-container");
 
-            } catch (error) {
-                console.error("Error en el ciclo de actualización:", error);
+            } catch (err) {
+                console.error("Error en el renderizado inicial:", err);
             }
-        }
+
+            // FUNCIÓN DE ACTUALIZACIÓN DE DATOS
+            async function actualizarTablero() {
+                try {
+                    // Actualizar Husos (Google Sheet principal)
+                    const datosPlanta = await SatexDataLoader.obtenerDatosPrincipales();
+                    if(datosPlanta && window.SatexEstatusData) {
+                        SatexEstatusData.actualizar(datosPlanta);
+                    }
+
+                    // AUTOMATIZACIÓN DONA (Conexión a D4)
+                    if (window.SatexDataBridge) {
+                        await SatexDataBridge.updatePreventivo();
+                    }
+
+                    // Actualizar Accidentes
+                    if(window.SatexAccidentes) {
+                        await SatexAccidentes.refresh();
+                    }
+                } catch (error) {
+                    console.error("Error en ciclo de actualización:", error);
+                }
+            }
+
+            // Iniciar ciclo
+            await actualizarTablero();
+            setInterval(actualizarTablero, 15000);
+        };
     </script>
 </body>
 </html>
-
