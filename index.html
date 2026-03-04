@@ -47,7 +47,8 @@
             "lib_compras_pendientes_design.js",
             "lib_pmc_donas_design.js",
             "lib_correctivo_kpi_design.js",
-            "lib_correctivo_indicadores_engine.js",  // 🔥 NUEVO ENGINE
+            "lib_correctivo_indicadores_engine.js",
+            "lib_pmc_sheet_bridge.js",   <!-- 🔥 NUEVA LIBRERÍA -->
             "lib_accidentes.js",
             "lib_accidentes_engine.js",
             "lib_data_loader.js",
@@ -84,10 +85,20 @@
 
             SatexCardasEngine.dibujar("cardas-grid");
 
-            SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
+            // 🔥 PMC AHORA DINÁMICO DESDE GOOGLE SHEET
+            const pmc = await SatexPMCSheetBridge.obtenerDatos();
+
+            SatexPMCDonasDesign.render(
+                "pmc-diario-container",
+                "pmc-mensual-container",
+                pmc.diario,
+                pmc.maxDiario,
+                pmc.mensual,
+                pmc.maxMensual
+            );
+
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
 
-            // 🔥 NUEVO: indicadores correctivos dinámicos
             await SatexCorrectivoIndicadoresEngine.init();
 
             const cumplimientoPreventivo = await SatexDataBridge.obtenerCumplimientoPreventivo();
