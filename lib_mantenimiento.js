@@ -1,15 +1,15 @@
 /* lib_mantenimiento.js */
-/* VERSION 1.3.1
-   - Ajuste leve vertical del título "Accidentes"
-   - No modifica alturas
-   - No altera layout
+/* VERSION 2.2 
+   - Mantiene layout original (colores, métricas, scrolls)
+   - Agrega fila de botones secundarios centrados
+   - No altera IDs ni funciones de renderizado previas
 */
 
 const SatexMantenimiento = {
     render: function(id) {
-        const container = document.getElementById(id);
+        const container = document.getElementById(id || "mantenimiento-container");
         if (!container) return;
-  
+
         container.innerHTML = `
         <div style="display: flex; width: 100%; height: 100%; position: relative; font-family: 'Segoe UI', sans-serif;">
             
@@ -35,8 +35,12 @@ const SatexMantenimiento = {
                     ${this.btn("BITÁCORA DE OS", "#ffffff")}
                 </div>
 
+                <div style="display: flex; width: 80%; gap: 8px; margin: 0 auto 10px auto; justify-content: center;">
+                    ${this.btn("Cambio Titulo", "#f9b218")}
+                    ${this.btn("Lecciones aprendidas", "#f9b218")}
+                </div>
+
                 <div style="margin-top: auto; padding-bottom: 5px;">
-                    
                     <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                         <div style="color: #f9b218; font-size: 12px; font-weight: bold; border-bottom: 1px solid #f9b218; width: 48%; text-align: center;">
                             DETS. PERSONAL MANTTO.
@@ -50,7 +54,6 @@ const SatexMantenimiento = {
                         <div id="personal-mantto-scroll" style="width: 48%; background: rgba(0,0,0,0.2); border-radius: 4px; overflow-y: auto;"></div>
                         <div id="compras-pendientes-scroll" style="width: 48%; background: rgba(0,0,0,0.2); border-radius: 4px; overflow-y: auto;"></div>
                     </div>
-
                 </div>
             </div>
 
@@ -63,20 +66,9 @@ const SatexMantenimiento = {
                 <div id="preventivos-grafico-container" style="width: 100%; height: 180px;"></div>
                 
                 <div style="margin-top: auto; padding-bottom: 10px;">
-                    
-                    <div style="
-                        color: #ff9999;
-                        font-size: 14px;
-                        font-weight: bold;
-                        border-bottom: 1px solid #ff9999;
-                        text-align: center;
-                        margin-top: 4px; /* ← BAJAMOS LIGERAMENTE */
-                        margin-bottom: 5px;
-                        text-transform: uppercase;
-                    ">
+                    <div style="color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; text-align: center; margin-top: 4px; margin-bottom: 5px; text-transform: uppercase;">
                         Accidentes
                     </div>
-
                     <div id="accidentes-scroll" style="height: 75px; background: rgba(0,0,0,0.2); border-radius: 4px; overflow-y: auto;"></div>
                 </div>
             </div>
@@ -93,11 +85,12 @@ const SatexMantenimiento = {
             color: white;
             border: 1px solid ${c};
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
             text-transform: uppercase;
             transition: 0.1s;
+            white-space: nowrap;
         "
         onmousedown="this.style.transform='scale(0.97)'"
         onmouseup="this.style.transform='scale(1)'">
