@@ -1,14 +1,11 @@
 /* lib_pmc_sheet_bridge.js */
-/* VERSION 1.0
+/* VERSION 2.0
    - Lee hoja "Bitácora"
-   - Obtiene:
-        N3:N14  → Meses
-        N16     → Horas día
-        N17     → Max H Día
-        N18     → Max H Mes
-   - Toma solo número antes de "h"
-   - Devuelve enteros
-   - No modifica ninguna librería existente
+   - Busca filas por texto (NO por índice)
+   - Columna M = nombre
+   - Columna N = valor
+   - Extrae solo número antes de "h"
+   - Devuelve enteros seguros
 */
 
 const SatexPMCSheetBridge = {
@@ -22,31 +19,35 @@ const SatexPMCSheetBridge = {
         const response = await fetch(url);
         const text = await response.text();
 
-        // Limpieza formato gviz
         const json = JSON.parse(text.substring(47).slice(0, -2));
         const rows = json.table.rows;
 
-        // 🔹 Detectar mes actual
-        const mesIndex = new Date().getMonth(); // 0-11
-        const filaMes = 2 + mesIndex; 
-        // N3 es índice 2 (base 0)
-        // Enero = rows[2]
-        // Febrero = rows[3]
-        // Marzo = rows[4]
+        // 🔹 Mes actual en texto
+        const meses = [
+            "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+            "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+        ];
 
-        // 🔹 Extraer valor mensual
-        const valorMesRaw = rows[filaMes]?.c[13]?.v || "0h";
-        const mensual = parseInt(valorMesRaw.split("h")[0]) || 0;
+        const mesActual = meses[new Date().getMonth()];
 
-        // 🔹 Diario N16 → índice 15
-        const diarioRaw = rows[15]?.c[13]?.v || "0h";
-        const diario = parseInt(diarioRaw.split("h")[0]) || 0;
+        // 🔎 Función para buscar fila por texto en columna M
+        function buscarValor(nombreFila) {
+            const fila = rows.find(r => r.c && r.c[12] && r.c[12].v === nombreFila);
+            if (!fila) return 0;
 
-        // 🔹 Max Diario N17 → índice 16
-        const maxDiario = parseInt(rows[16]?.c[13]?.v) || 0;
+            const valor = fila.c[13] ? fila.c[13].v : 0;
 
-        // 🔹 Max Mensual N18 → índice 17
-        const maxMensual = parseInt(rows[17]?.c[13]?.v) || 0;
+            if (typeof valor === "string" && valor.includes("h")) {
+                return parseInt(valor.split("h")[0]) || 0;
+            }
+
+            return parseInt(valor) || 0;
+        }
+
+        const mensual = buscarValor(mesActual);
+        const diario = buscarValor("Acumulado Hoy");
+        const maxDiario = buscarValor("Meta Diaria");
+        const maxMensual = buscarValor("Meta Mensual");
 
         return {
             diario: diario,
