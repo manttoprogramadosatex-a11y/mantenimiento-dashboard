@@ -1,8 +1,8 @@
 /* lib_mantenimiento.js */
-/* VERSION 2.4
-   - Botón "Cat. Cambios de Titulo" con ancho ajustado al texto (auto)
-   - Altura mínima de 22px para proteger el espacio vertical
-   - Margen inferior reducido a 2px
+/* VERSION 2.5
+   - Botón "Cat. Cambios de Titulo" vinculado a Google Sheets específico
+   - Diseño ultra-compacto (22px altura) para proteger layout inferior
+   - Mantiene toda la estructura visual y lógica de la versión anterior
 */
 
 const SatexMantenimiento = {
@@ -36,7 +36,7 @@ const SatexMantenimiento = {
                 </div>
 
                 <div style="display: flex; width: 100%; justify-content: center; margin-bottom: 2px;">
-                    ${this.btnExtra("Cat. Cambios de Titulo", "#f9b218")}
+                    ${this.btnExtra("Cat. Cambios de Titulo", "#f9b218", "accionCatCambiosTitulo()")}
                 </div>
 
                 <div style="margin-top: auto; padding-bottom: 5px;">
@@ -80,11 +80,16 @@ const SatexMantenimiento = {
         </button>`;
     },
 
-    btnExtra: function(t, c) {
+    btnExtra: function(t, c, onclick) {
         return `
-        <button style="width: auto; padding: 0 15px; height: 22px; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.1s; white-space: nowrap;"
+        <button onclick="${onclick}" style="width: auto; padding: 0 15px; height: 22px; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.1s; white-space: nowrap;"
         onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
             ${t}
         </button>`;
     }
 };
+
+/* FUNCIÓN DE ACCIÓN PARA EL BOTÓN EXTRA */
+function accionCatCambiosTitulo() {
+    window.open("https://docs.google.com/spreadsheets/d/1q6Mc7f2K8zBNYmNVBfNkuWURJyz1d5BPxy5SUeQPtvs/edit?usp=sharing", "_blank");
+}
