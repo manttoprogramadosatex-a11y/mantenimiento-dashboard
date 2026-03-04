@@ -1,8 +1,8 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.4
-   - Se agrega botón PROCEDIMIENTOS funcional
-   - No se elimina nada
-   - No se modifica estructura visual
+/* VERSION 2.5
+   - PREVENTIVOS HOY ahora es dinámico (F2 del mismo libro del %)
+   - NO se modifica botón
+   - NO se modifica estructura visual
 */
 
 const SatexPreventivoDesign = {
@@ -32,7 +32,7 @@ const SatexPreventivoDesign = {
             </div>
 
             <div style="width: 65%; display: flex; flex-direction: column; gap: 6px; justify-content: center;">
-                ${this.crearBotonPreventivo("PREVENTIVOS HOY", "55", "#f9b218", "accionPreventivosHoy()")}
+                ${this.crearBotonPreventivo("PREVENTIVOS HOY", "<span id='valor-preventivos-hoy'>...</span>", "#f9b218", "accionPreventivosHoy()")}
                 ${this.crearBotonPreventivo("PREV. PENDIENTES ANTES HOY", "20", "#ff9999", "accionPendientes()")}
                 ${this.crearBotonPreventivo("PREVENTIVOS EXTRAORDINARIOS", "<span id='valor-extraordinarios'>...</span>", "#ffffff", "accionExtraordinarios()")}
                 ${this.crearBotonPreventivo("MANTTO. DICIEMBRE", "<span id='valor-mantto-diciembre'>...</span>", "#4caf50", "accionDiciembre()")}
@@ -43,6 +43,7 @@ const SatexPreventivoDesign = {
 
         this.inicializarGrafico(cumplimiento);
 
+        cargarPreventivosHoy();
         cargarManttoAbril();
         cargarManttoDiciembre();
         cargarExtraordinarios();
@@ -105,7 +106,34 @@ const SatexPreventivoDesign = {
 
 
 /* ============================================================
-   GOOGLE SHEETS
+   PREVENTIVOS HOY (F2)
+   ============================================================ */
+
+async function cargarPreventivosHoy() {
+    try {
+        const sheetId = "16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg";
+        const gid = 0;
+        const celda = "F2";
+
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${celda}&tqx=out:json`;
+
+        const response = await fetch(url);
+        const text = await response.text();
+
+        const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+        const valor = json.table.rows[0]?.c[0]?.v;
+
+        const span = document.getElementById("valor-preventivos-hoy");
+        if (span) span.textContent = parseFloat(valor) || 0;
+
+    } catch (error) {
+        console.error("Error cargando Preventivos Hoy:", error);
+    }
+}
+
+
+/* ============================================================
+   GOOGLE SHEETS RESTO
    ============================================================ */
 
 async function obtenerMaxColumnaA(sheetId, gid) {
