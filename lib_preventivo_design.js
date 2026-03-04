@@ -1,8 +1,7 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.6
-   - PREVENTIVOS HOY dinámico (F2)
-   - PREV. PENDIENTES ANTES HOY dinámico (E2 mismo libro)
-   - NO se elimina ninguna línea existente
+/* VERSION 2.5
+   - PREVENTIVOS HOY ahora es dinámico (F2 del mismo libro del %)
+   - NO se modifica botón
    - NO se modifica estructura visual
 */
 
@@ -34,7 +33,7 @@ const SatexPreventivoDesign = {
 
             <div style="width: 65%; display: flex; flex-direction: column; gap: 6px; justify-content: center;">
                 ${this.crearBotonPreventivo("PREVENTIVOS HOY", "<span id='valor-preventivos-hoy'>...</span>", "#f9b218", "accionPreventivosHoy()")}
-                ${this.crearBotonPreventivo("PREV. PENDIENTES ANTES HOY", "<span id='valor-pendientes-hoy'>20</span>", "#ff9999", "accionPendientes()")}
+                ${this.crearBotonPreventivo("PREV. PENDIENTES ANTES HOY", "20", "#ff9999", "accionPendientes()")}
                 ${this.crearBotonPreventivo("PREVENTIVOS EXTRAORDINARIOS", "<span id='valor-extraordinarios'>...</span>", "#ffffff", "accionExtraordinarios()")}
                 ${this.crearBotonPreventivo("MANTTO. DICIEMBRE", "<span id='valor-mantto-diciembre'>...</span>", "#4caf50", "accionDiciembre()")}
                 ${this.crearBotonPreventivo("MANTTO. ABRIL", "<span id='valor-mantto-abril'>...</span>", "#00bcd4", "accionAbril()")}
@@ -45,7 +44,6 @@ const SatexPreventivoDesign = {
         this.inicializarGrafico(cumplimiento);
 
         cargarPreventivosHoy();
-        cargarPendientesHoy(); // ← NUEVA LLAMADA
         cargarManttoAbril();
         cargarManttoDiciembre();
         cargarExtraordinarios();
@@ -121,6 +119,7 @@ async function cargarPreventivosHoy() {
 
         const response = await fetch(url);
         const text = await response.text();
+
         const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
         const valor = json.table.rows[0]?.c[0]?.v;
 
@@ -134,26 +133,127 @@ async function cargarPreventivosHoy() {
 
 
 /* ============================================================
-   NUEVO: PENDIENTES ANTES HOY (E2)
+   GOOGLE SHEETS RESTO
    ============================================================ */
 
-async function cargarPendientesHoy() {
+async function obtenerMaxColumnaA(sheetId, gid) {
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&tqx=out:json&tq=select A`;
+
+    const response = await fetch(url);
+    const text = await response.text();
+
+    const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+
+    if (!json.table.rows) return 0;
+
+    const valores = json.table.rows
+        .map(r => parseFloat(r.c[0]?.v))
+        .filter(v => !isNaN(v));
+
+    return valores.length ? Math.max(...valores) : 0;
+}
+
+/* ================= DICIEMBRE ================= */
+
+async function cargarManttoDiciembre() {
     try {
-        const sheetId = "16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg";
-        const gid = 0;
-        const celda = "E2";
-
-        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${celda}&tqx=out:json`;
-
-        const response = await fetch(url);
-        const text = await response.text();
-        const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
-        const valor = json.table.rows[0]?.c[0]?.v;
-
-        const span = document.getElementById("valor-pendientes-hoy");
-        if (span) span.textContent = parseFloat(valor) || 0;
-
+        const sheetId = "1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0";
+        const maxA = await obtenerMaxColumnaA(sheetId, 0);
+        const span = document.getElementById("valor-mantto-diciembre");
+        if (span) span.textContent = maxA;
     } catch (error) {
-        console.error("Error cargando Pendientes Hoy:", error);
+        console.error("Error cargando Mantto Diciembre:", error);
     }
+}
+
+/* ================= EXTRAORDINARIOS ================= */
+
+async function cargarExtraordinarios() {
+    try {
+        const sheetId = "15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc";
+        const maxA = await obtenerMaxColumnaA(sheetId, 0);
+        const span = document.getElementById("valor-extraordinarios");
+        if (span) span.textContent = maxA;
+    } catch (error) {
+        console.error("Error cargando Extraordinarios:", error);
+    }
+}
+
+/* ================= FESTIVOS ================= */
+
+async function cargarManttoFestivos() {
+    try {
+        const sheetId = "1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U";
+        const maxA = await obtenerMaxColumnaA(sheetId, 0);
+        const span = document.getElementById("valor-mantto-festivos");
+        if (span) span.textContent = maxA;
+    } catch (error) {
+        console.error("Error cargando Mantto Festivos:", error);
+    }
+}
+
+/* ================= ABRIL ================= */
+
+async function obtenerValorCelda(gid, celda) {
+    const sheetId = "1sySN3ckuUjiYLTEbqxVA2LOtAjkp2moX2HKR2UR0ha4";
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${celda}&tqx=out:json`;
+
+    const response = await fetch(url);
+    const text = await response.text();
+
+    const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+    const valor = json.table.rows[0]?.c[0]?.v;
+
+    return parseFloat(valor) || 0;
+}
+
+async function cargarManttoAbril() {
+    try {
+        const valorSatex = await obtenerValorCelda(0, "N1");
+        const valorExterno = await obtenerValorCelda(1266295995, "L1");
+        const total = valorSatex + valorExterno;
+        const span = document.getElementById("valor-mantto-abril");
+        if (span) span.textContent = total;
+    } catch (error) {
+        console.error("Error cargando Mantto Abril:", error);
+    }
+}
+
+
+/* ============================================================
+   FUNCIONES GLOBALES
+   ============================================================ */
+
+function accionProcedimientos() {
+    window.open("https://docs.google.com/spreadsheets/d/1bDPlAnYnT9PWJwcG-jhtxON_Uv2Qzd8IWR5geLJn8mc/edit?usp=sharing", "_blank");
+}
+
+function accionPreventivosHoy() {
+    const nuevaVentana = window.open("", "_blank");
+    nuevaVentana.document.write(`
+        <html>
+            <body style="margin:0;background:#1e1e1e;">
+                <iframe src="https://calendar.google.com/calendar/embed?src=mantto.programado.satex%40gmail.com&ctz=America%2FMexico_City" 
+                style="width:100%;height:100vh;border:0;"></iframe>
+            </body>
+        </html>
+    `);
+}
+
+function accionAbril() {
+    window.open("https://docs.google.com/spreadsheets/d/1sySN3ckuUjiYLTEbqxVA2LOtAjkp2moX2HKR2UR0ha4/edit?gid=0#gid=0", "_blank");
+}
+
+function accionDiciembre() {
+    window.open("https://docs.google.com/spreadsheets/d/1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0/edit?gid=0#gid=0", "_blank");
+}
+
+function accionExtraordinarios() {
+    window.open("https://docs.google.com/spreadsheets/d/15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc/edit?gid=0#gid=0", "_blank");
+}
+
+function accionPendientes() {}
+
+function accionFestivos() {
+    window.open("https://docs.google.com/spreadsheets/d/1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U/edit?gid=0#gid=0", "_blank");
 }
