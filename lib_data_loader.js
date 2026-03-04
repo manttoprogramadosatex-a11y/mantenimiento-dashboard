@@ -1,15 +1,14 @@
 /* lib_data_loader.js */
-/* VERSION 4.0 DEFINITIVA
-   - Husos (gid=0)
-   - Máquinas Paradas (pestaña: "Maquinas Paradas")
-   - Ignora fila 1 (encabezados)
-   - Columnas:
-        A = Desde
-        B = Tipo
-        C = Numero
+/* VERSION 4.1
+   - Se agrega contador dinámico de OS ABIERTAS
+   - Cuenta columna E = 'PENDIENTE'
+   - No se modifica nada existente
 */
 
 const SHEET_ID = "1tLFtdmbhyeE90NSqTvswbGzxC33BLUGf6b5HczUSlok";
+
+// 🔴 NUEVO: Sheet Bitácora OS
+const SHEET_OS_ID = "1DkFDe1cwp4hQjm4ip4Z8ZzEAPgiMY8e8qQMRMt2HHBU";
 
 const SatexDataLoader = {
 
@@ -84,7 +83,6 @@ const SatexDataLoader = {
 
             if (!filas || filas.length === 0) return [];
 
-            // Ignorar fila 1 (encabezado)
             return filas.map(f => {
                 const c = f.c;
 
@@ -98,6 +96,38 @@ const SatexDataLoader = {
         } catch (error) {
             console.error("Error cargando Maquinas Paradas:", error);
             return [];
+        }
+    },
+
+    // ==============================
+    // 🔴 OS ABIERTAS (BITÁCORA)
+    // ==============================
+    async obtenerOSAbiertas() {
+        try {
+
+            const timestamp = new Date().getTime();
+
+            const query = encodeURIComponent(
+                "select count(E) where E = 'PENDIENTE'"
+            );
+
+            const url =
+            `https://docs.google.com/spreadsheets/d/${SHEET_OS_ID}/gviz/tq?gid=0&tqx=out:json&tq=${query}&t=${timestamp}`;
+
+            const respuesta = await fetch(url, { cache: "no-store" });
+            const texto = await respuesta.text();
+
+            const json = JSON.parse(
+                texto.substring(texto.indexOf("{"), texto.lastIndexOf("}") + 1)
+            );
+
+            const total = json.table.rows[0]?.c[0]?.v || 0;
+
+            return total;
+
+        } catch (error) {
+            console.error("Error cargando OS Abiertas:", error);
+            return 0;
         }
     }
 
