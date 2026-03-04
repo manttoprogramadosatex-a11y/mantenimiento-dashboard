@@ -2,7 +2,7 @@
 /* VERSION 2.6
    - PREVENTIVOS HOY dinámico (F2)
    - PENDIENTES ANTES HOY dinámico (E2)
-   - NO se elimina nada
+   - Integración total de funciones de Sheets
 */
 
 const SatexPreventivoDesign = {
@@ -43,8 +43,9 @@ const SatexPreventivoDesign = {
 
         this.inicializarGrafico(cumplimiento);
 
+        // Inicialización de todas las cargas dinámicas
         cargarPreventivosHoy();
-        cargarPendientesAntesHoy(); // NUEVO
+        cargarPendientesAntesHoy();
         cargarManttoAbril();
         cargarManttoDiciembre();
         cargarExtraordinarios();
@@ -105,56 +106,93 @@ const SatexPreventivoDesign = {
     }
 };
 
-
 /* ============================================================
-   PREVENTIVOS HOY (F2)
+   FUNCIONES DE CARGA DESDE GOOGLE SHEETS
    ============================================================ */
 
+// Función Genérica para obtener valor de una celda específica
+async function obtenerValorCeldaSimple(sheetId, gid, range) {
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${range}&tqx=out:json`;
+    const response = await fetch(url);
+    const text = await response.text();
+    const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+    return json.table.rows[0]?.c[0]?.v || 0;
+}
+
+// PREVENTIVOS HOY (F2)
 async function cargarPreventivosHoy() {
     try {
-        const sheetId = "16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg";
-        const gid = 0;
-        const celda = "F2";
-
-        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${celda}&tqx=out:json`;
-
-        const response = await fetch(url);
-        const text = await response.text();
-
-        const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
-        const valor = json.table.rows[0]?.c[0]?.v;
-
+        const valor = await obtenerValorCeldaSimple("16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg", 0, "F2");
         const span = document.getElementById("valor-preventivos-hoy");
         if (span) span.textContent = parseFloat(valor) || 0;
-
-    } catch (error) {
-        console.error("Error cargando Preventivos Hoy:", error);
-    }
+    } catch (e) { console.error("Error en Hoy:", e); }
 }
 
-
-/* ============================================================
-   PENDIENTES ANTES HOY (E2)
-   ============================================================ */
-
+// PENDIENTES ANTES HOY (E2)
 async function cargarPendientesAntesHoy() {
     try {
-        const sheetId = "16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg";
-        const gid = 0;
-        const celda = "E2";
-
-        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${celda}&tqx=out:json`;
-
-        const response = await fetch(url);
-        const text = await response.text();
-
-        const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
-        const valor = json.table.rows[0]?.c[0]?.v;
-
+        const valor = await obtenerValorCeldaSimple("16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg", 0, "E2");
         const span = document.getElementById("valor-pendientes-antes-hoy");
         if (span) span.textContent = parseFloat(valor) || 0;
-
-    } catch (error) {
-        console.error("Error cargando Pendientes Antes Hoy:", error);
-    }
+    } catch (e) { console.error("Error en Pendientes:", e); }
 }
+
+// Función auxiliar para obtener el máximo de la Columna A
+async function obtenerMaxColumnaA(sheetId, gid) {
+    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&tqx=out:json&tq=select A`;
+    const response = await fetch(url);
+    const text = await response.text();
+    const json = JSON.parse(text.substring(text.indexOf("{"), text.lastIndexOf("}") + 1));
+    if (!json.table.rows) return 0;
+    const valores = json.table.rows.map(r => parseFloat(r.c[0]?.v)).filter(v => !isNaN(v));
+    return valores.length ? Math.max(...valores) : 0;
+}
+
+async function cargarManttoDiciembre() {
+    try {
+        const maxA = await obtenerMaxColumnaA("1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0", 0);
+        document.getElementById("valor-mantto-diciembre").textContent = maxA;
+    } catch (e) { console.error(e); }
+}
+
+async function cargarExtraordinarios() {
+    try {
+        const maxA = await obtenerMaxColumnaA("15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc", 0);
+        document.getElementById("valor-extraordinarios").textContent = maxA;
+    } catch (e) { console.error(e); }
+}
+
+async function cargarManttoFestivos() {
+    try {
+        const maxA = await obtenerMaxColumnaA("1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U", 0);
+        document.getElementById("valor-mantto-festivos").textContent = maxA;
+    } catch (e) { console.error(e); }
+}
+
+async function cargarManttoAbril() {
+    try {
+        const sId = "1sySN3ckuUjiYLTEbqxVA2LOtAjkp2moX2HKR2UR0ha4";
+        const valorSatex = await obtenerValorCeldaSimple(sId, 0, "N1");
+        const valorExterno = await obtenerValorCeldaSimple(sId, 1266295995, "L1");
+        document.getElementById("valor-mantto-abril").textContent = (parseFloat(valorSatex) || 0) + (parseFloat(valorExterno) || 0);
+    } catch (e) { console.error(e); }
+}
+
+/* ============================================================
+   ACCIONES DE BOTONES
+   ============================================================ */
+
+function accionProcedimientos() {
+    window.open("https://docs.google.com/spreadsheets/d/1bDPlAnYnT9PWJwcG-jhtxON_Uv2Qzd8IWR5geLJn8mc/edit?usp=sharing", "_blank");
+}
+
+function accionPreventivosHoy() {
+    const nuevaVentana = window.open("", "_blank");
+    nuevaVentana.document.write(`<html><body style="margin:0;background:#1e1e1e;"><iframe src="https://calendar.google.com/calendar/embed?src=mantto.programado.satex%40gmail.com&ctz=America%2FMexico_City" style="width:100%;height:100vh;border:0;"></iframe></body></html>`);
+}
+
+function accionAbril() { window.open("https://docs.google.com/spreadsheets/d/1sySN3ckuUjiYLTEbqxVA2LOtAjkp2moX2HKR2UR0ha4/edit?gid=0#gid=0", "_blank"); }
+function accionDiciembre() { window.open("https://docs.google.com/spreadsheets/d/1e-mg7DX-D2DZiK38Fk0RKt9Wnt2I4sOs0Tpgv-o3sy0/edit?gid=0#gid=0", "_blank"); }
+function accionExtraordinarios() { window.open("https://docs.google.com/spreadsheets/d/15wGYNgEpeHFaOVSj7I92TCrzCWrcOKxxO8REh2hHrpc/edit?gid=0#gid=0", "_blank"); }
+function accionFestivos() { window.open("https://docs.google.com/spreadsheets/d/1dPkdMVafnkCUV9HMt5PVCz94gw14Of3BnPt3WZ4iL5U/edit?gid=0#gid=0", "_blank"); }
+function accionPendientes() { /* Sin acción definida aún */ }
