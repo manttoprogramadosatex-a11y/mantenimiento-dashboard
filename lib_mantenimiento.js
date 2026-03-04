@@ -1,8 +1,8 @@
 /* lib_mantenimiento.js */
-/* VERSION 2.3
-   - Solo botón "Cat. Cambios de Titulo"
-   - Tamaño de letra reducido a 10px
-   - Ancho de botón y márgenes optimizados para no desplazar layout inferior
+/* VERSION 2.4
+   - Botón "Cat. Cambios de Titulo" con ancho ajustado al texto (auto)
+   - Altura mínima de 22px para proteger el espacio vertical
+   - Margen inferior reducido a 2px
 */
 
 const SatexMantenimiento = {
@@ -35,7 +35,7 @@ const SatexMantenimiento = {
                     ${this.btn("BITÁCORA DE OS", "#ffffff")}
                 </div>
 
-                <div style="display: flex; width: 100%; justify-content: center; margin-bottom: 5px;">
+                <div style="display: flex; width: 100%; justify-content: center; margin-bottom: 2px;">
                     ${this.btnExtra("Cat. Cambios de Titulo", "#f9b218")}
                 </div>
 
@@ -80,10 +80,9 @@ const SatexMantenimiento = {
         </button>`;
     },
 
-    // Función específica para el botón extra más pequeño
     btnExtra: function(t, c) {
         return `
-        <button style="width: 60%; height: 26px; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.1s; white-space: nowrap;"
+        <button style="width: auto; padding: 0 15px; height: 22px; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.1s; white-space: nowrap;"
         onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
             ${t}
         </button>`;
