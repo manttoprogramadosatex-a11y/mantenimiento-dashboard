@@ -1,8 +1,8 @@
 /* lib_mantenimiento.js */
-/* VERSION 2.5
-   - Botón "Cat. Cambios de Titulo" vinculado a Google Sheets específico
-   - Diseño ultra-compacto (22px altura) para proteger layout inferior
-   - Mantiene toda la estructura visual y lógica de la versión anterior
+/* VERSION 2.6
+   - Botón "BITÁCORA DE OS" vinculado a pestaña específica (gid=0)
+   - Mantiene botón "Cat. Cambios de Titulo" con su vínculo
+   - No se altera la estructura visual ni se quita código previo
 */
 
 const SatexMantenimiento = {
@@ -30,9 +30,9 @@ const SatexMantenimiento = {
                 </div>
 
                 <div style="display: flex; width: 100%; gap: 8px; margin-bottom: 6px;">
-                    ${this.btn("CORRECTIVOS PROGRAMADOS", "#f9b218")}
-                    ${this.btn("CORRECTIVOS A EDIFICIOS", "#00bcd4")}
-                    ${this.btn("BITÁCORA DE OS", "#ffffff")}
+                    ${this.btn("CORRECTIVOS PROGRAMADOS", "#f9b218", "")}
+                    ${this.btn("CORRECTIVOS A EDIFICIOS", "#00bcd4", "")}
+                    ${this.btn("BITÁCORA DE OS", "#ffffff", "accionBitacoraOS()")}
                 </div>
 
                 <div style="display: flex; width: 100%; justify-content: center; margin-bottom: 2px;">
@@ -72,9 +72,9 @@ const SatexMantenimiento = {
         </div>`;
     },
 
-    btn: function(t, c) {
+    btn: function(t, c, onclick) {
         return `
-        <button style="flex: 1; height: 30px; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.1s; white-space: nowrap;"
+        <button onclick="${onclick}" style="flex: 1; height: 30px; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.1s; white-space: nowrap;"
         onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
             ${t}
         </button>`;
@@ -89,7 +89,12 @@ const SatexMantenimiento = {
     }
 };
 
-/* FUNCIÓN DE ACCIÓN PARA EL BOTÓN EXTRA */
+/* ================= FUNCIONES DE ACCIÓN ================= */
+
+function accionBitacoraOS() {
+    window.open("https://docs.google.com/spreadsheets/d/1DkFDe1cwp4hQjm4ip4Z8ZzEAPgiMY8e8qQMRMt2HHBU/edit?gid=0#gid=0", "_blank");
+}
+
 function accionCatCambiosTitulo() {
     window.open("https://docs.google.com/spreadsheets/d/1q6Mc7f2K8zBNYmNVBfNkuWURJyz1d5BPxy5SUeQPtvs/edit?usp=sharing", "_blank");
 }
