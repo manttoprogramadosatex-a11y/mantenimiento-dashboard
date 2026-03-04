@@ -48,7 +48,7 @@
             "lib_pmc_donas_design.js",
             "lib_correctivo_kpi_design.js",
             "lib_correctivo_indicadores_engine.js",
-            "lib_pmc_sheet_bridge.js",   <!-- 🔥 NUEVA LIBRERÍA -->
+            "lib_pmc_sheet_bridge.js",
             "lib_accidentes.js",
             "lib_accidentes_engine.js",
             "lib_data_loader.js",
@@ -85,7 +85,7 @@
 
             SatexCardasEngine.dibujar("cardas-grid");
 
-            // 🔥 PMC AHORA DINÁMICO DESDE GOOGLE SHEET
+            // 🔥 PMC DINÁMICO DESDE GOOGLE SHEET
             const pmc = await SatexPMCSheetBridge.obtenerDatos();
 
             SatexPMCDonasDesign.render(
@@ -96,6 +96,22 @@
                 pmc.mensual,
                 pmc.maxMensual
             );
+
+            // 🔥 NUEVO: AUTO ACTUALIZACIÓN CADA 2 MINUTOS (120000 ms)
+            setInterval(async () => {
+
+                const pmcActualizado = await SatexPMCSheetBridge.obtenerDatos();
+
+                SatexPMCDonasDesign.render(
+                    "pmc-diario-container",
+                    "pmc-mensual-container",
+                    pmcActualizado.diario,
+                    pmcActualizado.maxDiario,
+                    pmcActualizado.mensual,
+                    pmcActualizado.maxMensual
+                );
+
+            }, 120000);
 
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
 
