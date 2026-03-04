@@ -1,8 +1,8 @@
 /* lib_mantenimiento.js */
-/* VERSION 2.2 
-   - Mantiene layout original (colores, métricas, scrolls)
-   - Agrega fila de botones secundarios centrados
-   - No altera IDs ni funciones de renderizado previas
+/* VERSION 2.3
+   - Solo botón "Cat. Cambios de Titulo"
+   - Tamaño de letra reducido a 10px
+   - Ancho de botón y márgenes optimizados para no desplazar layout inferior
 */
 
 const SatexMantenimiento = {
@@ -29,15 +29,14 @@ const SatexMantenimiento = {
                     <div id="kpis-correctivo-container" style="width: 50%;"></div>
                 </div>
 
-                <div style="display: flex; width: 100%; gap: 8px; margin-bottom: 8px;">
+                <div style="display: flex; width: 100%; gap: 8px; margin-bottom: 6px;">
                     ${this.btn("CORRECTIVOS PROGRAMADOS", "#f9b218")}
                     ${this.btn("CORRECTIVOS A EDIFICIOS", "#00bcd4")}
                     ${this.btn("BITÁCORA DE OS", "#ffffff")}
                 </div>
 
-                <div style="display: flex; width: 80%; gap: 8px; margin: 0 auto 10px auto; justify-content: center;">
-                    ${this.btn("Cambio Titulo", "#f9b218")}
-                    ${this.btn("Lecciones aprendidas", "#f9b218")}
+                <div style="display: flex; width: 100%; justify-content: center; margin-bottom: 5px;">
+                    ${this.btnExtra("Cat. Cambios de Titulo", "#f9b218")}
                 </div>
 
                 <div style="margin-top: auto; padding-bottom: 5px;">
@@ -58,13 +57,10 @@ const SatexMantenimiento = {
             </div>
 
             <div style="flex: 1; display: flex; flex-direction: column; padding: 0px 15px 5px 15px;">
-                
                 <div style="color: #ffffff; font-size: 18px; font-weight: bold; border-bottom: 2px solid #f9b218; padding-bottom: 2px; width: 100%; text-align: center; text-transform: uppercase; margin-bottom: 6px;">
                     Mantto. Preventivo
                 </div>
-                
                 <div id="preventivos-grafico-container" style="width: 100%; height: 180px;"></div>
-                
                 <div style="margin-top: auto; padding-bottom: 10px;">
                     <div style="color: #ff9999; font-size: 14px; font-weight: bold; border-bottom: 1px solid #ff9999; text-align: center; margin-top: 4px; margin-bottom: 5px; text-transform: uppercase;">
                         Accidentes
@@ -78,22 +74,17 @@ const SatexMantenimiento = {
 
     btn: function(t, c) {
         return `
-        <button style="
-            flex: 1;
-            height: 32px;
-            background: #2f5577;
-            color: white;
-            border: 1px solid ${c};
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.1s;
-            white-space: nowrap;
-        "
-        onmousedown="this.style.transform='scale(0.97)'"
-        onmouseup="this.style.transform='scale(1)'">
+        <button style="flex: 1; height: 30px; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.1s; white-space: nowrap;"
+        onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
+            ${t}
+        </button>`;
+    },
+
+    // Función específica para el botón extra más pequeño
+    btnExtra: function(t, c) {
+        return `
+        <button style="width: 60%; height: 26px; background: #2f5577; color: white; border: 1px solid ${c}; border-radius: 4px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.1s; white-space: nowrap;"
+        onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform='scale(1)'">
             ${t}
         </button>`;
     }
