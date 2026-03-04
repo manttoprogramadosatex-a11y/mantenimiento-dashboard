@@ -47,10 +47,11 @@
             "lib_compras_pendientes_design.js",
             "lib_pmc_donas_design.js",
             "lib_correctivo_kpi_design.js",
+            "lib_correctivo_indicadores_engine.js",  // 🔥 NUEVO ENGINE
             "lib_accidentes.js",
             "lib_accidentes_engine.js",
             "lib_data_loader.js",
-            "lib_data_bridge.js"  <!-- 🔥 NUEVO PUENTE -->
+            "lib_data_bridge.js"
         ];
 
         libs.forEach(lib => {
@@ -61,15 +62,12 @@
     <script>
         window.onload = async () => {
 
-            // Render base
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
             SatexMantenimiento.render("mantenimiento-container");
 
-            // Accidentes (controlado por engine)
             SatexAccidentesEngine.inicializar();
 
-            // Máquinas Paradas
             SatexMaquinasInactivas.render("maquinas-paradas-scroll", [
                 {tipo:"CARDA", num:"02", desde:"2025/02/26", dias:""},
                 {tipo:"CARDA", num:"08", desde:"2026/02/20", dias:""},
@@ -78,22 +76,20 @@
                 {tipo:"CARDA", num:"05", desde:"2026/02/15", dias:""}
             ]);
 
-            // 🔥 Primera carga desde Google Sheets
             await SatexEstatusData.actualizarDesdeSheet();
 
-            // 🔥 Actualización automática cada 15 segundos
             setInterval(async () => {
                 await SatexEstatusData.actualizarDesdeSheet();
             }, 15000);
 
-            // Cardas
             SatexCardasEngine.dibujar("cardas-grid");
 
-            // Mantenimiento
             SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 11, 13, 280, 370);
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
 
-            // 🔥 Preventivo dinámico desde Google Sheets (D4)
+            // 🔥 NUEVO: indicadores correctivos dinámicos
+            await SatexCorrectivoIndicadoresEngine.init();
+
             const cumplimientoPreventivo = await SatexDataBridge.obtenerCumplimientoPreventivo();
             SatexPreventivoDesign.render("preventivos-grafico-container", cumplimientoPreventivo);
 
