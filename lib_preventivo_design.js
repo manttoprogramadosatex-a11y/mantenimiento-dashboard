@@ -1,8 +1,8 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.8
+/* VERSION 2.8.1
    - Mantiene PREVENTIVOS HOY y PENDIENTES dinámicos
-   - Agrega botón "LECCIONES APRENDIDAS" debajo de PROCEDIMIENTOS
-   - Mantiene integración total de funciones de Sheets
+   - Botón "LECCIONES APRENDIDAS" vinculado a Google Sheets específico
+   - Mantiene integración total de funciones de Sheets originales
 */
 
 const SatexPreventivoDesign = {
@@ -172,8 +172,9 @@ function accionProcedimientos() {
     window.open("https://docs.google.com/spreadsheets/d/1bDPlAnYnT9PWJwcG-jhtxON_Uv2Qzd8IWR5geLJn8mc/edit?usp=sharing", "_blank");
 }
 
+// NUEVO VÍNCULO ACTUALIZADO
 function accionLeccionesAprendidas() {
-    window.open("https://docs.google.com", "_blank");
+    window.open("https://docs.google.com/spreadsheets/d/1VaQVQ3QJmYSUKDl26KWlbVyZaew1zVjf029NnjGC168/edit?usp=sharing", "_blank");
 }
 
 function accionPreventivosHoy() {
