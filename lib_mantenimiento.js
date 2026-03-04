@@ -1,8 +1,8 @@
 /* lib_mantenimiento.js */
-/* VERSION 2.6
-   - Botón "BITÁCORA DE OS" vinculado a pestaña específica (gid=0)
-   - Mantiene botón "Cat. Cambios de Titulo" con su vínculo
-   - No se altera la estructura visual ni se quita código previo
+/* VERSION 2.7
+   - Botón "CORRECTIVOS PROGRAMADOS" vinculado a su Google Sheets
+   - Mantiene vínculos de "BITÁCORA DE OS" y "Cat. Cambios de Titulo"
+   - Sin alteraciones en la estructura gráfica ni pérdida de código
 */
 
 const SatexMantenimiento = {
@@ -30,7 +30,7 @@ const SatexMantenimiento = {
                 </div>
 
                 <div style="display: flex; width: 100%; gap: 8px; margin-bottom: 6px;">
-                    ${this.btn("CORRECTIVOS PROGRAMADOS", "#f9b218", "")}
+                    ${this.btn("CORRECTIVOS PROGRAMADOS", "#f9b218", "accionCorrectivosProgramados()")}
                     ${this.btn("CORRECTIVOS A EDIFICIOS", "#00bcd4", "")}
                     ${this.btn("BITÁCORA DE OS", "#ffffff", "accionBitacoraOS()")}
                 </div>
@@ -90,6 +90,10 @@ const SatexMantenimiento = {
 };
 
 /* ================= FUNCIONES DE ACCIÓN ================= */
+
+function accionCorrectivosProgramados() {
+    window.open("https://docs.google.com/spreadsheets/d/13FCj5OPnP-wkdK8Sxs3cKONse-7cnVaq6ACgMsAR8DE/edit?gid=0#gid=0", "_blank");
+}
 
 function accionBitacoraOS() {
     window.open("https://docs.google.com/spreadsheets/d/1DkFDe1cwp4hQjm4ip4Z8ZzEAPgiMY8e8qQMRMt2HHBU/edit?gid=0#gid=0", "_blank");
