@@ -1,7 +1,7 @@
 /* lib_personal_mantto_design.js */
 const SatexPersonalManttoDesign = {
-    // Ahora recibe el valor dinámico de faltas
-    render: function(id, valorFaltas = "02") {
+    // Ahora recibe ambos valores dinámicos
+    render: function(id, valorFaltas = "...", valorNegativos = "...") {
         const container = document.getElementById(id);
         if (!container) return;
 
@@ -14,16 +14,25 @@ const SatexPersonalManttoDesign = {
 
             ${this.crearBotonPersonal("Faltas", valorFaltas, "#f44336", "SatexPersonalManttoDesign.handleFaltasClick()")}
             
-            ${this.crearBotonPersonal("Registros Negativos", "05", "#f9b218", "")}
+            ${this.crearBotonPersonal("Registros Negativos", valorNegativos, "#f9b218", "SatexPersonalManttoDesign.handleNegativosClick()")}
 
         </div>`;
     },
 
-    // Manejador para actualizar el valor al hacer click
     handleFaltasClick: async function() {
         SatexPersonalFaltasBridge.abrirSheet();
         const nuevoMax = await SatexPersonalFaltasBridge.obtenerMaxColumnaA();
-        this.render("personal-mantto-scroll", nuevoMax);
+        // Recuperamos el valor actual de negativos para no pisarlo
+        const valNeg = document.querySelector('[style*="color: rgb(249, 178, 24)"]').innerText;
+        this.render("personal-mantto-scroll", nuevoMax, valNeg);
+    },
+
+    handleNegativosClick: async function() {
+        SatexPersonalNegativosBridge.abrirSheet();
+        const nuevoMax = await SatexPersonalNegativosBridge.obtenerMaxColumnaA();
+        // Recuperamos el valor actual de faltas para no pisarlo
+        const valFaltas = document.querySelector('[style*="color: rgb(244, 67, 54)"]').innerText;
+        this.render("personal-mantto-scroll", valFaltas, nuevoMax);
     },
 
     crearBotonPersonal: function(texto, valor, color, accion) {
