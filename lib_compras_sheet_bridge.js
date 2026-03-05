@@ -1,11 +1,4 @@
 /* lib_compras_sheet_bridge.js */
-/* VERSION 1.0
-   - Lee Google Sheet público (CSV)
-   - Obtiene valor máximo de columna A
-   - Abre el libro al hacer click
-   - No altera layout
-*/
-
 const SatexComprasSheetBridge = {
 
     sheetCSV: "https://docs.google.com/spreadsheets/d/1R_KbwiBbT--EY6QHnA7xCexIHbVo6mKsXk32Ectwzf8/export?format=csv&gid=0",
@@ -13,7 +6,6 @@ const SatexComprasSheetBridge = {
     sheetURL: "https://docs.google.com/spreadsheets/d/1R_KbwiBbT--EY6QHnA7xCexIHbVo6mKsXk32Ectwzf8/edit?gid=0",
 
     async obtenerMaxColumnaA() {
-
         try {
             const response = await fetch(this.sheetCSV);
             const text = await response.text();
@@ -21,7 +13,7 @@ const SatexComprasSheetBridge = {
             const filas = text.split("\n");
 
             const valores = filas
-                .map(f => f.split(",")[0])
+                .map(f => f.split(",")[0]) // Columna A
                 .map(v => parseFloat(v))
                 .filter(v => !isNaN(v));
 
