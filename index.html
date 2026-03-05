@@ -33,6 +33,11 @@
         <div id="mantenimiento-container"></div>
     </div>
 
+    <!-- 🔐 LIBRERÍAS DE AUTENTICACIÓN SATEX -->
+    <script src="lib_satex_users_bridge.js?v=${v}"></script>
+    <script src="lib_satex_auth_design.js?v=${v}"></script>
+    <script src="lib_satex_auth_engine.js?v=${v}"></script>
+
     <script>
         const libs = [
             "lib_header_design.js",
@@ -47,7 +52,7 @@
             "lib_personal_vacaciones_bridge.js",
             "lib_personal_roll_bridge.js",
             "lib_personal_faltas_bridge.js",
-            "lib_personal_negativos_bridge.js", // 🔥 TODAS LAS LIBRERÍAS DE PERSONAL CONECTADAS
+            "lib_personal_negativos_bridge.js",
             "lib_compras_pendientes_design.js",
             "lib_compras_sheet_bridge.js",
             "lib_espera_llegada_bridge.js",
@@ -67,7 +72,10 @@
     </script>
 
     <script>
-        window.onload = async () => {
+        /* 🔒 FUNCIÓN PRINCIPAL DEL TABLERO
+           SOLO SE EJECUTA DESPUÉS DE AUTENTICARSE
+        */
+        window.satexStartApp = async () => {
 
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
@@ -121,7 +129,6 @@
             const cumplimientoPreventivo = await SatexDataBridge.obtenerCumplimientoPreventivo();
             SatexPreventivoDesign.render("preventivos-grafico-container", cumplimientoPreventivo);
 
-            // 🔥 CARGA DINÁMICA DE TODO EL PERSONAL AL INICIO
             const valFaltas = await SatexPersonalFaltasBridge.obtenerMaxColumnaA();
             const valNegativos = await SatexPersonalNegativosBridge.obtenerMaxColumnaA();
             SatexPersonalManttoDesign.render("personal-mantto-scroll", valFaltas, valNegativos);
