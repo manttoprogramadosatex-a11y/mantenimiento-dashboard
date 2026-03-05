@@ -1,6 +1,7 @@
 /* lib_personal_mantto_design.js */
 const SatexPersonalManttoDesign = {
-    render: function(id, datos) {
+    // Ahora recibe el valor dinámico de faltas
+    render: function(id, valorFaltas = "02") {
         const container = document.getElementById(id);
         if (!container) return;
 
@@ -11,10 +12,18 @@ const SatexPersonalManttoDesign = {
             
             ${this.crearBotonPersonal("Roll de turnos", null, "#00bcd4", "SatexPersonalRollBridge.abrirSheet()")}
 
-            ${this.crearBotonPersonal("Faltas", "02", "#f44336", "")}
+            ${this.crearBotonPersonal("Faltas", valorFaltas, "#f44336", "SatexPersonalManttoDesign.handleFaltasClick()")}
+            
             ${this.crearBotonPersonal("Registros Negativos", "05", "#f9b218", "")}
 
         </div>`;
+    },
+
+    // Manejador para actualizar el valor al hacer click
+    handleFaltasClick: async function() {
+        SatexPersonalFaltasBridge.abrirSheet();
+        const nuevoMax = await SatexPersonalFaltasBridge.obtenerMaxColumnaA();
+        this.render("personal-mantto-scroll", nuevoMax);
     },
 
     crearBotonPersonal: function(texto, valor, color, accion) {
