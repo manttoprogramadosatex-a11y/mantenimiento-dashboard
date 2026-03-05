@@ -44,9 +44,10 @@
             "lib_mantenimiento.js",
             "lib_preventivo_design.js",
             "lib_personal_mantto_design.js",
+            "lib_personal_vacaciones_bridge.js", // 🔥 NUEVA LIBRERÍA CONECTADA
             "lib_compras_pendientes_design.js",
             "lib_compras_sheet_bridge.js",
-            "lib_espera_llegada_bridge.js", // 🔥 SEGUNDA LIBRERÍA DE COMPRAS CONECTADA
+            "lib_espera_llegada_bridge.js",
             "lib_pmc_donas_design.js",
             "lib_correctivo_kpi_design.js",
             "lib_correctivo_indicadores_engine.js",
@@ -119,7 +120,6 @@
 
             SatexPersonalManttoDesign.render("personal-mantto-scroll", []);
             
-            // 🔥 CARGA DINÁMICA DE AMBOS BOTONES AL INICIO
             const maxPendientes = await SatexComprasSheetBridge.obtenerMaxColumnaA();
             const maxEspera = await SatexEsperaLlegadaBridge.obtenerMaxColumnaA();
             SatexComprasPendientesDesign.render("compras-pendientes-scroll", maxPendientes, maxEspera);
