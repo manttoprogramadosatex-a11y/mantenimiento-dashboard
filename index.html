@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Satex Master Project 2026</title>
     <script>
+        // Generamos el timestamp una sola vez para evitar problemas de caché
         const v = new Date().getTime(); 
         document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
     </script>
@@ -33,13 +34,14 @@
         <div id="mantenimiento-container"></div>
     </div>
 
-    <!-- 🔐 LIBRERÍAS DE AUTENTICACIÓN SATEX -->
-    <script src="lib_satex_users_bridge.js?v=${v}"></script>
-    <script src="lib_satex_auth_design.js?v=${v}"></script>
-    <script src="lib_satex_auth_engine.js?v=${v}"></script>
-
     <script>
+        // 1. LISTADO DE TODAS LAS LIBRERÍAS (Incluyendo las nuevas de autenticación)
         const libs = [
+            // Autenticación primero para que estén disponibles
+            "lib_satex_users_bridge.js",
+            "lib_satex_auth_design.js",
+            "lib_satex_auth_engine.js",
+            // Diseño y Datos
             "lib_header_design.js",
             "lib_estatus_design.js",
             "lib_estatus_data.js",
@@ -66,16 +68,18 @@
             "lib_data_bridge.js"
         ];
 
+        // 2. CARGA DINÁMICA CORRECTA (Aquí corregimos el error del ${v})
         libs.forEach(lib => {
             document.write(`<script src="${lib}?v=${v}"><\/script>`);
         });
     </script>
 
     <script>
-        /* 🔒 FUNCIÓN PRINCIPAL DEL TABLERO
-           SOLO SE EJECUTA DESPUÉS DE AUTENTICARSE
+        /* 🔒 FUNCIÓN PRINCIPAL 
+           Se encarga de renderizar todo el tablero.
         */
         window.satexStartApp = async () => {
+            console.log("Iniciando Tablero Satex...");
 
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
@@ -93,14 +97,15 @@
 
             await SatexEstatusData.actualizarDesdeSheet();
 
+            // Intervalo de actualización de estatus
             setInterval(async () => {
                 await SatexEstatusData.actualizarDesdeSheet();
             }, 15000);
 
             SatexCardasEngine.dibujar("cardas-grid");
 
+            // Datos PMC
             const pmc = await SatexPMCSheetBridge.obtenerDatos();
-
             SatexPMCDonasDesign.render(
                 "pmc-diario-container",
                 "pmc-mensual-container",
@@ -122,13 +127,14 @@
                 );
             }, 120000);
 
+            // KPIs y Preventivos
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
-
             await SatexCorrectivoIndicadoresEngine.init();
 
             const cumplimientoPreventivo = await SatexDataBridge.obtenerCumplimientoPreventivo();
             SatexPreventivoDesign.render("preventivos-grafico-container", cumplimientoPreventivo);
 
+            // Personal y Compras
             const valFaltas = await SatexPersonalFaltasBridge.obtenerMaxColumnaA();
             const valNegativos = await SatexPersonalNegativosBridge.obtenerMaxColumnaA();
             SatexPersonalManttoDesign.render("personal-mantto-scroll", valFaltas, valNegativos);
@@ -136,6 +142,17 @@
             const maxPendientes = await SatexComprasSheetBridge.obtenerMaxColumnaA();
             const maxEspera = await SatexEsperaLlegadaBridge.obtenerMaxColumnaA();
             SatexComprasPendientesDesign.render("compras-pendientes-scroll", maxPendientes, maxEspera);
+        };
+
+        // 3. DISPARADOR AUTOMÁTICO O POR AUTENTICACIÓN
+        window.onload = async () => {
+            /* Si tu 'lib_satex_auth_engine.js' ya muestra un formulario de login, 
+               deja que el engine llame a satexStartApp().
+               
+               Si quieres probar el tablero DE INMEDIATO como antes, 
+               descomenta la siguiente línea:
+            */
+            // window.satexStartApp(); 
         };
     </script>
 
