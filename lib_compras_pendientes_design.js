@@ -1,8 +1,8 @@
 /* lib_compras_pendientes_design.js */
 const SatexComprasPendientesDesign = {
     
-    // Ahora recibe el valor dinámico del bridge
-    render: function(id, valorReal = "...") {
+    // Ahora recibe ambos valores reales
+    render: function(id, valorPendientes = "...", valorEspera = "...") {
         const container = document.getElementById(id);
         if (!container) return;
 
@@ -11,31 +11,37 @@ const SatexComprasPendientesDesign = {
             
             ${this.crearBotonCompras(
                 "Req. Pendientes por pasar", 
-                valorReal, 
+                valorPendientes, 
                 "#f9b218", 
-                "SatexComprasPendientesDesign.handleBtnClick()"
+                "SatexComprasPendientesDesign.handlePendientesClick()"
             )}
 
             ${this.crearBotonCompras(
                 "Req. en espera llegada", 
-                "08", 
+                valorEspera, 
                 "#ff9999", 
-                ""
+                "SatexComprasPendientesDesign.handleEsperaClick()"
             )}
 
         </div>`;
     },
 
-    // Función que se dispara al pulsar el botón
-    handleBtnClick: async function() {
-        // 1. Abrir la hoja de Google
+    // Manejador para el primer botón
+    handlePendientesClick: async function() {
         SatexComprasSheetBridge.abrirSheet();
-        
-        // 2. Buscar el nuevo máximo
         const nuevoMax = await SatexComprasSheetBridge.obtenerMaxColumnaA();
-        
-        // 3. Actualizar el tablero con el dato real
-        this.render("compras-pendientes-scroll", nuevoMax);
+        // Obtenemos el valor actual del otro contador para no perderlo al re-renderizar
+        const valorEsperaActual = document.querySelector('[style*="color: rgb(255, 153, 153)"]').innerText;
+        this.render("compras-pendientes-scroll", nuevoMax, valorEsperaActual);
+    },
+
+    // Manejador para el segundo botón
+    handleEsperaClick: async function() {
+        SatexEsperaLlegadaBridge.abrirSheet();
+        const nuevoMax = await SatexEsperaLlegadaBridge.obtenerMaxColumnaA();
+        // Obtenemos el valor actual del primer contador para no perderlo
+        const valorPendientesActual = document.querySelector('[style*="color: rgb(249, 178, 24)"]').innerText;
+        this.render("compras-pendientes-scroll", valorPendientesActual, nuevoMax);
     },
 
     crearBotonCompras: function(texto, valor, color, accion) {
