@@ -9,7 +9,7 @@ const SatexPersonalManttoDesign = {
             
             ${this.crearBotonPersonal("Vacaciones Programadas", null, "#4caf50", "SatexPersonalVacacionesBridge.abrirSheet()")}
             
-            ${this.crearBotonPersonal("Roll de turnos", null, "#00bcd4", "")}
+            ${this.crearBotonPersonal("Roll de turnos", null, "#00bcd4", "SatexPersonalRollBridge.abrirSheet()")}
 
             ${this.crearBotonPersonal("Faltas", "02", "#f44336", "")}
             ${this.crearBotonPersonal("Registros Negativos", "05", "#f9b218", "")}
