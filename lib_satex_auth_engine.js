@@ -1,12 +1,14 @@
 /* lib_satex_auth_engine.js */
-/* VERSION 1.1 - Corregida para activar tablero */
+/* VERSION 1.2 - Soporte para persistencia de sesión */
 
 async function satexInitAuth(){
-    // Verificar si la función de creación existe
+    // 1. Si ya hay sesión en localStorage, no mostramos el login
+    if(localStorage.getItem("satex_session") === "active") {
+        return; 
+    }
+
     if(typeof satexCreateLogin === "function"){
         satexCreateLogin();
-    } else {
-        console.error("No se encontró satexCreateLogin en lib_satex_auth_design.js");
     }
 
     const btn = document.getElementById("satex_login_btn");
@@ -27,19 +29,20 @@ async function satexInitAuth(){
         satexShowLoading();
 
         setTimeout(() => {
-            // 1. Quitar la pantalla de login
             const overlay = document.getElementById("satex_login_overlay");
             if(overlay) overlay.remove();
 
-            // 2. 🔥 ¡ACTIVAR EL TABLERO!
-            if(typeof window.satexStartApp === "function"){
-                window.satexStartApp();
-            } else {
-                console.error("La función satexStartApp no está definida en el HTML");
-            }
+            // Guardar sesión e iniciar app
+            localStorage.setItem("satex_session", "active");
+            window.satexStartApp();
         }, 1500);
     });
 }
 
-// Iniciar proceso de auth
 window.addEventListener("load", satexInitAuth);
+
+// Función extra por si quieres añadir un botón de "Cerrar Sesión" después
+function satexLogout() {
+    localStorage.removeItem("satex_session");
+    location.reload();
+}
