@@ -45,7 +45,8 @@
             "lib_preventivo_design.js",
             "lib_personal_mantto_design.js",
             "lib_personal_vacaciones_bridge.js",
-            "lib_personal_roll_bridge.js", // 🔥 NUEVA LIBRERÍA CONECTADA
+            "lib_personal_roll_bridge.js",
+            "lib_personal_faltas_bridge.js", // 🔥 NUEVA LIBRERÍA DE FALTAS CONECTADA
             "lib_compras_pendientes_design.js",
             "lib_compras_sheet_bridge.js",
             "lib_espera_llegada_bridge.js",
@@ -119,7 +120,9 @@
             const cumplimientoPreventivo = await SatexDataBridge.obtenerCumplimientoPreventivo();
             SatexPreventivoDesign.render("preventivos-grafico-container", cumplimientoPreventivo);
 
-            SatexPersonalManttoDesign.render("personal-mantto-scroll", []);
+            // 🔥 CARGA DINÁMICA DE FALTAS AL INICIO
+            const valorRealFaltas = await SatexPersonalFaltasBridge.obtenerMaxColumnaA();
+            SatexPersonalManttoDesign.render("personal-mantto-scroll", valorRealFaltas);
             
             const maxPendientes = await SatexComprasSheetBridge.obtenerMaxColumnaA();
             const maxEspera = await SatexEsperaLlegadaBridge.obtenerMaxColumnaA();
