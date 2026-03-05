@@ -45,6 +45,7 @@
             "lib_preventivo_design.js",
             "lib_personal_mantto_design.js",
             "lib_compras_pendientes_design.js",
+            "lib_compras_sheet_bridge.js", // 🔥 LIBRERÍA DE COMPRAS CONECTADA
             "lib_pmc_donas_design.js",
             "lib_correctivo_kpi_design.js",
             "lib_correctivo_indicadores_engine.js",
@@ -85,7 +86,6 @@
 
             SatexCardasEngine.dibujar("cardas-grid");
 
-            // 🔥 PMC DINÁMICO DESDE GOOGLE SHEET
             const pmc = await SatexPMCSheetBridge.obtenerDatos();
 
             SatexPMCDonasDesign.render(
@@ -97,11 +97,8 @@
                 pmc.maxMensual
             );
 
-            // 🔥 NUEVO: AUTO ACTUALIZACIÓN CADA 2 MINUTOS (120000 ms)
             setInterval(async () => {
-
                 const pmcActualizado = await SatexPMCSheetBridge.obtenerDatos();
-
                 SatexPMCDonasDesign.render(
                     "pmc-diario-container",
                     "pmc-mensual-container",
@@ -110,7 +107,6 @@
                     pmcActualizado.mensual,
                     pmcActualizado.maxMensual
                 );
-
             }, 120000);
 
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
@@ -121,7 +117,10 @@
             SatexPreventivoDesign.render("preventivos-grafico-container", cumplimientoPreventivo);
 
             SatexPersonalManttoDesign.render("personal-mantto-scroll", []);
-            SatexComprasPendientesDesign.render("compras-pendientes-scroll", []);
+            
+            // 🔥 CARGA DINÁMICA DE COMPRAS AL INICIO
+            const maxCompras = await SatexComprasSheetBridge.obtenerMaxColumnaA();
+            SatexComprasPendientesDesign.render("compras-pendientes-scroll", maxCompras);
         };
     </script>
 
