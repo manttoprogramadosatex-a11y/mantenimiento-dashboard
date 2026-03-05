@@ -35,11 +35,9 @@
 
     <script>
         const libs = [
-            // --- NUEVAS LIBRERÍAS DE AUTENTICACIÓN ---
             "lib_satex_users_bridge.js",
             "lib_satex_auth_design.js",
             "lib_satex_auth_engine.js",
-            // --- TUS LIBRERÍAS ORIGINALES ---
             "lib_header_design.js",
             "lib_estatus_design.js",
             "lib_estatus_data.js",
@@ -72,8 +70,9 @@
     </script>
 
     <script>
-        // Esta función contiene TODO tu código original de window.onload
         window.satexStartApp = async () => {
+            // Guardamos en la memoria del navegador que la sesión está activa
+            localStorage.setItem("satex_session", "active");
 
             SatexHeaderDesign.render("header-container");
             SatexEstatusDesign.render("estatus-container");
@@ -98,36 +97,19 @@
             SatexCardasEngine.dibujar("cardas-grid");
 
             const pmc = await SatexPMCSheetBridge.obtenerDatos();
-
-            SatexPMCDonasDesign.render(
-                "pmc-diario-container",
-                "pmc-mensual-container",
-                pmc.diario,
-                pmc.maxDiario,
-                pmc.mensual,
-                pmc.maxMensual
-            );
+            SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", pmc.diario, pmc.maxDiario, pmc.mensual, pmc.maxMensual);
 
             setInterval(async () => {
                 const pmcActualizado = await SatexPMCSheetBridge.obtenerDatos();
-                SatexPMCDonasDesign.render(
-                    "pmc-diario-container",
-                    "pmc-mensual-container",
-                    pmcActualizado.diario,
-                    pmcActualizado.maxDiario,
-                    pmcActualizado.mensual,
-                    pmcActualizado.maxMensual
-                );
+                SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", pmcActualizado.diario, pmcActualizado.maxDiario, pmcActualizado.mensual, pmcActualizado.maxMensual);
             }, 120000);
 
             SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
-
             await SatexCorrectivoIndicadoresEngine.init();
 
             const cumplimientoPreventivo = await SatexDataBridge.obtenerCumplimientoPreventivo();
             SatexPreventivoDesign.render("preventivos-grafico-container", cumplimientoPreventivo);
 
-            // 🔥 CARGA DINÁMICA DE TODO EL PERSONAL AL INICIO
             const valFaltas = await SatexPersonalFaltasBridge.obtenerMaxColumnaA();
             const valNegativos = await SatexPersonalNegativosBridge.obtenerMaxColumnaA();
             SatexPersonalManttoDesign.render("personal-mantto-scroll", valFaltas, valNegativos);
@@ -137,10 +119,12 @@
             SatexComprasPendientesDesign.render("compras-pendientes-scroll", maxPendientes, maxEspera);
         };
 
-        // El window.onload ahora NO inicia el tablero, solo deja que las libs carguen.
-        // El tablero iniciará cuando el login sea exitoso llamando a satexStartApp().
         window.onload = () => {
-            console.log("Sistema Base Cargado. Esperando Autenticación...");
+            // Si ya existe una sesión previa, entramos directo
+            if(localStorage.getItem("satex_session") === "active") {
+                console.log("Sesión restaurada.");
+                window.satexStartApp();
+            }
         };
     </script>
 
