@@ -4,36 +4,22 @@
     <meta charset="UTF-8">
     <title>Satex Master Project 2026</title>
     <script>
-        // Control de versiones para evitar caché
         const v = new Date().getTime(); 
         document.write(`<link rel="stylesheet" href="estilos.css?v=${v}">`);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         html, body { margin: 0; padding: 0; height: 100vh; background-color: #2f5577; overflow: hidden; font-family: sans-serif; }
-        #main-content { display: flex; flex-direction: column; height: calc(100vh - 105px); }
+        #main-content { display: none; flex-direction: column; height: calc(100vh - 105px); }
         #cardas-grid { height: 155px !important; flex-shrink: 0; display: flex; overflow-x: auto; padding: 2px 10px; background: rgba(0,0,0,0.1); gap: 5px; }
         #mantenimiento-container { flex-grow: 1; position: relative; }
 
-        #maquinas-paradas-scroll, #accidentes-scroll {
-            overflow-y: auto;
-            max-height: 100%;
-        }
-
+        #maquinas-paradas-scroll, #accidentes-scroll { overflow-y: auto; max-height: 100%; }
         #accidentes-scroll::-webkit-scrollbar { width: 5px; }
         #accidentes-scroll::-webkit-scrollbar-thumb { background: #ff9999; border-radius: 3px; }
-        
-        /* Capa de carga por si el login tarda */
-        #loading-screen { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #2f5577; display: flex; justify-content: center; 
-            align-items: center; color: white; z-index: 9999; 
-        }
     </style>
 </head>
 <body>
-
-    <div id="loading-screen">Cargando Sistemas Satex...</div>
 
     <div id="header-container"></div>
     <div id="estatus-container"></div>
@@ -44,7 +30,6 @@
     </div>
 
     <script>
-        // 1. LISTADO COMPLETO DE LIBRERÍAS
         const libs = [
             "lib_satex_users_bridge.js",
             "lib_satex_auth_design.js",
@@ -75,103 +60,55 @@
             "lib_data_bridge.js"
         ];
 
-        // 2. INYECCIÓN DE SCRIPTS
         libs.forEach(lib => {
             document.write(`<script src="${lib}?v=${v}"><\/script>`);
         });
     </script>
 
     <script>
-        // Variable para evitar doble ejecución
-        let appIniciada = false;
-
-        /* 🔒 FUNCIÓN MAESTRA DE INICIO */
+        // FUNCIÓN QUE SERÁ LLAMADA POR EL MOTOR DE AUTENTICACIÓN
         window.satexStartApp = async () => {
-            if (appIniciada) return;
-            appIniciada = true;
-
-            console.log("🚀 Iniciando renderizado de componentes...");
+            console.log("Iniciando Tablero...");
             
-            try {
-                // Ocultar pantalla de carga
-                const loader = document.getElementById("loading-screen");
-                if(loader) loader.style.display = "none";
+            // Mostrar el contenido principal
+            document.getElementById("main-content").style.display = "flex";
 
-                // Renderizado de estructuras básicas
-                if (typeof SatexHeaderDesign !== 'undefined') SatexHeaderDesign.render("header-container");
-                if (typeof SatexEstatusDesign !== 'undefined') SatexEstatusDesign.render("estatus-container");
-                if (typeof SatexMantenimiento !== 'undefined') SatexMantenimiento.render("mantenimiento-container");
+            // Renderizado de componentes
+            SatexHeaderDesign.render("header-container");
+            SatexEstatusDesign.render("estatus-container");
+            SatexMantenimiento.render("mantenimiento-container");
 
-                // Inicializar Motores
-                if (typeof SatexAccidentesEngine !== 'undefined') SatexAccidentesEngine.inicializar();
-                
-                if (typeof SatexMaquinasInactivas !== 'undefined') {
-                    SatexMaquinasInactivas.render("maquinas-paradas-scroll", [
-                        {tipo:"CARDA", num:"02", desde:"2025/02/26", dias:""},
-                        {tipo:"CARDA", num:"08", desde:"2026/02/20", dias:""},
-                        {tipo:"CONERA", num:"04", desde:"2026/02/27", dias:""},
-                        {tipo:"CONTINUA", num:"12", desde:"2026/02/28", dias:""},
-                        {tipo:"CARDA", num:"05", desde:"2026/02/15", dias:""}
-                    ]);
-                }
+            SatexAccidentesEngine.inicializar();
 
-                // Carga de datos de Sheets
-                if (typeof SatexEstatusData !== 'undefined') {
-                    await SatexEstatusData.actualizarDesdeSheet();
-                    setInterval(async () => { await SatexEstatusData.actualizarDesdeSheet(); }, 15000);
-                }
+            SatexMaquinasInactivas.render("maquinas-paradas-scroll", [
+                {tipo:"CARDA", num:"02", desde:"2025/02/26", dias:""},
+                {tipo:"CARDA", num:"08", desde:"2026/02/20", dias:""},
+                {tipo:"CONERA", num:"04", desde:"2026/02/27", dias:""},
+                {tipo:"CONTINUA", num:"12", desde:"2026/02/28", dias:""},
+                {tipo:"CARDA", num:"05", desde:"2026/02/15", dias:""}
+            ]);
 
-                if (typeof SatexCardasEngine !== 'undefined') SatexCardasEngine.dibujar("cardas-grid");
+            await SatexEstatusData.actualizarDesdeSheet();
+            setInterval(async () => { await SatexEstatusData.actualizarDesdeSheet(); }, 15000);
 
-                // Producción PMC
-                if (typeof SatexPMCSheetBridge !== 'undefined' && typeof SatexPMCDonasDesign !== 'undefined') {
-                    const pmc = await SatexPMCSheetBridge.obtenerDatos();
-                    const renderPMC = (datos) => {
-                        SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", 
-                        datos.diario, datos.maxDiario, datos.mensual, datos.maxMensual);
-                    };
-                    renderPMC(pmc);
-                    setInterval(async () => { renderPMC(await SatexPMCSheetBridge.obtenerDatos()); }, 120000);
-                }
+            SatexCardasEngine.dibujar("cardas-grid");
 
-                // KPIs y Personal
-                if (typeof SatexCorrectivoKPIDesign !== 'undefined') SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
-                if (typeof SatexCorrectivoIndicadoresEngine !== 'undefined') await SatexCorrectivoIndicadoresEngine.init();
+            const pmc = await SatexPMCSheetBridge.obtenerDatos();
+            SatexPMCDonasDesign.render("pmc-diario-container", "pmc-mensual-container", pmc.diario, pmc.maxDiario, pmc.mensual, pmc.maxMensual);
 
-                if (typeof SatexDataBridge !== 'undefined' && typeof SatexPreventivoDesign !== 'undefined') {
-                    const cumplimiento = await SatexDataBridge.obtenerCumplimientoPreventivo();
-                    SatexPreventivoDesign.render("preventivos-grafico-container", cumplimiento);
-                }
+            SatexCorrectivoKPIDesign.render("kpis-correctivo-container", 125, 4, 18);
+            await SatexCorrectivoIndicadoresEngine.init();
 
-                // Personal y Compras
-                if (typeof SatexPersonalFaltasBridge !== 'undefined' && typeof SatexPersonalManttoDesign !== 'undefined') {
-                    const f = await SatexPersonalFaltasBridge.obtenerMaxColumnaA();
-                    const n = await SatexPersonalNegativosBridge.obtenerMaxColumnaA();
-                    SatexPersonalManttoDesign.render("personal-mantto-scroll", f, n);
-                }
+            const cumplimiento = await SatexDataBridge.obtenerCumplimientoPreventivo();
+            SatexPreventivoDesign.render("preventivos-grafico-container", cumplimiento);
 
-                if (typeof SatexComprasSheetBridge !== 'undefined' && typeof SatexComprasPendientesDesign !== 'undefined') {
-                    const p = await SatexComprasSheetBridge.obtenerMaxColumnaA();
-                    const e = await SatexEsperaLlegadaBridge.obtenerMaxColumnaA();
-                    SatexComprasPendientesDesign.render("compras-pendientes-scroll", p, e);
-                }
-
-            } catch (error) {
-                console.error("Error crítico durante el inicio:", error);
-            }
-        };
-
-        // 3. DISPARADOR DE SEGURIDAD
-        window.onload = () => {
-            // Intento de inicio automático tras 3 segundos si el login no responde
-            setTimeout(() => {
-                if (!appIniciada) {
-                    console.warn("La autenticación no respondió a tiempo. Forzando inicio...");
-                    window.satexStartApp();
-                }
-            }, 3000);
+            const valFaltas = await SatexPersonalFaltasBridge.obtenerMaxColumnaA();
+            const valNegativos = await SatexPersonalNegativosBridge.obtenerMaxColumnaA();
+            SatexPersonalManttoDesign.render("personal-mantto-scroll", valFaltas, valNegativos);
             
-            // Si tu SatexAuthEngine funciona bien, él llamará a satexStartApp() antes de los 3s.
+            const maxP = await SatexComprasSheetBridge.obtenerMaxColumnaA();
+            const maxE = await SatexEsperaLlegadaBridge.obtenerMaxColumnaA();
+            SatexComprasPendientesDesign.render("compras-pendientes-scroll", maxP, maxE);
         };
     </script>
 </body>
