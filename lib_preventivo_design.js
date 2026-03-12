@@ -1,5 +1,6 @@
 /* lib_preventivo_design.js */
-/* VERSION 2.8.1
+/* VERSION 2.8.2
+   - LÓGICA DE COLORES ACTUALIZADA: 0-50% Rojo, 50-80% Amarillo, 80-100% Verde
    - Mantiene PREVENTIVOS HOY y PENDIENTES dinámicos
    - Botón "LECCIONES APRENDIDAS" vinculado a Google Sheets específico
    - Mantiene integración total de funciones de Sheets originales
@@ -82,12 +83,22 @@ const SatexPreventivoDesign = {
         const chartExistente = Chart.getChart("chart-cumplimiento");
         if (chartExistente) chartExistente.destroy();
 
+        // --- LÓGICA DE COLORES SOLICITADA ---
+        let colorDinamico = '#28a745'; // Verde por defecto (80-100%)
+        
+        if (porcentaje <= 50) {
+            colorDinamico = '#da291c'; // Rojo (0-50%)
+        } else if (porcentaje <= 80) {
+            colorDinamico = '#f9b218'; // Amarillo (51-80%)
+        }
+        // ------------------------------------
+
         new Chart(ctx, {
             type: 'doughnut',
             data: {
                 datasets: [{
                     data: [porcentaje, 100 - porcentaje],
-                    backgroundColor: ['#4caf50', 'rgba(255,255,255,0.1)'],
+                    backgroundColor: [colorDinamico, 'rgba(255,255,255,0.1)'],
                     borderWidth: 0
                 }]
             },
@@ -172,7 +183,6 @@ function accionProcedimientos() {
     window.open("https://docs.google.com/spreadsheets/d/1bDPlAnYnT9PWJwcG-jhtxON_Uv2Qzd8IWR5geLJn8mc/edit?usp=sharing", "_blank");
 }
 
-// NUEVO VÍNCULO ACTUALIZADO
 function accionLeccionesAprendidas() {
     window.open("https://docs.google.com/spreadsheets/d/1VaQVQ3QJmYSUKDl26KWlbVyZaew1zVjf029NnjGC168/edit?usp=sharing", "_blank");
 }
