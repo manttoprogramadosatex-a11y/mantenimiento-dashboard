@@ -12,7 +12,7 @@ const SatexDataBridge = {
         try {
             const sheetId = "16gfm9ZgivtCcpuRKpZQVuxfMcT2_fjpll5w8insJ3jg";
             const gid = 0;
-            const rango = "D4";
+            const rango = "H1";
 
             const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?gid=${gid}&range=${rango}&tqx=out:json`;
 
