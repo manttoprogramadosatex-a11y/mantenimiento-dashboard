@@ -1,5 +1,5 @@
 const SatexCardasEngine = {
-    version: "2.3",
+    version: "2.8",
     intervalo: null,
 
     dibujar: function(idContenedor) {
@@ -31,16 +31,38 @@ const SatexCardasEngine = {
 
             const datos = [];
 
-            for (let i = 3; i <= 13; i++) {
-                const id = i - 2;
+            // 🔥 MAPEO EXACTO BASADO EN TU IMAGEN (imagen_4.png)
+            // Orden visual: 00, 0, 1 al 11, 12, A, B, C, D, E
+            const ordenCardas = [
+                { id: "00", col: 3  }, // Columna D
+                { id: "0",  col: 4  }, // Columna E
+                { id: "1",  col: 5  }, // Columna F
+                { id: "2",  col: 6  }, // Columna G
+                { id: "3",  col: 7  }, // Columna H
+                { id: "4",  col: 8  }, // Columna I
+                { id: "5",  col: 9  }, // Columna J
+                { id: "6",  col: 10 }, // Columna K
+                { id: "7",  col: 11 }, // Columna L
+                { id: "8",  col: 12 }, // Columna M
+                { id: "9",  col: 13 }, // Columna N
+                { id: "10", col: 14 }, // Columna O
+                { id: "11", col: 15 }, // Columna P
+                { id: "12", col: 16 }, // Columna Q
+                { id: "A",  col: 17 }, // Columna R
+                { id: "B",  col: 18 }, // Columna S
+                { id: "C",  col: 19 }, // Columna T
+                { id: "D",  col: 20 }, // Columna U
+                { id: "E",  col: 21 }  // Columna V
+            ];
 
+            ordenCardas.forEach(carda => {
                 datos.push({
-                    id: id,
-                    t: `CARDA ${id}`,
-                    ac: parseFloat(filaAct[i]) || 0,
-                    max: parseFloat(filaMax[i]) || 0
+                    id: carda.id,
+                    t: `CARDA ${carda.id}`,
+                    ac: parseFloat(filaAct[carda.col]) || 0,
+                    max: parseFloat(filaMax[carda.col]) || 0
                 });
-            }
+            });
 
             grid.innerHTML = datos.map(c =>
                 SatexCardasDesign.crearCarda(c.id, c.t, c.ac, c.max)
